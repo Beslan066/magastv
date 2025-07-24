@@ -1,0 +1,193 @@
+.single-news-page {
+    font-family: "Golos Text", sans-serif !important;
+}
+
+.single-news__top {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+    padding-top: 60px;
+}
+
+.single-news-page p {
+    font-size: 16px !important;
+}
+
+.single-news__title {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 122%;
+    color: var(--bw-black);
+}
+
+
+.single-news__info {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--neutral-neutral-500);
+}
+
+
+.single-news__bottom {
+    display: flex;
+    align-items: start;
+    gap: 30px;
+}
+
+.single-news__content {
+    padding-top: 3%;
+    flex-basis: 74.4%;
+    padding-bottom: 8%;
+    display: grid;
+    grid-template-columns: 100% 280px;
+    column-gap: 30px;
+}
+.single-news__content--main {
+    border-bottom: 1px solid var(--neutral-neutral-200);
+    padding-bottom: 5%;
+
+}
+.popular-sidebar--news {
+    margin-top: 25px;
+}
+
+.single-news__right-block {
+    padding-top: 3%;
+    flex-basis: 25.6%;
+    max-width: 280px;
+}
+
+
+.single-news__text > p {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 400;
+    font-size: 16px !important;
+    line-height: 150%;
+    color: var(--bw-black);
+}
+
+.single-news__image {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+}
+
+.single-news__image img {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+
+}
+
+.single-news__image--main {
+    max-height: 600px;
+}
+
+.single-news__image_name {
+
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 167%;
+    color: var(--neutral-neutral-500);
+    font-family: "Golos Text", sans-serif;
+}
+
+.single-news__subInner {
+    margin: 0 auto;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 30px;
+}
+
+.single-news__author {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--neutral-neutral-500);
+    text-align: left;
+}
+
+.single-news__text {
+    display: flex;
+    text-align: left;
+    align-items: start;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.single-news__text p {
+
+    font-family: "Golos Text", sans-serif;
+    font-weight: 400;
+    font-size: 16px !important;
+    line-height: 150%;
+    color: var(--bw-black);
+}
+
+.single-news__image--sub>.single-news__image_content {
+    width: 100%;
+    height: 366px;
+}
+
+.single-news__image--sub>.single-news__image_content img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.single-news__citate {
+    width: 100%;
+    max-width: 488px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin: 0 auto;
+}
+
+.single-news__citate_paragraph {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 143%;
+    color: var(--bw-black);
+}
+
+.divider {
+    width: 100%;
+    height: 1px;
+    background-color: var(--neutral-neutral-700);
+}
+
+.single-news-other__title {
+
+    font-family: "Golos Text", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 117%;
+    color: var(--bw-black);
+}
+
+.single-news__paragraph--first {
+    font-family: "Golos Text", sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 156%;
+    color: var(--neutral-neutral-700);
+}
+
+.single-news-other__list .news-item {
+    display: block;
+    flex-grow: 1;
+}

@@ -1,0 +1,107 @@
+.tvProgram__main {
+    padding-top: 30px;
+    display: flex;
+    align-items: start;
+    gap: 30px;
+    font-family: var(--font-family);
+}
+
+.tvProgram__inner {
+    padding-bottom: 10%;
+    padding-top: 60px;
+}
+.tvProgram__left {
+    width: 100%;
+    max-width: 904px;
+}
+.tvProgram__title {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 122%;
+    color: var(--bw-black);
+}
+
+.programList {
+    margin-top: 30px;
+}
+
+
+
+.ProgramTabBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 64px;
+    border-bottom: 1px solid var(--neutral-neutral-200);
+}
+
+.ProgramTabBar__list {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    max-width: 800px;
+
+}
+
+.ProgramTabBar__item {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    flex-shrink: 0;
+    width: 112px;
+    height: 100%;
+}
+
+
+.ProgramTabBar__item time {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 143%;
+    color: var(--neutral-neutral-500);
+}
+
+.ProgramTabBar__item span {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 143%;
+    color: var(--neutral-neutral-500);
+}
+.ProgramTabBar__item.active {
+    border-bottom: 2px solid var(--primary-primary-500);
+}
+.ProgramTabBar__item.active time {
+    color: var(--bw-black);
+}
+.program-tab-content {
+    display: none;
+}
+.program-tab-content.active {
+    display: block;
+}
+
+.tab {
+    cursor: pointer;
+    padding: 8px 20px;
+    transition: background 0.3s ease-in-out;
+}
+
+.tab:hover {
+    background: var(--neutral-neutral-100);
+}
+
+.tab:hover span {
+    color: var(--bw-black);
+}
+
+.tab.active {
+    border-bottom: 2px solid var(--primary-primary-500);
+    margin-bottom: -2px;
+}
+
+.tab.active span {
+    color: var(--bw-black);
+}

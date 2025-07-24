@@ -1,0 +1,127 @@
+.advertising__page {
+    font-family: var(--font-family);
+}
+.advertising__text {
+    padding-top: 32px;
+}
+.advertising__text p {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--bw-black);
+}
+
+.advertising__title {
+    font-weight: 600;
+    font-size: 36px;
+    line-height: 122%;
+    color: var(--bw-black);
+}
+
+.advertising__inner {
+    padding-top: 60px;
+    padding-bottom: 10%;
+}
+
+.advertising__cards {
+    margin-top: 3%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.advertising__card {
+    border-radius: 12px;
+    background: var(--neutral-neutral-100);
+    flex-basis: 380px;
+    flex-shrink: 1;
+    flex-grow: 1;
+    height: 352px;
+}
+
+.advertising__card_body {
+    padding-top: 16px;
+}
+.advertising__card_inner {
+    padding: 20px;
+}
+
+.advertising__card_header {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--neutral-neutral-200);
+}
+
+.advertising__card_title {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 156%;
+    color: var(--bw-black);
+}
+
+.advertising__card_list {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: left;
+    gap: 5px;
+}
+
+.advertising__card_item {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--bw-black);
+}
+.advertising__card_item span {
+    font-family: var(--font-family);
+font-weight: 500;
+font-size: 12px;
+line-height: 167%;
+color: var(--neutral-neutral-500);
+}
+.advertising__card_item a {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: var(--bw-black);
+}
+
+.advertising__card_item--mail a {
+    text-decoration: underline;
+    text-decoration-skip-ink: none;
+    color: var(--primary-primary-700);
+}
+
+.advertising__priceList {
+    margin-top: 30px;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.advertising__priceList_download {
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 156%;
+    color: var(--primary-primary-500);
+}
+.advertising__priceList_img {
+    border: 1px solid var(--neutral-neutral-300);
+border-radius: 20px;
+padding: 40px;
+max-width: 801px;
+max-height: 1115px;
+}
+.advertising__priceList_img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+}
