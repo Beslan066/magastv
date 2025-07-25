@@ -107,7 +107,7 @@
                     <span class="menu-header-text">Контент</span>
                 </li>
 
-                @if(auth()->user()->role !== "Администратор радио")
+                @if(auth()->user()->role !== 'Администратор радио')
                     <li class="menu-item">
                         <a href="{{route('news.index')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-news"></i>
@@ -207,7 +207,7 @@
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Настройки</span></li>
 
                     <li class="menu-item">
-                        <a href="cards-basic.html" class="menu-link">
+                        <a class="menu-link">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
                             <div class="text-truncate" data-i18n="Basic">Настройки</div>
                         </a>
@@ -215,7 +215,7 @@
                 @endif
 
 
-                @if(auth()->user()->role == "Администратор радио" || "Супер-админ")
+                @if(in_array(auth()->user()->role, ['Администратор радио', 'Супер-админ']))
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Контент радио</span>
                     </li>
