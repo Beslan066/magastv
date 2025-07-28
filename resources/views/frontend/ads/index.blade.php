@@ -50,26 +50,16 @@
                                 <div class="advertising__card_body">
                                     <ul class="list-reset advertising__card_list">
                                         <li class="advertising__card_item">
-
-
                                             <span>Телефон:</span> <a href="tel:88734554055">8 (8734) 55-40-55</a>
+                                            <span>Эл. почта:</span> <a href="mailto:advertising@ntrk-magas.ru">magas@magas.tv</a>
 
                                         </li>
-                                        <li class="advertising__card_item advertising__card_item--mail">
 
-                                            <span>Эл. почта:</span> <a href="mailto:advertising@ntrk-magas.ru">advertising@ntrk-magas.ru</a>
-                                            <span>Эл. почта:</span> <a href="mailto:said-ms@mail.ru">said-ms@mail.ru</a>
-
-
-
-                                        </li>
-                                        <li class="advertising__card_item">
+                                        <li class="advertising__card_item" style="margin-top: 10px">
 
                                             <span>Контактное лицо</span>
-                                            <a>Саид Саправлиев (менеджер по рекламе)</a>
-
-                                        </li>
-                                        <li class="advertising__card_item">
+                                            <a>Саид Саправлиев (директор по рекламе)</a>
+                                            <span>Эл. почта:</span> <a href="mailto:said-ms@mail.ru">said-ms@mail.ru</a>
                                             <span>Телефон менеджера:</span>
                                             <a href="tel:79631740033">
                                                 +7 963 174-00-33

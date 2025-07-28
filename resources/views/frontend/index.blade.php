@@ -120,7 +120,7 @@
                                     @if(isset($popularItems))
                                         @foreach($popularItems as $item)
                                             <li class="popular-sidebar__item">
-                                                <a href="#" class="popular-sidebar__item_text">
+                                                <a href="{{route('home.news.single', $item->slug)}}" class="popular-sidebar__item_text">
                                                     {{$item->title}}
                                                 </a>
                                                 <div class="popular-sidebar__item_info">

@@ -107,7 +107,7 @@
                     <span class="menu-header-text">Контент</span>
                 </li>
 
-                @if(auth()->user()->role !== 'Администратор радио')
+                @if(auth()->user()->role->name !== 'Администратор радио')
                     <li class="menu-item">
                         <a href="{{route('news.index')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-news"></i>
@@ -215,7 +215,7 @@
                 @endif
 
 
-                @if(in_array(auth()->user()->role, ['Администратор радио', 'Супер-админ']))
+                @if(in_array(auth()->user()->role->name, ['Администратор радио', 'Супер-админ']))
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Контент радио</span>
                     </li>
