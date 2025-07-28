@@ -75,7 +75,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
     Route::group(['prefix' => 'admin'], function () {
         Route::resource('/categories', CategoryController::class);
         Route::resource('/news', AdminNewsController::class);
-        Route::resource('/radio-news', AdminNewsController::class);
+        Route::resource('/radio-news', RadioNewsController::class);
         Route::resource('/files', FileController::class);
         Route::resource('/video-reportages', VideoReportageController::class);
         Route::resource('/tv-show-type', TvShowTypeController::class);
