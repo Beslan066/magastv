@@ -269,11 +269,10 @@
                                 <p class="single-news__paragraph">{{$news->lead}}</p>
                             @endif
 
+                            <div>
+                                {!! $news->video !!}
+                            </div>
                             <div class="video-player">
-
-                                <iframe src="{{$news->video}}"
-                                        frameborder="0" allowfullscreen="1"
-                                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture"></iframe>
 
                                 <div class="video-navigation hidden">
                                     <div class="video-navigation__progress"></div>

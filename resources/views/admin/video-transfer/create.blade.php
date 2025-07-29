@@ -96,8 +96,9 @@
 {{--                            </div>--}}
 
                             <div class="mb-4">
-                                <label class="form-label">Ссылка на видео</label>
-                                <input type="text" class="form-control" placeholder="Вставьте ссылку" name="video" required>
+                                <label class="form-label">Код iframe видео (VK)</label>
+                                <textarea class="form-control" placeholder="Вставьте iframe код видео из VK" name="video" rows="4"></textarea>
+                                <small class="text-muted">Скопируйте iframe код из "Получить код" на странице видео VK</small>
                             </div>
 
                             @error('video')

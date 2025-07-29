@@ -24,17 +24,17 @@ class UpdateRequest extends FormRequest
         $videoTransferId = $this->route('video_transfers');
 
         // For AJAX video upload
-        if ($this->ajax() && $this->hasFile('video')) {
-            return [
-                'video' => 'required|file|mimes:mp4,mov,ogg,qt|max:204800'
-            ];
-        }
+//        if ($this->ajax() && $this->hasFile('video')) {
+//            return [
+//                'video' => 'required|file|mimes:mp4,mov,ogg,qt|max:204800'
+//            ];
+//        }
 
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
             'preview' => 'nullable|image|mimes:jpg,jpeg,png,webp',
-            'video' => 'nullable|file|mimes:mp4,mov,ogg,qt|max:204800',
+            'video' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'transfer_id' => 'required|exists:categories,id',
             'deleter_id' => 'nullable|exists:users,id',
@@ -69,9 +69,9 @@ class UpdateRequest extends FormRequest
             // Deleter ID
             'deleter_id.exists' => __('Указанный удалитель не найден'),
 
-            'video.required' => 'Пожалуйста, загрузите видеофайл',
-            'video.max' => 'Размер видео не должен превышать 2GB',
-            'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
+//            'video.required' => 'Пожалуйста, загрузите видеофайл',
+//            'video.max' => 'Размер видео не должен превышать 2GB',
+//            'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
         ];
     }
 }

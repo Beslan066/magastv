@@ -25,11 +25,11 @@ class UpdateRequest extends FormRequest
         $videoReportageId = $this->route('video_reportage');
 
         // For AJAX video upload
-        if ($this->ajax() && $this->hasFile('video')) {
-            return [
-                'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800',
-            ];
-        }
+//        if ($this->ajax() && $this->hasFile('video')) {
+//            return [
+//                'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800',
+//            ];
+//        }
 
         return [
             'title' => 'required|string|max:255',
@@ -37,7 +37,7 @@ class UpdateRequest extends FormRequest
             'lead' => 'required|string|max:255',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'video' => 'nullable|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800',
+            'video' => 'nullable',
             'status' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'category_id' => 'required|exists:categories,id',
@@ -85,8 +85,8 @@ class UpdateRequest extends FormRequest
             'published_at.date_format' => 'Некорректный формат даты, используйте формат ГГГГ-ММ-ДДTЧЧ:ММ.',
 
             'video.required' => 'Пожалуйста, загрузите видеофайл',
-            'video.max' => 'Размер видео не должен превышать 200MB',
-            'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
+//            'video.max' => 'Размер видео не должен превышать 200MB',
+//            'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
         ];
     }
 }

@@ -83,37 +83,43 @@
                                 </div>
                             </div>
 
-                            <!-- Блок для видео -->
-                            <!-- Блок для видео -->
                             <div class="mb-4">
-                                @if($videoTransfer->video)
-                                    <div class="mb-3">
-                                        <label>Текущее видео:</label>
-                                        <video controls class="w-100" poster="{{ asset('storage/public/'.$videoTransfer->preview) }}" style="max-height: 400px">
-                                            <source src="{{ asset('storage/public/'.$videoTransfer->video) }}" type="video/mp4">
-                                            Ваш браузер не поддерживает видео.
-                                        </video>
-                                        <div class="form-check mt-2">
-                                            <input class="form-check-input" type="checkbox" id="deleteVideo" name="delete_video">
-                                            <label class="form-check-label" for="deleteVideo">Удалить текущее видео</label>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                <label class="form-label">Новое видео (оставьте пустым, если не нужно менять)</label>
-                                <div class="video-upload-container" id="videoDropzone">
-                                    <input type="file" id="videoUpload" name="video" accept=".mp4,.mov,.ogg,video/mp4,video/quicktime,video/ogg" style="display: none;">
-                                    <label for="videoUpload" class="video-upload-label">
-                                        <i class="bx bx-cloud-upload fs-1 text-primary"></i>
-                                        <h5 class="mt-2">Кликните для загрузки видео</h5>
-                                        <p class="text-muted">MP4, MOV, OGG (до 200MB)</p>
-                                    </label>
-                                    <div class="progress mt-3" id="uploadProgress" style="display: none; height: 20px;">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                    </div>
-                                    <div id="videoInfo" class="mt-2"></div>
-                                </div>
+                                <label class="form-label">Код iframe видео (VK)</label>
+                                <textarea class="form-control" placeholder="Вставьте iframe код видео из VK" name="video" rows="4">{{ old('video', $videoTransfer->video) }}</textarea>
+                                <small class="text-muted">Скопируйте iframe код из "Получить код" на странице видео VK</small>
                             </div>
+
+{{--                            <!-- Блок для видео -->--}}
+{{--                            <!-- Блок для видео -->--}}
+{{--                            <div class="mb-4">--}}
+{{--                                @if($videoTransfer->video)--}}
+{{--                                    <div class="mb-3">--}}
+{{--                                        <label>Текущее видео:</label>--}}
+{{--                                        <video controls class="w-100" poster="{{ asset('storage/public/'.$videoTransfer->preview) }}" style="max-height: 400px">--}}
+{{--                                            <source src="{{ asset('storage/public/'.$videoTransfer->video) }}" type="video/mp4">--}}
+{{--                                            Ваш браузер не поддерживает видео.--}}
+{{--                                        </video>--}}
+{{--                                        <div class="form-check mt-2">--}}
+{{--                                            <input class="form-check-input" type="checkbox" id="deleteVideo" name="delete_video">--}}
+{{--                                            <label class="form-check-label" for="deleteVideo">Удалить текущее видео</label>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+
+{{--                                <label class="form-label">Новое видео (оставьте пустым, если не нужно менять)</label>--}}
+{{--                                <div class="video-upload-container" id="videoDropzone">--}}
+{{--                                    <input type="file" id="videoUpload" name="video" accept=".mp4,.mov,.ogg,video/mp4,video/quicktime,video/ogg" style="display: none;">--}}
+{{--                                    <label for="videoUpload" class="video-upload-label">--}}
+{{--                                        <i class="bx bx-cloud-upload fs-1 text-primary"></i>--}}
+{{--                                        <h5 class="mt-2">Кликните для загрузки видео</h5>--}}
+{{--                                        <p class="text-muted">MP4, MOV, OGG (до 200MB)</p>--}}
+{{--                                    </label>--}}
+{{--                                    <div class="progress mt-3" id="uploadProgress" style="display: none; height: 20px;">--}}
+{{--                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>--}}
+{{--                                    </div>--}}
+{{--                                    <div id="videoInfo" class="mt-2"></div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <input type="hidden" name="uploaded_video_path" id="uploadedVideoPath" value="{{ $videoTransfer->video ?? '' }}">
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
