@@ -35,9 +35,9 @@
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
                                     <div class="dropdown-menu" style="">
                                         <a class="dropdown-item" href="{{route('categories.edit', $category->id)}}"><i class="icon-base bx bx-edit-alt me-1"></i>Изменить</a>
-                                        <form action="{{route('categories.destroy', $category->id)}}">
+                                        <form action="{{route('categories.destroy', $category->id)}}" method="post">
                                             @csrf
-                                            @method('patch')
+                                            @method('delete')
                                             <button type="submit" class="dropdown-item"><i class="icon-base bx bx-trash me-1"></i>Удалить</button>
                                         </form>
                                     </div>

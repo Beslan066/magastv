@@ -24,9 +24,9 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'required|string|max:255',
+            'lead' => 'required',
             'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
+            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png|max:150',
             'status' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'category_id' => 'required|exists:categories,id',
@@ -58,13 +58,15 @@ class StoreRequest extends FormRequest
 
             // Image
             'image.string' => __('Изображение должно быть строкой'),
-            'image.max' => __('Ссылка на изображение не должна превышать 255 символов'),
+            'image.max' => __('Размер изображения не должен превышать 150КБ'),
 
 
             // User ID
             'user_id.exists' => __('Указанный пользователь не найден'),
 
             // Category ID
+            'category_id.required' => __('Категория обязательна для заполнения'),
+
             'category_id.exists' => __('Указанная категория не найдена'),
 
             // Deleter ID

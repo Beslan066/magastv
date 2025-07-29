@@ -39,7 +39,7 @@
                                             <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
                                         </div>
                                         <h6 class="transferItem_title">
-                                            <a href="#">{{$transfer->title}}</a>
+                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
                                         <span class="transferItem_count">24 выпуска</span>
                                     </li>

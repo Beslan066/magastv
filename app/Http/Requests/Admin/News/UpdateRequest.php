@@ -24,9 +24,9 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'lead' => 'required|string|max:255',
+            'lead' => 'required',
             'content' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
+            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png|max:150',
             'status' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'category_id' => 'required|exists:categories,id',
@@ -59,7 +59,7 @@ class UpdateRequest extends FormRequest
 
             // Image
             'image.string' => __('Изображение должно быть строкой'),
-            'image.max' => __('Ссылка на изображение не должна превышать 255 символов'),
+            'image.max' => __('Размер изображения не должен превышать 150КБ'),
 
 
             // User ID
