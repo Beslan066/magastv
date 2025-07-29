@@ -23,17 +23,18 @@ class StoreRequest extends FormRequest
     {
 
         // For AJAX video upload
-        if ($this->ajax() && $this->hasFile('video')) {
-            return [
-                'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800',
-            ];
-        }
+//        if ($this->ajax() && $this->hasFile('video')) {
+//            return [
+////                'video' => 'required|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800',
+//            ];
+//        }
 
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:2048',
+//            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:2048',
+            'video' => 'nullable',
             'user_id' => 'required|exists:users,id',
             'transfer_id' => 'required|exists:categories,id',
             'deleter_id' => 'nullable|exists:users,id',

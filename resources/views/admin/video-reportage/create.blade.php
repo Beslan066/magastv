@@ -71,22 +71,27 @@
                             </div>
 
                             <!-- Блок для загрузки видео -->
+{{--                            <div class="mb-4">--}}
+{{--                                <div class="video-upload-container" id="videoDropzone">--}}
+{{--                                    <input type="file" id="videoUpload" name="video"--}}
+{{--                                           accept="video/mp4,video/quicktime,video/ogg,video/x-qt" style="display: none;">--}}
+{{--                                    <label for="videoUpload" class="video-upload-label">--}}
+{{--                                        <i class="bx bx-cloud-upload fs-1 text-primary"></i>--}}
+{{--                                        <h5 class="mt-2">Кликните для загрузки видео</h5>--}}
+{{--                                        <p class="text-muted">MP4, MOV, OGG (до 200MB)</p>--}}
+{{--                                    </label>--}}
+{{--                                    <div class="progress mt-3" id="uploadProgress" style="display: none; height: 20px;">--}}
+{{--                                        <div class="progress-bar progress-bar-striped progress-bar-animated"--}}
+{{--                                             role="progressbar" style="width: 0%"></div>--}}
+{{--                                    </div>--}}
+{{--                                    <div id="videoInfo" class="mt-2"></div>--}}
+{{--                                </div>--}}
+{{--                                --}}
+{{--                            </div>--}}
+
                             <div class="mb-4">
-                                <label class="form-label">Видео файл *</label>
-                                <div class="video-upload-container" id="videoDropzone">
-                                    <input type="file" id="videoUpload" name="video"
-                                           accept="video/mp4,video/quicktime,video/ogg,video/x-qt" style="display: none;">
-                                    <label for="videoUpload" class="video-upload-label">
-                                        <i class="bx bx-cloud-upload fs-1 text-primary"></i>
-                                        <h5 class="mt-2">Кликните для загрузки видео</h5>
-                                        <p class="text-muted">MP4, MOV, OGG (до 200MB)</p>
-                                    </label>
-                                    <div class="progress mt-3" id="uploadProgress" style="display: none; height: 20px;">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
-                                             role="progressbar" style="width: 0%"></div>
-                                    </div>
-                                    <div id="videoInfo" class="mt-2"></div>
-                                </div>
+                                <label class="form-label">Ссылка на видео</label>
+                                <input type="text" class="form-control" placeholder="Вставьте ссылку" name="video" required>
                             </div>
 
                             <div class="mb-3">
