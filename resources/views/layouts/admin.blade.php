@@ -206,6 +206,16 @@
                     <!-- Forms & Tables -->
                     <li class="menu-header small text-uppercase"><span class="menu-header-text">Настройки</span></li>
 
+
+                    <li class="menu-item">
+                        <form action="{{route('logout')}}" method="post">
+                            @csrf
+                            @method('post')
+
+                            <button type="submit" class="btn menu-link text-danger">Выйти</button>
+                        </form>
+                    </li>
+
                     <li class="menu-item">
                         <a class="menu-link">
                             <i class="menu-icon tf-icons bx bx-cog"></i>
