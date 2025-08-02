@@ -5,8 +5,15 @@
         <section class="news">
             <div class="container">
                 <div class="news__inner">
-                    <div class="tabs">
-                        <ul class="list-reset tabs__list">
+                    <div class="tabs-container">
+                        <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+
+                        <div class="tabs">
+                            <ul class="list-reset tabs__list">
                             <li class="tab active" data-category-id="all">
                                 <span>Все</span>
                             </li>
@@ -15,7 +22,13 @@
                                     <span>{{$category->name}}</span>
                                 </li>
                             @endforeach
-                        </ul>
+                            </ul>
+                        </div>
+                        <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
                     </div>
                     <div class="news__main">
                         <div class="news__grid">
@@ -524,6 +537,63 @@
                     }
                 });
             });
+
+
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsContainer = document.querySelector('.tabs');
+            const tabsList = document.querySelector('.tabs__list');
+            const prevBtn = document.querySelector('.tab-arrow-prev');
+            const nextBtn = document.querySelector('.tab-arrow-next');
+
+            // Скрываем стрелку "назад" по умолчанию
+            prevBtn.style.display = 'none';
+
+            function updateArrows() {
+                // Проверяем, есть ли скролл
+                const canScroll = tabsList.scrollWidth > tabsContainer.offsetWidth;
+
+                if (!canScroll) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    return;
+                }
+
+                // Показываем обе стрелки, если контент не помещается
+                nextBtn.style.display = 'flex';
+
+                // Проверяем позицию скролла
+                const isAtStart = tabsList.scrollLeft <= 0;
+                const isAtEnd = tabsList.scrollLeft + tabsContainer.offsetWidth >= tabsList.scrollWidth - 1;
+
+                prevBtn.style.display = isAtStart ? 'none' : 'flex';
+                nextBtn.style.display = isAtEnd ? 'none' : 'flex';
+
+                prevBtn.disabled = isAtStart;
+                nextBtn.disabled = isAtEnd;
+            }
+
+            // Обработчики для стрелок
+            prevBtn.addEventListener('click', () => {
+                tabsList.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                tabsList.scrollBy({ left: 200, behavior: 'smooth' });
+            });
+
+            // Обновляем стрелки при скролле
+            tabsList.addEventListener('scroll', updateArrows);
+
+            // И при изменении размера окна
+            window.addEventListener('resize', updateArrows);
+
+            // Инициализация
+            updateArrows();
         });
     </script>
 @endpush

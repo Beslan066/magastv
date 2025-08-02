@@ -1298,6 +1298,64 @@ body.active {
     display: none;
 }
 
+.tabs-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.tabs {
+    width: 100%;
+    max-width: calc(100% - 110px);
+    border-bottom: 1px solid var(--neutral-neutral-200);
+    height: 42px;
+    overflow: hidden; /* Изменено с auto на hidden */
+}
+
+.tabs__list {
+    display: flex;
+    gap: 16px;
+    padding: 0 8px;
+    white-space: nowrap;
+    overflow-x: auto; /* Переносим скролл сюда */
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    height: 100%;
+}
+
+.tabs__list::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-arrow {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--neutral-neutral-600);
+    transition: all 0.2s ease;
+}
+
+.tab-arrow:hover {
+    background: var(--neutral-neutral-100);
+    color: var(--neutral-neutral-800);
+}
+
+.tab-arrow[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: var(--neutral-neutral-50);
+}
+
+
 /*  - tabs: */
 .tabs {
     width: 100%;
