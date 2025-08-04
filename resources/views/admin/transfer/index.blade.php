@@ -59,6 +59,10 @@
 
                 </tbody>
             </table>
+
+            <div class="mt-2">
+                {{$transfers->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

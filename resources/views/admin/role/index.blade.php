@@ -45,6 +45,9 @@
 
                 </tbody>
             </table>
+            <div class="mt-2">
+                {{$roles->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

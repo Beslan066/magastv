@@ -49,6 +49,9 @@
 
                 </tbody>
             </table>
+            <div class="mt-2">
+                {{$categories->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

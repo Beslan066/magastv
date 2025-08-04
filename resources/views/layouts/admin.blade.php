@@ -75,12 +75,14 @@
 <body>
 <!-- Layout wrapper -->
 <div class="layout-wrapper layout-content-navbar">
-    <div class="layout-container">
+    
+<div class="layout-container">
+    
         <!-- Menu -->
 
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
             <div class="app-brand demo">
-                <a href="{{route('admin.index')}}" class="app-brand-link">
+                <a href="{{route('home')}}" class="app-brand-link">
                     <span class="app-brand-text demo menu-text fw-bold ms-2">МагасТВ</span>
                 </a>
 
@@ -95,8 +97,8 @@
 
             <ul class="menu-inner py-1">
                 <!-- Dashboards -->
-                <li class="menu-item active open">
-                    <a href="javascript:void(0);" class="menu-link">
+                <li class="menu-item open">
+                    <a href="{{route('admin.index')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-home-smile"></i>
                         <div class="text-truncate" data-i18n="Dashboards">Дашборд</div>
                     </a>
@@ -119,13 +121,6 @@
                         <a href="{{route('categories.index')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-tag"></i>
                             <div class="text-truncate" data-i18n="Basic">Категории</div>
-                        </a>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="{{route('files.index')}}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-file"></i>
-                            <div class="text-truncate" data-i18n="Basic">Файлы</div>
                         </a>
                     </li>
 
@@ -436,6 +431,45 @@
         });
     });
 
+    document.addEventListener('DOMContentLoaded', function() {
+        // Получаем текущий URL (без параметров запроса и хэша)
+        const currentPath = window.location.pathname;
+        
+        // Находим все ссылки в меню
+        const menuLinks = document.querySelectorAll('#layout-menu .menu-link');
+        
+        // Удаляем классы active/open у всех пунктов меню (кроме тех, что должны быть открыты по умолчанию)
+        document.querySelectorAll('#layout-menu .menu-item').forEach(item => {
+            if (!item.classList.contains('active') || !item.querySelector('a[href="{{route('admin.index')}}"]')) {
+                item.classList.remove('active', 'open');
+            }
+        });
+        
+        // Перебираем все ссылки
+        menuLinks.forEach(link => {
+            // Сравниваем путь ссылки с текущим путём
+            const linkPath = new URL(link.href).pathname;
+            
+            if (linkPath === currentPath) {
+                // Добавляем класс active к родительскому элементу li
+                const menuItem = link.closest('.menu-item');
+                menuItem.classList.add('active');
+                
+                // Если есть родительское меню, открываем его
+                const parentMenu = link.closest('.menu-sub');
+                if (parentMenu) {
+                    parentMenu.style.display = 'block';
+                    parentMenu.previousElementSibling.classList.add('active', 'open');
+                }
+            }
+        });
+        
+        // Специальная проверка для дашборда
+        const dashboardLink = document.querySelector('a[href="{{route('admin.index')}}"]');
+        if (dashboardLink && currentPath === new URL(dashboardLink.href).pathname) {
+            dashboardLink.closest('.menu-item').classList.add('active', 'open');
+        }
+    });
 
 
 </script>

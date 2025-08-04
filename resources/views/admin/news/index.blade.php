@@ -24,7 +24,9 @@
                     @foreach($news as $item)
                         <tr>
                             <td><span>{{$item->id}}</span></td>
-                            <td>{{$item->title}}</td>
+                            <td><a href="{{route('home.news.single', $item->slug)}}">
+                                {{$item->title}}
+                            </a></td>
 {{--                            <td><div class="bg-label-primary rounded-3 text-center mb-4 pt-6">--}}
 {{--                                    <img class="img-fluid" src="{{asset('storage/' . $item->image)}}" alt="Card girl image">--}}
 {{--                                </div></td>--}}
@@ -59,6 +61,10 @@
 
                 </tbody>
             </table>
+
+            <div class="mt-2">
+                {{$news->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

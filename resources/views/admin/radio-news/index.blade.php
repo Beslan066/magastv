@@ -58,6 +58,9 @@
                 @endif
                 </tbody>
             </table>
+            <div class="mt-2">
+                {{$news->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

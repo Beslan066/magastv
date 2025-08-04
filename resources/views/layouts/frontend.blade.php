@@ -36,9 +36,39 @@
 <!-- header menu,footer -->
 
 <body class="body">
+    @if(auth()->user())
+        @if(auth()->user()->role->name !== 'Обычный пользователь')
+        <div class="admin-row">
+            <div class="container">
+                <ul>
+                    <li>
+                    <a href="{{route('admin.index')}}">
+                        Админ-панель
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('categories.index')}}">
+                        Категории
+                    </a>
+                </li>
+                <li><a href="{{route('news.index')}}"></a></li>
+                <li>
+                    <a href="{{route('video-reportages.index')}}">
+                        Видеорепортажи
+                    </a>
+                </li>
+                <li>Пользователи</li>
+                <li>Роли</li>
+            </ul>
+            </div>
+        </div>
+    @endif
+    @endif
 <header class="header">
+    
     <div class="header__top">
         <div class="container">
+            
             <div class="header__top_inner">
                 <div class="header__media">
                     <div class="header__media_tabs">

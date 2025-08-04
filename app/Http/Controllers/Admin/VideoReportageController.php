@@ -38,14 +38,14 @@ class VideoReportageController extends Controller
         $data = $request->validated();
 
         // Handle AJAX video upload
-        if ($request->ajax() && $request->hasFile('video')) {
-            try {
-                $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
-                return response()->json(['video_path' => $path]);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
-        }
+        // if ($request->ajax() && $request->hasFile('video')) {
+        //     try {
+        //         $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
+        //         return response()->json(['video_path' => $path]);
+        //     } catch (\Exception $e) {
+        //         return response()->json(['error' => $e->getMessage()], 500);
+        //     }
+        // }
 
         // Regular form submission
         if ($request->hasFile('preview')) {
@@ -54,12 +54,12 @@ class VideoReportageController extends Controller
         }
 
         // Use either the uploaded video path or the newly uploaded file
-        if ($request->has('uploaded_video_path')) {
-            $data['video'] = $request->input('uploaded_video_path');
-        } elseif ($request->hasFile('video')) {
-            $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
-            $data['video'] = $path ?? null;
-        }
+        // if ($request->has('uploaded_video_path')) {
+        //     $data['video'] = $request->input('uploaded_video_path');
+        // } elseif ($request->hasFile('video')) {
+        //     $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
+        //     $data['video'] = $path ?? null;
+        // }
 
         $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
         $data['main_material'] = $request->has('main_material') ? 1 : 0;
@@ -93,19 +93,19 @@ class VideoReportageController extends Controller
         $data = $request->validated();
 
         // Handle AJAX video upload
-        if ($request->ajax() && $request->hasFile('video')) {
-            try {
-                // Delete old video if exists
-                if ($video_reportage->video) {
-                    Storage::disk('public')->delete($video_reportage->video);
-                }
+        // if ($request->ajax() && $request->hasFile('video')) {
+        //     try {
+        //         // Delete old video if exists
+        //         if ($video_reportage->video) {
+        //             Storage::disk('public')->delete($video_reportage->video);
+        //         }
 
-                $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
-                return response()->json(['video_path' => $path]);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
-        }
+        //         $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
+        //         return response()->json(['video_path' => $path]);
+        //     } catch (\Exception $e) {
+        //         return response()->json(['error' => $e->getMessage()], 500);
+        //     }
+        // }
 
         // Handle preview image
         if ($request->hasFile('preview')) {
@@ -119,17 +119,17 @@ class VideoReportageController extends Controller
         }
 
         // Handle video file
-        if ($request->has('uploaded_video_path')) {
-            $data['video'] = $request->input('uploaded_video_path');
-        } elseif ($request->hasFile('video')) {
-            // Delete old video if exists
-            if ($video_reportage->video) {
-                Storage::disk('public')->delete($video_reportage->video);
-            }
+        // if ($request->has('uploaded_video_path')) {
+        //     $data['video'] = $request->input('uploaded_video_path');
+        // } elseif ($request->hasFile('video')) {
+        //     // Delete old video if exists
+        //     if ($video_reportage->video) {
+        //         Storage::disk('public')->delete($video_reportage->video);
+        //     }
 
-            $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
-            $data['video'] = $path;
-        }
+        //     $path = Storage::disk('public')->put('videoReportages', $request->file('video'));
+        //     $data['video'] = $path;
+        // }
 
         $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
         $data['main_material'] = $request->has('main_material') ? 1 : 0;

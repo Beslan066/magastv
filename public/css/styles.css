@@ -2555,3 +2555,26 @@ body.active {
 .schedule-list__item.active {
     border: 1px solid #70e780;
 }
+
+.admin-row {
+    background-color: #545454;
+    color: #fff;
+    padding: 10px;
+    font-family: "Golos Text", sans-serif;;
+}
+
+.admin-row ul {
+    display: flex;
+    align-items: center;
+}
+
+.admin-row ul li{
+    margin-right: 30px;
+    list-style: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.admin-row a{
+    color: #fff;
+}

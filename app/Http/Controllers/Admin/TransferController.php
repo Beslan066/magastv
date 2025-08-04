@@ -20,7 +20,7 @@ class TransferController extends Controller
      */
     public function index()
     {
-        $transfers = Transfer::paginate(10);
+        $transfers = Transfer::query()->orderBy('id', 'desc')->paginate(10);
 
         return view('admin.transfer.index', [
             'transfers' => $transfers,

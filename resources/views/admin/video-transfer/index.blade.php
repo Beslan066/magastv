@@ -59,6 +59,9 @@
 
                 </tbody>
             </table>
+            <div class="mt-2">
+                {{$videos->links()}}
+            </div>
         </div>
     </div>
     <!-- end row -->

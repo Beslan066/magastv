@@ -66,12 +66,17 @@
                                 <select class="form-select" id="inputGroupSelect02" name="category_id">
                                     @if(isset($transfer->category_id))
                                         <option
-                                            value="{{$transfer->category_id}}">{{$transfer->category->name}}</option>
+                                            value="{{$transfer->category_id}}">{{$transfer->category->title}}</option>
+                                            @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">
+                                                {{ $category->title }}
+                                            </option>
+                                        @endforeach
                                     @else
                                         <option value="">Выберите категорию...</option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">
-                                                {{ $category->name }}
+                                                {{ $category->title }}
                                             </option>
                                         @endforeach
                                     @endif

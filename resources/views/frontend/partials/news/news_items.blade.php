@@ -1,7 +1,7 @@
 @if($items)
     @foreach($items as $news)
         <li class="news-item news-item--second @if($news->type === 'video') news-item--media @endif">
-            <a href="{{ $news->type === 'news' ? route('home.news.single', $news->slug) : route('home.videos.single', $news->slug) }}">
+            <a href="{{ $news->type === 'news' ? route('home.news.single', $news->slug) : route('home.news.single', $news->slug) }}">
                 <div class="news-item__media active">
                     <img src="{{ asset('storage/public/' . $news->media) }}"
                          alt="{{ $news->title }}"
@@ -17,7 +17,7 @@
             </a>
             <div class="news-item__bottom">
                 <h6 class="news-item__title">
-                    <a href="{{ $news->type === 'news' ? route('home.news.single', $news->slug) : route('home.videos.single', $news->slug) }}">
+                    <a href="{{ $news->type === 'news' ? route('home.news.single', $news->slug) : route('home.news.single', $news->slug) }}">
                         {{ $news->title }}
                     </a>
                 </h6>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="news-item__info">
                     <time datetime="{{ $news->published_at->format('Y-m-d H:i') }}" class="news-item_time">
-                        {{ $news->published_at->format('d M, H:i') }}
+                        {{ $news->formatted_published_at }}
                     </time>
                     <div class="news-item_views">
                         <div class="item-views__icon">

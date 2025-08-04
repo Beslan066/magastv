@@ -21,6 +21,11 @@
                             <time>{{$news->formatted_published_at}}</time>
                             ·
                             <span>{{$news->category->name}}</span>
+                            @if(auth()->user())
+                            @if(auth()->user()->role->name !== 'Обычный пользователь')
+                            <a href="{{route('news.edit', $news->slug)}}">Изменить</a>
+                            @endif
+                            @endif
                         </div>
                         <ul class="list-reset socials">
                             <li class="social"><a href="#">
@@ -116,28 +121,26 @@
                                 <div class="content__popular popular-sidebar popular-sidebar--news">
                                     <h3 class="popular-sidebar__title">Популярное</h3>
                                     <ul class="list-reset popular-sidebar__list">
-                                        @if(isset($popularItems)) @endif
-                                        @foreach($popularItems as $item)
+                                        @if($popularItems)
+                                        @foreach($popularItems as $news)
                                             <li class="popular-sidebar__item">
-                                                <a href="{{route('home.news.single', $item->slug)}}"
-                                                   class="popular-sidebar__item_text">
-                                                    Учёные создали материал, который восстанавливается
+                                                <a href="{{route('home.news.single', $news->slug)}}" class="popular-sidebar__item_text">
+                                                    {{$news->title}}
                                                 </a>
                                                 <div class="popular-sidebar__item_info">
-                                                    <time datetime="2024-09-19 21:34"
-                                                          class="popular-sidebar__item_time">
-                                                        19 сен, 21:34
+                                                    <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
+                                                        {{$news->formatted_published_at}}
                                                     </time>
                                                     <div class="popular-sidebar__item_views">
                                                         <div class="item-views__icon">
-                                                            <img src="{{asset('assets/img/views1.svg')}}"
-                                                                 alt="Eye icon">
+                                                            <img src="{{asset('assets/img/views1.svg')}}" alt="Eye icon">
                                                         </div>
-                                                        <span>99</span>
+                                                        <span>{{$news->views}}</span>
                                                     </div>
                                                 </div>
                                             </li>
                                         @endforeach
+                                    @endif
                                     </ul>
                                 </div>
                             </div>
@@ -204,6 +207,11 @@
                             <time>1 апреля 2025, 13:45</time>
                             ·
                             <span>{{$news->category->title}}</span>
+                            @if(auth()->user())
+                            @if(auth()->user()->role->name !== 'Обычный пользователь')
+                            <a href="{{route('video-reportages.edit', $news->id)}}">Изменить</a>
+                            @endif
+                            @endif
                         </div>
                         <ul class="list-reset socials">
                             <li class="social"><a href="#">
@@ -412,246 +420,26 @@
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
                                 <ul class="list-reset popular-sidebar__list">
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="{{asset('assets/img/views1.svg')}}" alt="Eye icon">
+                                    @if($popularItems)
+                                        @foreach($popularItems as $news)
+                                            <li class="popular-sidebar__item">
+                                                <a href="{{route('home.news.single', $news->slug)}}" class="popular-sidebar__item_text">
+                                                    {{$news->title}}
+                                                </a>
+                                                <div class="popular-sidebar__item_info">
+                                                    <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
+                                                        {{$news->formatted_published_at}}
+                                                    </time>
+                                                    <div class="popular-sidebar__item_views">
+                                                        <div class="item-views__icon">
+                                                            <img src="{{asset('assets/img/views1.svg')}}" alt="Eye icon">
+                                                        </div>
+                                                        <span>{{$news->views}}</span>
+                                                    </div>
                                                 </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            ИИ научился распознавать эмоции с точностью 99%
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Неожиданный рекорд: новый фильм собрал миллиарды за неделю
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Книга, которую никто не ожидал: бестселлер от неизвестного автора
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Музыкальная сенсация: трек, который взорвал чарты за день
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Редкое природное явление: когда его можно увидеть?
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            В недрах Ингушетии обнаружен новый драгоценный минерал
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="popular-sidebar__item">
-                                        <a href="#" class="popular-sidebar__item_text">
-                                            Учёные создали материал, который восстанавливается
-                                        </a>
-                                        <div class="popular-sidebar__item_info">
-                                            <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                19 сен, 21:34
-                                            </time>
-                                            <div class="popular-sidebar__item_views">
-                                                <div class="item-views__icon">
-                                                    <img src="./assets/img/views1.svg" alt="Eye icon">
-                                                </div>
-                                                <span>99</span>
-                                            </div>
-                                        </div>
-                                    </li>
+                                            </li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </div>
                         </div>
