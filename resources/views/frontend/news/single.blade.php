@@ -204,9 +204,10 @@
                             {{$news->title}}
                         </h2>
                         <div class="single-news__info">
-                            <time>1 апреля 2025, 13:45</time>
+                            <time>{{$news->formatted_published_at}}</time>
                             ·
-                            <span>{{$news->category->title}}</span>
+                            <span>{{$news->category->name}}</span>
+                            @endif
                             @if(auth()->user())
                             @if(auth()->user()->role->name !== 'Обычный пользователь')
                             <a href="{{route('video-reportages.edit', $news->id)}}">Изменить</a>

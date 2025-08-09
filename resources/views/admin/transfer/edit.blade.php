@@ -71,7 +71,7 @@
                                             <option value="{{ $category->id }}">
                                                 {{ $category->title }}
                                             </option>
-                                        @endforeach
+                                        @endforeach     
                                     @else
                                         <option value="">Выберите категорию...</option>
                                         @foreach($categories as $category)
