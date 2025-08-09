@@ -20,7 +20,9 @@
                         <div class="single-news__info">
                             <time>{{$news->formatted_published_at}}</time>
                             ·
-                            <span>{{$news->category->name}}</span>
+                            @if(isset($news->category))
+                                <span>{{$news->category->name}}</span>
+                            @endif
                             @if(auth()->user())
                             @if(auth()->user()->role->name !== 'Обычный пользователь')
                             <a href="{{route('news.edit', $news->slug)}}">Изменить</a>
@@ -206,6 +208,7 @@
                         <div class="single-news__info">
                             <time>{{$news->formatted_published_at}}</time>
                             ·
+                            @if(isset($news->category))
                             <span>{{$news->category->name}}</span>
                             @endif
                             @if(auth()->user())
