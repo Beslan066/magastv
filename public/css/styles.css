@@ -2371,6 +2371,11 @@ body.active {
     z-index: 11;
 }
 
+.popular-item__media iframe {
+    height: unset !important;
+    width: unset !important;
+}
+
 .popular-item__media::before {
     content: "";
     display: none;

@@ -36,7 +36,7 @@ class UpdateRequest extends FormRequest
             'preview' => 'nullable|image|mimes:jpg,jpeg,png,webp',
             'video' => 'nullable',
             'user_id' => 'required|exists:users,id',
-            'transfer_id' => 'required|exists:categories,id',
+            'transfer_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
             'delete_preview' => 'nullable|boolean',
             'delete_video' => 'nullable|boolean',
@@ -64,7 +64,7 @@ class UpdateRequest extends FormRequest
             'user_id.exists' => __('Указанный пользователь не найден'),
 
             // Category ID
-            'category_id.exists' => __('Указанная категория не найдена'),
+            'transfer_id.required' => __('Указанная передача не найдена'),
 
             // Deleter ID
             'deleter_id.exists' => __('Указанный удалитель не найден'),

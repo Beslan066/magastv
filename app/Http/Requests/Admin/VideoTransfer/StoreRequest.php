@@ -36,7 +36,7 @@ class StoreRequest extends FormRequest
 //            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:2048',
             'video' => 'nullable',
             'user_id' => 'required|exists:users,id',
-            'transfer_id' => 'required|exists:categories,id',
+            'transfer_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
         ];
     }
