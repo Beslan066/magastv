@@ -11,7 +11,14 @@
 }
 
 .live-content__left {
+    width: 904px;
     max-width: 904px;
+}
+
+.live-content__left iframe {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
 
 .live-content__right {
@@ -19,8 +26,9 @@
 }
 
 .live__main-media {
+    max-width: 904px !important;
+    width: 100% !important;
     position: relative;
-    width: 100%;
     max-height: 508px;
     border-radius: 12px;
     overflow: hidden;
@@ -141,4 +149,16 @@
     font-size: 24px;
     line-height: 117%;
     color: var(--bw-black);
+}
+
+@media (max-width: 480px) {
+
+    .live-content__left {
+        width: 100%;
+    }
+
+    .live__main-media {
+        max-width: unset !important;
+    }
+
 }

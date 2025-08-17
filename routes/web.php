@@ -28,38 +28,16 @@ use App\Models\VideoTransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
-use Illuminate\Support\Str;
 
-
-
-
-Route::get('/proxy-live/{path?}', function ($path = null) {
-    $baseUrl = 'https://ingushetia.mediacdn.ru/cdn/ingushetia/';
-    $requestUrl = $baseUrl . ($path ? $path : 'playlist.m3u8');
-
-    // Добавляем query-параметры (если есть)
-    if (request()->query()) {
-        $requestUrl .= '?' . http_build_query(request()->query());
-    }
-
-    try {
-        $client = new Client();
-        $response = $client->get($requestUrl, [
-            'headers' => [
-                'Accept' => 'application/x-mpegurl',
-            ],
-        ]);
-
-        return response($response->getBody(), 200, [
-            'Content-Type' => 'application/x-mpegurl',
-            'Access-Control-Allow-Origin' => '*',
-        ]);
-    } catch (\Exception $e) {
-        return response("Ошибка загрузки потока: " . $e->getMessage(), 500);
-    }
-})->where('path', '.*'); // Разрешаем любой путь
+Route::get('/proxy/live-stream', function() {
+    $streamUrl = 'https://public.mediacdn.ru/magas/';
+    return response()->streamDownload(function() use ($streamUrl) {
+        readfile($streamUrl);
+    }, 'stream.m3u8', [
+        'Content-Type' => 'application/x-mpegURL',
+        'Access-Control-Allow-Origin' => '*'
+    ]);
+});
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/on-air', [HomeController::class, 'onAir'])->name('onAir');

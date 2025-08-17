@@ -14,8 +14,13 @@
                     </h1>
                     <div class="live-content">
                         <div class="live-content__left">
-                            <video id="liveStream" controls autoplay muted></video>
-
+                            <div class="live__main-media">
+                                <iframe src="https://public.mediacdn.ru/magas/"
+                                        frameborder="0"
+                                        allowfullscreen
+                                        allow="autoplay">
+                                </iframe>
+                            </div>
                             <div class="live-programs">
                                 <h2 class="live-programs__title">Смотрите дальше</h2>
                                 <div class="live-programs__items">
@@ -32,12 +37,12 @@
                                                         Новости
                                                     </span>
                                                     <div class="programListItem__media programListItem__media--mobile">
-                                                        <img src="./assets/poster.jpg" alt="Program item image">
+                                                        <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
                                                     </div>
                                                     <p class="programListItem__text">{{$program->description}}</p>
                                             </div>
                                             <div class="programListItem__media">
-                                                <img src="./assets/poster.jpg" alt="Program item image">
+                                                <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
                                             </div>
                                         </div>
                                         @endforeach
@@ -47,7 +52,7 @@
                         </div>
                         <div class="live-content__right">
                             <div class="ads-block">
-                                <img src="./assets/add.jpg" alt="add">
+                                <img src="{{asset('assets/add.jpg')}}" alt="add">
                             </div>
                         </div>
                     </div>
@@ -58,53 +63,28 @@
 @endsection
 
 @push('scripts')
-{{--<script src="{{asset('js/live.js')}}"></script>--}}
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.querySelector('.live-video-tag');
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script>
-    const video = document.getElementById('liveStream');
-
-    if (Hls.isSupported()) {
-        const hls = new Hls({
-            pLoader: (context) => {
-                // Переписываем URL для загрузки через прокси
-                context.url = '/proxy-live/' + context.url.split('/').pop();
-                return context;
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource('https://public.mediacdn.ru/magas/');
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Для Safari, который поддерживает HLS нативно
+                video.src = 'https://public.mediacdn.ru/magas/';
+                video.addEventListener('loadedmetadata', function() {
+                    video.play();
+                });
             }
-        });
 
-        hls.loadSource('/proxy-live/playlist.m3u8');
-        hls.attachMedia(video);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(e => console.error("Autoplay error:", e));
+            // Остальной код вашего live.js
         });
-
-        hls.on(Hls.Events.ERROR, (event, data) => {
-            console.error("HLS Error:", data);
-            if (data.fatal) {
-                switch (data.type) {
-                    case Hls.ErrorTypes.NETWORK_ERROR:
-                        console.error("Network error, trying to recover...");
-                        hls.startLoad();
-                        break;
-                    case Hls.ErrorTypes.MEDIA_ERROR:
-                        console.error("Media error, recovering...");
-                        hls.recoverMediaError();
-                        break;
-                    default:
-                        console.error("Fatal error, cannot recover");
-                }
-            }
-        });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // Для Safari (который поддерживает HLS без HLS.js)
-        video.src = '/proxy-live';
-        video.addEventListener('loadedmetadata', () => {
-            video.play().catch(e => console.error("Autoplay error:", e));
-        });
-    } else {
-        alert("Ваш браузер не поддерживает HLS!");
-    }
-</script>
+    </script>
+<script src="{{asset('js/live.js')}}"></script>
 @endpush
