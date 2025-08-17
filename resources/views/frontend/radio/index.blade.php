@@ -191,7 +191,9 @@
                                             </div>
                                         </div>
                                         <div class="player__controls">
-                                            <audio src="http://77.87.97.62:8086/ingradio"></audio>
+                                            <!-- На прод-->
+                                            <audio src="/proxy/audio"></audio>
+{{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
                                             <div class="player__controls_controls">
                                                 <button class="btn-reset player__controls_btn">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
