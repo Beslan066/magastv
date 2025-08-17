@@ -224,7 +224,6 @@ HTML;
 
     public function transfers()
     {
-
         $categories = TvShowType::query()->orderBy('id', 'desc')->get();
         $transfers = Transfer::query()->orderBy('id', 'desc')->get();
 

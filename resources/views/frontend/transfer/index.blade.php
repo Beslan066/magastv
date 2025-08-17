@@ -41,7 +41,7 @@
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
-                                        <span class="transferItem_count">24 выпуска</span>
+                                        <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
                                     </li>
                                 @endforeach
                             @endif

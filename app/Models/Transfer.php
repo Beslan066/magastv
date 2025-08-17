@@ -37,5 +37,15 @@ class Transfer extends Model
         return $this->belongsTo(User::class, 'deleter_id', 'id');
     }
 
+    // Добавляем отношение с видеопередачами
+    public function videos()
+    {
+        return $this->hasMany(VideoTransfer::class, 'transfer_id', 'id');
+    }
 
+    // Метод для получения количества видеопередач
+    public function getVideosCountAttribute()
+    {
+        return $this->videos()->count();
+    }
 }

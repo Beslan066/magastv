@@ -170,7 +170,7 @@
                         @if(isset($transfers))
                             @foreach($transfers as $transfer)
                                 <div class="swiper-slide programs-slide swiper-slide-active"
-                                     style="background-image: url({{asset('storage/public/' . $transfer->slider_image)}}); width: 430px;"
+                                     style="background-image: url({{asset('storage/public/' . $transfer->slider_image)}}); width: 430px; "
                                      role="group" aria-label="1 / 3" data-swiper-slide-index="0">
                                     <div class="programs-slide__inner">
                                         <div class="programs-slide__mobile-image">
@@ -251,7 +251,7 @@
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
-                                        <span class="transferItem_count">24 выпуска</span>
+                                        <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
                                     </div>
                                 </li>
                             @endforeach
