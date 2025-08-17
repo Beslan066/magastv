@@ -53,8 +53,6 @@
                                     </select>
                                     <label class="input-group-text" for="inputGroupSelect02">Категории</label>
                                 </div>
-
-
                             </div>
                         </div>
                     </div>

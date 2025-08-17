@@ -80,6 +80,9 @@ class UpdateRequest extends FormRequest
 
             'published_at.required' => 'Укажите дату публикации.',
             'published_at.date_format' => 'Некорректный формат даты, используйте формат ГГГГ-ММ-ДДTЧЧ:ММ.',
+
+            'audio.file' => 'Файл должен быть корректным аудиофайлом.',
+            'audio.mimes' => 'Поддерживается только формат MP3.',
         ];
     }
 }

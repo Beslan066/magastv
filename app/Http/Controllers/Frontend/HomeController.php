@@ -10,6 +10,7 @@ use App\Models\News;
 use App\Models\RadioBroadcast;
 use App\Models\RadioNews;
 use App\Models\RadioShow;
+use App\Models\RadioShowType;
 use App\Models\Supervisor;
 use App\Models\Transfer;
 use App\Models\TvShow;
@@ -256,6 +257,7 @@ HTML;
 
     public function radio(Request $request)
     {
+        $radioShowTypes = RadioShowType::all();
 
         $events = RadioNews::query()
             ->where('status', 1)
@@ -305,6 +307,7 @@ HTML;
             'currentShowId' => $currentShowId,
             'radioShows' => $radioShows,
             'news' => $news,
+            'radioShowTypes' => $radioShowTypes,
         ]);
     }
 
@@ -348,13 +351,16 @@ HTML;
 
     public function contact()
     {
-
-
         $contacts = Contact::query()->latest()->first();
 
         return view('frontend.contact.index', [
             'contacts' => $contacts,
         ]);
+    }
+
+    public function filterRadio(Request $request)
+    {
+        $categoryId = $request->get('category_id');
     }
 
 

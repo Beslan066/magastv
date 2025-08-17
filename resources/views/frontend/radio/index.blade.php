@@ -76,6 +76,34 @@
                                 Наши события
                             </h2>
 
+                            <div class="tabs-container">
+                                <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории" style="display: none;">
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
+
+                                <div class="tabs">
+                                    <ul class="list-reset tabs__list">
+                                        <li class="tab active" data-category-id="all">
+                                            <span>Все</span>
+                                        </li>
+                                        @if(isset($radioShowTypes))
+                                            @foreach($radioShowTypes as $category)
+                                                <li class="tab" data-category-id="6">
+                                                    <span>{{$category->title}}</span>
+                                                </li>
+                                            @endforeach
+                                        @endif
+                                    </ul>
+                                </div>
+                                <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории" style="display: none;">
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
                             <div class="radio__items">
                                 @if(isset($news))
                                     @foreach($news as $item)
@@ -213,24 +241,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="player__main_bottom">
-                                        <ul class="list-reset player__list">
-                                            <li class="player__item">
-                                                <div class="player__item_meta">
-                                                    <span class="player__item_title">Радио Г1алг1айче</span>
-                                                    <span class="player__item_frequency">87.6 FM</span>
-                                                </div>
-                                                <button class="btn-reset player__item_btn">
-                                                    <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <path
-                                                            d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
-                                                            fill="#BDBDBD"/>
-                                                    </svg>
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div>
                                 </div>
                             </div>
 
@@ -276,4 +286,104 @@
 @push('scripts')
     <script defer src="{{asset('js/radio-slider.js')}}"></script>
     <script defer src="{{asset('js/radio.js')}}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab');
+            const container = document.querySelector('.radio__items');
+
+            if (!container) {
+                console.error('news-items-container not found');
+                return;
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', async () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const categoryId = tab.dataset.categoryId ?? 'all';
+
+                    const mainPostElement = container.querySelector('[data-static="true"]');
+                    const mainPostHTML = mainPostElement?.outerHTML || '';
+
+                    try {
+                        const response = await fetch(`/radio/filter?category_id=${categoryId}`);
+                        const data = await response.json();
+
+                        if (data && data.html) {
+                            // Если есть HTML с новостями - вставляем его
+                            container.innerHTML = mainPostHTML + data.html;
+                        } else {
+                            // Если новостей нет - показываем сообщение
+                            container.innerHTML = mainPostHTML +
+                                `<li class="no-news-message" style="font-family: Golos Text, sans-serif; font-size: 16px;">Нет новостей по этой категории</li>`;
+                        }
+                    } catch (e) {
+                        console.error('Ошибка при загрузке новостей:', e);
+                        // В случае ошибки тоже показываем сообщение
+                        container.innerHTML = mainPostHTML +
+                            `<li class="no-news-message">Ошибка при загрузке новостей</li>`;
+                    }
+                });
+            });
+
+
+        });
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsContainer = document.querySelector('.tabs');
+            const tabsList = document.querySelector('.tabs__list');
+            const prevBtn = document.querySelector('.tab-arrow-prev');
+            const nextBtn = document.querySelector('.tab-arrow-next');
+
+            // Скрываем стрелку "назад" по умолчанию
+            prevBtn.style.display = 'none';
+
+            function updateArrows() {
+                // Проверяем, есть ли скролл
+                const canScroll = tabsList.scrollWidth > tabsContainer.offsetWidth;
+
+                if (!canScroll) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    return;
+                }
+
+                // Показываем обе стрелки, если контент не помещается
+                nextBtn.style.display = 'flex';
+
+                // Проверяем позицию скролла
+                const isAtStart = tabsList.scrollLeft <= 0;
+                const isAtEnd = tabsList.scrollLeft + tabsContainer.offsetWidth >= tabsList.scrollWidth - 1;
+
+                prevBtn.style.display = isAtStart ? 'none' : 'flex';
+                nextBtn.style.display = isAtEnd ? 'none' : 'flex';
+
+                prevBtn.disabled = isAtStart;
+                nextBtn.disabled = isAtEnd;
+            }
+
+            // Обработчики для стрелок
+            prevBtn.addEventListener('click', () => {
+                tabsList.scrollBy({ left: -200, behavior: 'smooth' });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                tabsList.scrollBy({ left: 200, behavior: 'smooth' });
+            });
+
+            // Обновляем стрелки при скролле
+            tabsList.addEventListener('scroll', updateArrows);
+
+            // И при изменении размера окна
+            window.addEventListener('resize', updateArrows);
+
+            // Инициализация
+            updateArrows();
+        });
+    </script>
 @endpush
