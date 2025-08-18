@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\AudiobookController;
+use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\FileController;
@@ -63,6 +65,8 @@ Route::post('/videos/{video}/view', function(VideoTransfer $video) {
 });
 
 Route::get('/radio', [HomeController::class, 'radio'])->name('radio');
+Route::get('/radio/transfers', [HomeController::class, 'radioTransfers'])->name('radio.transfers');
+Route::get('/radio/books', [HomeController::class, 'radioBooks'])->name('radio.books');
 Route::get('/event/{event}', [HomeController::class, 'eventSingle'])->name('event.single');
 Route::get('/watch', [HomeController::class, 'watch'])->name('watch');
 Route::get('/realeses', [HomeController::class, 'realese'])->name('realeses');
@@ -85,6 +89,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
 
     Route::group(['prefix' => 'admin'], function () {
         Route::resource('/categories', CategoryController::class);
+        Route::resource('/authors', AuthorController::class);
         Route::resource('/news', AdminNewsController::class);
         Route::resource('/radio-news', RadioNewsController::class);
         Route::resource('/files', FileController::class);
@@ -119,6 +124,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
                 'edit' => 'radio-programs.edit',
                 'update' => 'radio-programs.update',
                 'destroy' => 'radio-programs.destroy',
+            ]);
+        Route::resource('audiobooks', AudiobookController::class)
+            ->names([
+                'index' => 'admin.radio.books',
+                'create' => 'admin.radio.books.create',
+                'store' => 'admin.radio.books.store',
+                'edit' => 'admin.radio.books.edit',
+                'update' => 'admin.radio.books.update',
+                'destroy' => 'admin.radio.books.destroy',
             ]);
     });
 });

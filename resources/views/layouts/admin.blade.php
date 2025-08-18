@@ -259,6 +259,20 @@
                             <div class="text-truncate" data-i18n="Basic">Программа передач</div>
                         </a>
                     </li>
+
+                    <li class="menu-item">
+                        <a href="{{route('authors.index')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-male"></i>
+                            <div class="text-truncate" data-i18n="Basic">Авторы</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{route('admin.radio.books')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book"></i>
+                            <div class="text-truncate" data-i18n="Basic">Книги</div>
+                        </a>
+                    </li>
                 @endif
                 <!-- Forms -->
 

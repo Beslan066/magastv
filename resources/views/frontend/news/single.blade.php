@@ -97,13 +97,18 @@
                                 </p>
 
                                 <div class="single-news__image single-news__image--main">
-                                    <div class="single-news__image_content">
+                                    <div class="single-news__image_content" style="margin-bottom: 10px">
                                         <img src="{{asset('storage/public/' . $news->image)}}" alt="{{$news->title}}">
                                     </div>
                                     @if(isset($news->image_author))
-                                        <h6 class="single-news__image_name">
-                                            Фото: <span>Покорение новых верщин, Администрация АРМХИ</span>
-                                        </h6>
+                                        <div class="flex-row">
+                                            <h6 class="single-news__image_name" style="margin-right: 10px">
+                                                Фото: <span>{{$news->image_author}}</span>
+                                            </h6>
+                                            @if(isset($news->image_description))
+                                                <span class="single-news__image_name">| {{$news->image_description}}</span>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
 

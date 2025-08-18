@@ -21,7 +21,9 @@ class News extends Model
         'deleter_id',
         'published_at',
         'main_material',
-        'views'
+        'views',
+        'image_author',
+        'image_description',
     ];
 
     protected $dates = ['published_at', 'deleted_at'];

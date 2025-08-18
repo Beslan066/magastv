@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\About;
+use App\Models\Audiobook;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\News;
@@ -299,6 +300,8 @@ HTML;
             $currentShowId = $currentShow->id ?? null;
         }
 
+        $books = Audiobook::query()->with('author')->orderBy('id', 'desc')->take(6)->get();
+
         return view('frontend.radio.index', [
             'events' => $events,
             'dates' => $dates,
@@ -307,9 +310,19 @@ HTML;
             'radioShows' => $radioShows,
             'news' => $news,
             'radioShowTypes' => $radioShowTypes,
+            'books' => $books,
         ]);
     }
 
+    public function radioTransfers()
+    {
+        return view('frontend.radio.transfers');
+    }
+
+    public function radioBooks()
+    {
+        return view('frontend.radio.books');
+    }
 
     public function eventSingle(RadioNews $event)
     {

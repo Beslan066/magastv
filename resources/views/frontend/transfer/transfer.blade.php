@@ -70,9 +70,9 @@
                                                 {!! $video->video !!}
                                             </div>
                                             <div class="popular-item__info">
-                                                <h6 class="popular-item__title"><a href="#">
+                                                <h6 class="popular-item__title">
                                                         {{$video->title}}
-                                                    </a></h6>
+                                                </h6>
                                                 <time datetime="2025-03-21 21:34" class="popular-item__time">21 мар, 21:34</time>
                                             </div>
                                         </div>
