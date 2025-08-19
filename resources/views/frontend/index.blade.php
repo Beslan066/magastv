@@ -281,16 +281,16 @@
                                 @foreach($popularVideos as $video)
                                     <div class="releases__items">
                                         {!! $video->video !!}
-                                        <div class="popular-item__info">
-                                            <h6 class="popular-item__title">
-                                                <a href="{{route('transfer', $video->transfer_id)}}">
-                                                    {{$video->title}}
-                                                </a>
-                                            </h6>
-                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">
-                                                {{$video->formated_created_at}}
-                                            </time>
-                                        </div>
+{{--                                        <div class="popular-item__info">--}}
+{{--                                            <h6 class="popular-item__title">--}}
+{{--                                                <a href="{{route('transfer', $video->transfer_id)}}">--}}
+{{--                                                    {{$video->title}}--}}
+{{--                                                </a>--}}
+{{--                                            </h6>--}}
+{{--                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">--}}
+{{--                                                {{$video->formated_created_at}}--}}
+{{--                                            </time>--}}
+{{--                                        </div>--}}
                                     </div>
                                 @endforeach
                             @endif
