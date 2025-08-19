@@ -8,26 +8,30 @@
                 <div class="news__inner">
                     <div class="tabs-container">
                         <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории">
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"/>
                             </svg>
                         </button>
 
                         <div class="tabs">
                             <ul class="list-reset tabs__list">
-                            <li class="tab active" data-category-id="all">
-                                <span>Все</span>
-                            </li>
-                            @foreach($categories as $category)
-                                <li class="tab" data-category-id="{{ $category->id }}">
-                                    <span>{{$category->name}}</span>
+                                <li class="tab active" data-category-id="all">
+                                    <span>Все</span>
                                 </li>
-                            @endforeach
+                                @foreach($categories as $category)
+                                    <li class="tab" data-category-id="{{ $category->id }}">
+                                        <span>{{$category->name}}</span>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                         <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории">
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                      stroke-linejoin="round"/>
                             </svg>
                         </button>
                     </div>
@@ -53,9 +57,9 @@
                                             </a>
                                             <div class="news-item__bottom">
 
-                                                    <h6 class="news-item__title">
-                                                        <a href="{{route('home.news.single', $mainPost->slug)}}">{{$mainPost->title}}</a>
-                                                    </h6>
+                                                <h6 class="news-item__title">
+                                                    <a href="{{route('home.news.single', $mainPost->slug)}}">{{$mainPost->title}}</a>
+                                                </h6>
 
                                                 <div class="news-item__descr">
                                                     <p>{{$mainPost->lead}}</p>
@@ -134,7 +138,8 @@
                                     @if(isset($popularItems))
                                         @foreach($popularItems as $item)
                                             <li class="popular-sidebar__item">
-                                                <a href="{{route('home.news.single', $item->slug)}}" class="popular-sidebar__item_text">
+                                                <a href="{{route('home.news.single', $item->slug)}}"
+                                                   class="popular-sidebar__item_text">
                                                     {{$item->title}}
                                                 </a>
                                                 <div class="popular-sidebar__item_info">
@@ -252,7 +257,8 @@
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
-                                        <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
+                                        <span
+                                            class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
                                     </div>
                                 </li>
                             @endforeach
@@ -270,21 +276,21 @@
                         Часто смотрят
                     </h2>
                     <div class="releases__content">
-                        <div class="releases__items">
+                        <div class="releases__items home-release-item">
                             @if(isset($popularVideos))
                                 @foreach($popularVideos as $video)
                                     <div class="releases__items">
                                         {!! $video->video !!}
-                                        {{--                                    <div class="popular-item__info">--}}
-                                        {{--                                        <h6 class="popular-item__title">--}}
-                                        {{--                                            <a href="{{route('transfer', $video->transfer_id)}}">--}}
-                                        {{--                                                {{$video->title}}--}}
-                                        {{--                                            </a>--}}
-                                        {{--                                        </h6>--}}
-                                        {{--                                        <time datetime="2025-03-21 21:34" class="popular-item__time">--}}
-                                        {{--                                            {{$video->formated_published_at}}--}}
-                                        {{--                                        </time>--}}
-                                        {{--                                    </div>--}}
+                                        <div class="popular-item__info">
+                                            <h6 class="popular-item__title">
+                                                <a href="{{route('transfer', $video->transfer_id)}}">
+                                                    {{$video->title}}
+                                                </a>
+                                            </h6>
+                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">
+                                                {{$video->formated_created_at}}
+                                            </time>
+                                        </div>
                                     </div>
                                 @endforeach
                             @endif
@@ -341,7 +347,7 @@
             }
 
             playButtons.forEach((button, index) => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const video = videoElements[index];
                     const videoNav = videoNavigations[index];
 
@@ -368,7 +374,7 @@
                 const playBtn = playButtons[index];
                 const videoNav = videoNavigations[index];
 
-                video.addEventListener('click', function() {
+                video.addEventListener('click', function () {
                     if (this.paused) {
                         pauseOtherVideos(this);
                         this.play();
@@ -385,7 +391,7 @@
                     }
                 });
 
-                video.addEventListener('ended', function() {
+                video.addEventListener('ended', function () {
                     currentPlayingVideo = null;
                     playBtn.style.display = 'block';
                     videoNav.classList.add('hidden');
@@ -442,7 +448,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabsContainer = document.querySelector('.tabs');
             const tabsList = document.querySelector('.tabs__list');
             const prevBtn = document.querySelector('.tab-arrow-prev');
@@ -477,11 +483,11 @@
 
             // Обработчики для стрелок
             prevBtn.addEventListener('click', () => {
-                tabsList.scrollBy({ left: -200, behavior: 'smooth' });
+                tabsList.scrollBy({left: -200, behavior: 'smooth'});
             });
 
             nextBtn.addEventListener('click', () => {
-                tabsList.scrollBy({ left: 200, behavior: 'smooth' });
+                tabsList.scrollBy({left: 200, behavior: 'smooth'});
             });
 
             // Обновляем стрелки при скролле

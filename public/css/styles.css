@@ -2596,5 +2596,8 @@ body.active {
     justify-content: start;
     gap: 30px;
 
+}
 
+.home-release-item iframe {
+    border-radius: 12px !important;
 }
