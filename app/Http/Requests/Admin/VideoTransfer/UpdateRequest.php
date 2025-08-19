@@ -21,7 +21,7 @@ class UpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $videoTransferId = $this->route('video_transfers');
+       // $videoTransferId = $this->route('video_transfers');
 
         // For AJAX video upload
 //        if ($this->ajax() && $this->hasFile('video')) {

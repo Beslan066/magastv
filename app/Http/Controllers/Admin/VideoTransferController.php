@@ -87,6 +87,7 @@ class VideoTransferController extends Controller
     public function edit(VideoTransfer $videoTransfer)
     {
         $categories = Transfer::all();
+
         return view('admin.video-transfer.edit', [
             'videoTransfer' => $videoTransfer,
             'categories' => $categories
@@ -98,20 +99,20 @@ class VideoTransferController extends Controller
     {
         $data = $request->validated();
 
-        // Handle AJAX video upload
-        if ($request->ajax() && $request->hasFile('video')) {
-            try {
-                // Delete old video if exists
-                if ($videoTransfer->video) {
-                    Storage::disk('public')->delete($videoTransfer->video);
-                }
-
-                $path = Storage::disk('public')->put('videoTransfers', $request->file('video'));
-                return response()->json(['video_path' => $path]);
-            } catch (\Exception $e) {
-                return response()->json(['error' => $e->getMessage()], 500);
-            }
-        }
+//        // Handle AJAX video upload
+//        if ($request->ajax() && $request->hasFile('video')) {
+//            try {
+//                // Delete old video if exists
+//                if ($videoTransfer->video) {
+//                    Storage::disk('public')->delete($videoTransfer->video);
+//                }
+//
+//                $path = Storage::disk('public')->put('videoTransfers', $request->file('video'));
+//                return response()->json(['video_path' => $path]);
+//            } catch (\Exception $e) {
+//                return response()->json(['error' => $e->getMessage()], 500);
+//            }
+//        }
 
         // Handle preview
         if ($request->hasFile('preview')) {
@@ -129,25 +130,25 @@ class VideoTransferController extends Controller
         }
 
         // Handle video - здесь основное изменение
-        if ($request->has('delete_video')) {
-            // Если отмечено удаление видео
-            if ($videoTransfer->video) {
-                Storage::disk('public')->delete($videoTransfer->video);
-            }
-            $data['video'] = null;
-        } elseif ($request->hasFile('video')) {
-            // Если загружено новое видео
-            if ($videoTransfer->video) {
-                Storage::disk('public')->delete($videoTransfer->video);
-            }
-            $data['video'] = $request->file('video')->store('videoTransfers', 'public');
-        } elseif ($request->filled('uploaded_video_path')) {
-            // Если есть путь к загруженному видео (из AJAX или текущее)
-            $data['video'] = $request->input('uploaded_video_path');
-        } else {
-            // Если ничего не выбрано - оставляем текущее
-            $data['video'] = $videoTransfer->video;
-        }
+//        if ($request->has('delete_video')) {
+//            // Если отмечено удаление видео
+//            if ($videoTransfer->video) {
+//                Storage::disk('public')->delete($videoTransfer->video);
+//            }
+//            $data['video'] = null;
+//        } elseif ($request->hasFile('video')) {
+//            // Если загружено новое видео
+//            if ($videoTransfer->video) {
+//                Storage::disk('public')->delete($videoTransfer->video);
+//            }
+//            $data['video'] = $request->file('video')->store('videoTransfers', 'public');
+//        } elseif ($request->filled('uploaded_video_path')) {
+//            // Если есть путь к загруженному видео (из AJAX или текущее)
+//            $data['video'] = $request->input('uploaded_video_path');
+//        } else {
+//            // Если ничего не выбрано - оставляем текущее
+//            $data['video'] = $videoTransfer->video;
+//        }
 
         $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
 

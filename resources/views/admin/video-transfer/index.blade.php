@@ -15,7 +15,6 @@
                     <th class="fw-bold">Заголовок</th>
                     <th class="fw-bold">Автор</th>
                     <th class="fw-bold">Создан</th>
-                    <th class="fw-bold">Статус</th>
                     <th class="fw-bold">Действие</th>
                 </tr>
                 </thead>
@@ -34,12 +33,6 @@
                                 <td>Нет автора</td>
                             @endif
                             <td>{{$item->created_at}}</td>
-                            @if($item->status == 1)
-                                <td><span class="badge bg-label-success me-1">Опубликована</span></td>
-                            @else
-                                <td><span class="badge bg-label-primary me-1">Не опубликована</span></td>
-
-                            @endif
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>

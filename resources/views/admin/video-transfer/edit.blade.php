@@ -41,13 +41,27 @@
                             <div class="mb-4">
                                 <label class="form-label">Передача *</label>
                                 <select class="form-select" name="transfer_id" required>
-                                    <option value="">Выберите передачу...</option>
-                                    @foreach($categories as $category)
-                                        <option
-                                            value="{{ $category->id }}" {{ $videoTransfer->category_id == $category->id ? 'selected' : '' }}>
-                                            {{ $category->title }}
-                                        </option>
-                                    @endforeach
+
+
+                                    @if(isset($videoTransfer->transfer_id))
+                                        <option value="{{$videoTransfer->transfer_id}}">{{$videoTransfer->transfer->title}}</option>
+                                        @foreach($categories as $category)
+                                            <option
+                                                value="{{ $category->id }}" {{ $videoTransfer->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->title }}
+                                            </option>
+                                        @endforeach
+                                    @else
+                                        <option value="">Выберите передачу...</option>
+                                        @foreach($categories as $category)
+                                            <option
+                                                value="{{ $category->id }}" {{ $videoTransfer->category_id == $category->id ? 'selected' : '' }}>
+                                                {{ $category->title }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+
+
                                 </select>
                             </div>
                         </div>
@@ -85,7 +99,7 @@
 
                             <div class="mb-4">
                                 <label class="form-label">Код iframe видео (VK)</label>
-                                <textarea class="form-control" placeholder="Вставьте iframe код видео из VK" name="video" rows="4">{{ old('video', $videoTransfer->video) }}</textarea>
+                                <textarea class="form-control" placeholder="Вставьте iframe код видео из VK" name="video" rows="4">{{$videoTransfer->video}}</textarea>
                                 <small class="text-muted">Скопируйте iframe код из "Получить код" на странице видео VK</small>
                             </div>
 
@@ -121,9 +135,7 @@
 {{--                                </div>--}}
 {{--                            </div>--}}
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                            <input type="hidden" name="uploaded_video_path" id="uploadedVideoPath" value="{{ $videoTransfer->video ?? '' }}">
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                            <input type="hidden" name="uploaded_video_path" id="uploadedVideoPath" value="">
                         </div>
                     </div>
                 </div>
@@ -193,9 +205,9 @@
             });
 
 
-            if ('{{ $videoTransfer->video ?? '' }}') {
-                $('#uploadedVideoPath').val('{{ $videoTransfer->video }}');
-            }
+            {{--if ('{{ $videoTransfer->video ?? '' }}') {--}}
+            {{--    $('#uploadedVideoPath').val('{{ $videoTransfer->video }}');--}}
+            {{--}--}}
             // Удаление превью
             $('#removePreview').click(function () {
                 $('#previewUpload').val('');
@@ -206,7 +218,7 @@
                 }
             });
 
-// Если загружаем новое изображение, снимаем отметку с чекбокса удаления
+            // Если загружаем новое изображение, снимаем отметку с чекбокса удаления
             $('#previewUpload').change(function () {
                 if (this.files && this.files[0]) {
                     const reader = new FileReader();
@@ -223,105 +235,107 @@
             });
 
             // Загрузка видео с прогресс-баром
-            $('#videoUpload').change(function () {
-                const file = this.files[0];
-                if (!file) return;
+            {{--    $('#videoUpload').change(function () {--}}
+            {{--        const file = this.files[0];--}}
+            {{--        if (!file) return;--}}
 
-                // Проверка размера файла
-                if (file.size > 200 * 1024 * 1024) {
-                    $('#videoInfo').html(
-                        '<div class="alert alert-danger">Файл слишком большой (макс. 200MB)</div>'
-                    );
-                    $(this).val('');
-                    return;
-                }
+            {{--        // Проверка размера файла--}}
+            {{--        if (file.size > 200 * 1024 * 1024) {--}}
+            {{--            $('#videoInfo').html(--}}
+            {{--                '<div class="alert alert-danger">Файл слишком большой (макс. 200MB)</div>'--}}
+            {{--            );--}}
+            {{--            $(this).val('');--}}
+            {{--            return;--}}
+            {{--        }--}}
 
-                // Показываем информацию о файле
-                $('#videoInfo').html(
-                    '<div class="alert alert-info">' +
-                    '<i class="bx bx-loader bx-spin"></i> ' +
-                    'Подготовка к загрузке: ' + file.name + ' (' +
-                    Math.round(file.size / (1024 * 1024)) + 'MB)' +
-                    '</div>'
-                );
+            {{--        // Показываем информацию о файле--}}
+            {{--        $('#videoInfo').html(--}}
+            {{--            '<div class="alert alert-info">' +--}}
+            {{--            '<i class="bx bx-loader bx-spin"></i> ' +--}}
+            {{--            'Подготовка к загрузке: ' + file.name + ' (' +--}}
+            {{--            Math.round(file.size / (1024 * 1024)) + 'MB)' +--}}
+            {{--            '</div>'--}}
+            {{--        );--}}
 
-                // Показываем прогресс-бар
-                $('#uploadProgress').show();
+            {{--        // Показываем прогресс-бар--}}
+            {{--        $('#uploadProgress').show();--}}
 
-                // Создаем FormData для AJAX-загрузки
-                const formData = new FormData();
-                formData.append('video', file);
-                formData.append('_token', '{{ csrf_token() }}');
-                formData.append('_method', 'patch');
-                formData.append('ajax_upload', true);
+            {{--        // Создаем FormData для AJAX-загрузки--}}
+            {{--        const formData = new FormData();--}}
+            {{--        formData.append('video', file);--}}
+            {{--        formData.append('_token', '{{ csrf_token() }}');--}}
+            {{--        formData.append('_method', 'patch');--}}
+            {{--        formData.append('ajax_upload', true);--}}
 
-                // AJAX-загрузка файла
-                const xhr = new XMLHttpRequest();
-                xhr.open('POST', '{{ route("video-transfers.update", $videoTransfer->id) }}', true);
-                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            {{--        // AJAX-загрузка файла--}}
+            {{--        const xhr = new XMLHttpRequest();--}}
+            {{--        xhr.open('POST', '{{ route("video-transfers.update", $videoTransfer->id) }}', true);--}}
+            {{--        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');--}}
 
-                // Прогресс загрузки
-                xhr.upload.onprogress = function (e) {
-                    if (e.lengthComputable) {
-                        const percent = Math.round((e.loaded / e.total) * 100);
-                        $('.progress-bar').css('width', percent + '%');
-                    }
-                };
+            {{--        // Прогресс загрузки--}}
+            {{--        xhr.upload.onprogress = function (e) {--}}
+            {{--            if (e.lengthComputable) {--}}
+            {{--                const percent = Math.round((e.loaded / e.total) * 100);--}}
+            {{--                $('.progress-bar').css('width', percent + '%');--}}
+            {{--            }--}}
+            {{--        };--}}
 
-                // После загрузки
-                xhr.onload = function () {
-                    if (xhr.status === 200) {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.video_path) {
-                                $('#videoInfo').html(
-                                    '<div class="alert alert-success">' +
-                                    '<i class="bx bx-check"></i> ' +
-                                    'Видео успешно загружено: ' + file.name +
-                                    '</div>'
-                                );
-                                $('#uploadedVideoPath').val(response.video_path);
-                                $('#deleteVideo').prop('checked', false);
-                            } else if (response.error) {
-                                showError(response.error);
-                            } else {
-                                showError('Не удалось получить путь к видео');
-                            }
-                        } catch (e) {
-                            showError('Ошибка обработки ответа сервера');
-                        }
-                    } else if (xhr.status === 422) {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            if (response.errors && response.errors.video) {
-                                showError(response.errors.video[0]);
-                            } else {
-                                showError('Ошибка валидации видеофайла');
-                            }
-                        } catch (e) {
-                            showError('Ошибка валидации');
-                        }
-                    } else {
-                        showError('Ошибка загрузки: ' + xhr.statusText);
-                    }
-                    setTimeout(() => $('#uploadProgress').hide(), 2000);
-                };
+            {{--        // После загрузки--}}
+            {{--        xhr.onload = function () {--}}
+            {{--            if (xhr.status === 200) {--}}
+            {{--                try {--}}
+            {{--                    const response = JSON.parse(xhr.responseText);--}}
+            {{--                    if (response.video_path) {--}}
+            {{--                        $('#videoInfo').html(--}}
+            {{--                            '<div class="alert alert-success">' +--}}
+            {{--                            '<i class="bx bx-check"></i> ' +--}}
+            {{--                            'Видео успешно загружено: ' + file.name +--}}
+            {{--                            '</div>'--}}
+            {{--                        );--}}
+            {{--                        $('#uploadedVideoPath').val(response.video_path);--}}
+            {{--                        $('#deleteVideo').prop('checked', false);--}}
+            {{--                    } else if (response.error) {--}}
+            {{--                        showError(response.error);--}}
+            {{--                    } else {--}}
+            {{--                        showError('Не удалось получить путь к видео');--}}
+            {{--                    }--}}
+            {{--                } catch (e) {--}}
+            {{--                    showError('Ошибка обработки ответа сервера');--}}
+            {{--                }--}}
+            {{--            } else if (xhr.status === 422) {--}}
+            {{--                try {--}}
+            {{--                    const response = JSON.parse(xhr.responseText);--}}
+            {{--                    if (response.errors && response.errors.video) {--}}
+            {{--                        showError(response.errors.video[0]);--}}
+            {{--                    } else {--}}
+            {{--                        showError('Ошибка валидации видеофайла');--}}
+            {{--                    }--}}
+            {{--                } catch (e) {--}}
+            {{--                    showError('Ошибка валидации');--}}
+            {{--                }--}}
+            {{--            } else {--}}
+            {{--                showError('Ошибка загрузки: ' + xhr.statusText);--}}
+            {{--            }--}}
+            {{--            setTimeout(() => $('#uploadProgress').hide(), 2000);--}}
+            {{--        };--}}
 
-                xhr.onerror = function () {
-                    showError('Ошибка сети при загрузке видео');
-                    $('#uploadProgress').hide();
-                };
+            {{--        xhr.onerror = function () {--}}
+            {{--            showError('Ошибка сети при загрузке видео');--}}
+            {{--            $('#uploadProgress').hide();--}}
+            {{--        };--}}
 
-                xhr.send(formData);
-            });
+            {{--        xhr.send(formData);--}}
+            {{--    });--}}
 
-            function showError(message) {
-                $('#videoInfo').html(
-                    '<div class="alert alert-danger">' +
-                    '<i class="bx bx-x"></i> ' + message +
-                    '</div>'
-                );
-            }
-        });
+            {{--    function showError(message) {--}}
+            {{--        $('#videoInfo').html(--}}
+            {{--            '<div class="alert alert-danger">' +--}}
+            {{--            '<i class="bx bx-x"></i> ' + message +--}}
+            {{--            '</div>'--}}
+            {{--        );--}}
+            {{--    }--}}
+            {{--});--}}
+
+        })
     </script>
 @endpush
