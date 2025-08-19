@@ -72,7 +72,6 @@
                         </div>
 
                         <div class="radio-events">
-
                             <div class="tabs-container">
                                 <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории" style="display: none;">
                                     <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -82,12 +81,12 @@
 
                                 <div class="tabs">
                                     <ul class="list-reset tabs__list">
-                                        <li class="tab active" data-category-id="all">
+                                        <li class="tab {{ ($selectedCategory ?? 'all') == 'all' ? 'active' : '' }}" data-category-id="all">
                                             <span>Все</span>
                                         </li>
                                         @if(isset($radioShowTypes))
                                             @foreach($radioShowTypes as $category)
-                                                <li class="tab" data-category-id="6">
+                                                <li class="tab {{ ($selectedCategory ?? '') == $category->id ? 'active' : '' }}" data-category-id="{{ $category->id }}">
                                                     <span>{{$category->title}}</span>
                                                 </li>
                                             @endforeach
@@ -108,8 +107,8 @@
                                 <a href="{{route('radio.transfers')}}" class="main-transfers__all">Все программы</a>
                             </div>
 
-                            <div class="radio__items">
-                                @if(isset($news))
+                            <div class="radio__items" id="programs-container">
+                                @if(isset($news) && $news->count() > 0)
                                     @foreach($news as $item)
                                         <div class="radio-item">
                                             <div class="radio-item__image">
@@ -133,9 +132,7 @@
                                                         </svg>
                                                     </button>
                                                     <div class="radio-item__progress">
-                                                        <div class="audio-slider">
-
-                                                        </div>
+                                                        <div class="audio-slider"></div>
                                                         <div class="radio-item__timer">
                                                             <span class="duration">00:00</span>
                                                         </div>
@@ -162,6 +159,10 @@
                                             </div>
                                         </div>
                                     @endforeach
+                                @else
+                                    <div class="no-programs-message">
+                                        <p style="font-family: 'Golos Text', sans-serif">Программ на выбранную категорию нет</p>
+                                    </div>
                                 @endif
                             </div>
 
@@ -350,102 +351,69 @@
     <script defer src="{{asset('js/radio.js')}}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             const tabs = document.querySelectorAll('.tab');
-            const container = document.querySelector('.radio__items');
-
-            if (!container) {
-                console.error('news-items-container not found');
-                return;
-            }
+            const programsContainer = document.getElementById('programs-container');
+            const loadingIndicator = document.createElement('div');
+            loadingIndicator.className = 'loading-indicator';
+            loadingIndicator.innerHTML = '<p>Загрузка...</p>';
+            loadingIndicator.style.display = 'none';
+            programsContainer.parentNode.insertBefore(loadingIndicator, programsContainer);
 
             tabs.forEach(tab => {
-                tab.addEventListener('click', async () => {
+                tab.addEventListener('click', function() {
+                    const categoryId = this.getAttribute('data-category-id');
+
+                    // Убираем активный класс у всех табов
                     tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
+                    // Добавляем активный класс текущему табу
+                    this.classList.add('active');
 
-                    const categoryId = tab.dataset.categoryId ?? 'all';
+                    // Показываем индикатор загрузки
+                    loadingIndicator.style.display = 'block';
+                    programsContainer.style.opacity = '0.5';
 
-                    const mainPostElement = container.querySelector('[data-static="true"]');
-                    const mainPostHTML = mainPostElement?.outerHTML || '';
+                    // Создаем FormData для отправки
+                    const formData = new FormData();
+                    formData.append('category_id', categoryId);
+                    formData.append('_token', '{{ csrf_token() }}');
 
-                    try {
-                        const response = await fetch(`/radio/filter?category_id=${categoryId}`);
-                        const data = await response.json();
-
-                        if (data && data.html) {
-                            // Если есть HTML с новостями - вставляем его
-                            container.innerHTML = mainPostHTML + data.html;
-                        } else {
-                            // Если новостей нет - показываем сообщение
-                            container.innerHTML = mainPostHTML +
-                                `<li class="no-news-message" style="font-family: Golos Text, sans-serif; font-size: 16px;">Нет новостей по этой категории</li>`;
+                    // Отправляем AJAX запрос
+                    fetch('{{ route("radio.filter.programs") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
-                    } catch (e) {
-                        console.error('Ошибка при загрузке новостей:', e);
-                        // В случае ошибки тоже показываем сообщение
-                        container.innerHTML = mainPostHTML +
-                            `<li class="no-news-message">Ошибка при загрузке новостей</li>`;
-                    }
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Обновляем контейнер с программами
+                                programsContainer.innerHTML = data.html;
+
+                                // Обновляем URL без перезагрузки страницы
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('category_id', categoryId);
+                                window.history.pushState({}, '', url.toString());
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при загрузке новостей:', error);
+                            programsContainer.innerHTML = '<div class="error-message"><p>Произошла ошибка при загрузке программ</p></div>';
+                        })
+                        .finally(() => {
+                            // Скрываем индикатор загрузки
+                            loadingIndicator.style.display = 'none';
+                            programsContainer.style.opacity = '1';
+                        });
                 });
             });
-
-
-        });
-
-    </script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabsContainer = document.querySelector('.tabs');
-            const tabsList = document.querySelector('.tabs__list');
-            const prevBtn = document.querySelector('.tab-arrow-prev');
-            const nextBtn = document.querySelector('.tab-arrow-next');
-
-            // Скрываем стрелку "назад" по умолчанию
-            prevBtn.style.display = 'none';
-
-            function updateArrows() {
-                // Проверяем, есть ли скролл
-                const canScroll = tabsList.scrollWidth > tabsContainer.offsetWidth;
-
-                if (!canScroll) {
-                    prevBtn.style.display = 'none';
-                    nextBtn.style.display = 'none';
-                    return;
-                }
-
-                // Показываем обе стрелки, если контент не помещается
-                nextBtn.style.display = 'flex';
-
-                // Проверяем позицию скролла
-                const isAtStart = tabsList.scrollLeft <= 0;
-                const isAtEnd = tabsList.scrollLeft + tabsContainer.offsetWidth >= tabsList.scrollWidth - 1;
-
-                prevBtn.style.display = isAtStart ? 'none' : 'flex';
-                nextBtn.style.display = isAtEnd ? 'none' : 'flex';
-
-                prevBtn.disabled = isAtStart;
-                nextBtn.disabled = isAtEnd;
-            }
-
-            // Обработчики для стрелок
-            prevBtn.addEventListener('click', () => {
-                tabsList.scrollBy({ left: -200, behavior: 'smooth' });
-            });
-
-            nextBtn.addEventListener('click', () => {
-                tabsList.scrollBy({ left: 200, behavior: 'smooth' });
-            });
-
-            // Обновляем стрелки при скролле
-            tabsList.addEventListener('scroll', updateArrows);
-
-            // И при изменении размера окна
-            window.addEventListener('resize', updateArrows);
-
-            // Инициализация
-            updateArrows();
         });
     </script>
 @endpush

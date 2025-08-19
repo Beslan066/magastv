@@ -78,6 +78,9 @@ Route::get('/search', [SearchController::class, 'search']);
 Route::get('/search/all', [SearchController::class, 'allResults'])->name('search.all');
 Route::get('/filter-news', [HomeController::class, 'filterNews'])->name('home.news.filter');
 Route::get('/radio/filter', [HomeController::class, 'filterRadio'])->name('home.radio.filter');
+Route::post('/radio/filter-programs', [HomeController::class, 'filterPrograms'])
+    ->name('radio.filter.programs')
+    ->withoutMiddleware(['csrf']);
 Route::get('/sort-news', [HomeController::class, 'sortNews']);
 
 

@@ -265,22 +265,28 @@ HTML;
             ->orderBy('id', 'desc')
             ->get();
 
-        $news = RadioBroadcast::query()
+        // Фильтрация программ по категории
+        $newsQuery = RadioBroadcast::query()
             ->where('status', 1)
-            ->orderBy('id', 'desc')
+            ->with('radioShowType');
+
+        // Если выбрана конкретная категория (не "Все")
+        if ($request->has('category_id') && $request->category_id != 'all') {
+            $newsQuery->where('radio_show_type_id', $request->category_id);
+        }
+
+        $news = $newsQuery->orderBy('id', 'desc')
             ->limit(6)
             ->get();
 
         $today = now();
         $selectedDate = $request->date ? Carbon::parse($request->date) : $today;
 
-        // Оптимизированный запрос с eager loading
         $radioShows = RadioShow::with('radioShowType')
             ->whereDate('program_date', $selectedDate->format('Y-m-d'))
             ->orderBy('time_range')
             ->get();
 
-        // Быстрое формирование дат без лишних вычислений
         $dates = collect(range(-3, 3))->map(function ($day) use ($today, $selectedDate) {
             $date = $today->copy()->addDays($day);
             return [
@@ -312,7 +318,98 @@ HTML;
             'news' => $news,
             'radioShowTypes' => $radioShowTypes,
             'books' => $books,
+            'selectedCategory' => $request->category_id ?? 'all'
         ]);
+    }
+
+    // Новый метод для AJAX фильтрации
+    public function filterPrograms(Request $request)
+    {
+        // Проверяем, что запрос AJAX
+        if (!$request->ajax()) {
+            return response()->json(['error' => 'Only AJAX requests allowed'], 400);
+        }
+
+        $categoryId = $request->input('category_id');
+
+        $newsQuery = RadioBroadcast::query()
+            ->where('status', 1)
+            ->with('radioShowType');
+
+        if ($categoryId && $categoryId != 'all') {
+            $newsQuery->where('radio_show_type_id', $categoryId);
+        }
+
+        $news = $newsQuery->orderBy('id', 'desc')
+            ->limit(6)
+            ->get();
+
+        if ($news->count() > 0) {
+            $html = '';
+            foreach ($news as $item) {
+                $html .= '
+            <div class="radio-item">
+                <div class="radio-item__image">
+                    <img src="'.asset('storage/public/' . $item->image).'" alt="'.htmlspecialchars($item->title).'">
+                </div>
+                <div class="radio-item__bottom">
+                    <div class="radio-item__nav">
+                        <audio class="audio" preload="auto"
+                               src="'.asset('storage/public/' . $item->audio).'"></audio>
+                        <button class="btn-reset radio-item__play_btn">
+                            <svg class="radio-item__play_btn--play-svg" width="12" height="14"
+                                 viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
+                                    fill="#545454"/>
+                            </svg>
+                            <svg class="radio-item__play_btn--stop-svg" width="24" height="24"
+                                 viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="6" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
+                                <rect x="14" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
+                            </svg>
+                        </button>
+                        <div class="radio-item__progress">
+                            <div class="audio-slider"></div>
+                            <div class="radio-item__timer">
+                                <span class="duration">00:00</span>
+                            </div>
+                        </div>
+                        <a href="'.asset('storage/public/' . $item->audio).'" download class="btn-reset radio-item__download">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M5 14V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V14"
+                                    stroke="#545454" stroke-width="2"/>
+                                <path d="M12 3V15" stroke="#545454" stroke-width="2"/>
+                                <path d="M17 10L12 15L7 10" stroke="#545454" stroke-width="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="radio-item__info">
+                        <h6 class="radio-item__title">
+                            <a>'.htmlspecialchars($item->title).'</a>
+                        </h6>
+                        <div class="radio-item__meta">
+                            <time datetime="2025-04-1 18:35">'.($item->formatted_published_at ?? '').'</time>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+            }
+
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'count' => $news->count()
+            ]);
+        } else {
+            return response()->json([
+                'success' => true,
+                'html' => '<div class="no-programs-message"><p >Программ на выбранную категорию нет</p></div>',
+                'count' => 0
+            ]);
+        }
     }
 
     public function radioTransfers()

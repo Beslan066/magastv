@@ -39,7 +39,6 @@ noUiSlider.create(softSlider, {
 softSlider.noUiSlider.on('update', function (values, handle) {
     input.value = values[handle];
     playerAudio.volume = values[handle];
-    console.log(values[handle]);
 });
 
 // Из input в слайдер
@@ -77,7 +76,6 @@ function formatTime(seconds) {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
 }
 const audioPlayers = document.querySelectorAll('.radio-item');
-console.log(audioPlayers);
 audioPlayers.forEach(container => {
     const audio = container.querySelector('.audio');
     const slider = container.querySelector('.audio-slider');

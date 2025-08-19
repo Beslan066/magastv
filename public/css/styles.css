@@ -2601,3 +2601,7 @@ body.active {
 .home-release-item iframe {
     border-radius: 12px !important;
 }
+
+.no-programs-message p{
+    font-family: "Golos Text", sans-serif;
+}
