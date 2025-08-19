@@ -73,7 +73,7 @@
                                                 <h6 class="popular-item__title">
                                                         {{$video->title}}
                                                 </h6>
-                                                <time datetime="2025-03-21 21:34" class="popular-item__time">21 мар, 21:34</time>
+                                                <time datetime="{{$video->formatted_created_at}}" class="popular-item__time">{{$video->formatted_created_at}}</time>
                                             </div>
                                         </div>
                                     </div>

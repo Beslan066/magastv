@@ -2585,3 +2585,16 @@ body.active {
     display: flex;
     align-items: center;
 }
+
+.releases__content {
+    width: 100%;
+}
+
+.releases__items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 30px;
+
+
+}
