@@ -2371,7 +2371,6 @@ body.active {
 }
 
 .popular-item__media iframe {
-    height: unset !important;
     width: unset !important;
 }
 
