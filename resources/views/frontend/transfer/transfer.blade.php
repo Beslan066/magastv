@@ -71,7 +71,9 @@
                                             </div>
                                             <div class="popular-item__info">
                                                 <h6 class="popular-item__title">
+                                                    <a>
                                                         {{$video->title}}
+                                                    </a>
                                                 </h6>
                                                 <time datetime="{{$video->formatted_created_at}}" class="popular-item__time">{{$video->formatted_created_at}}</time>
                                             </div>

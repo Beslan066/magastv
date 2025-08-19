@@ -317,12 +317,27 @@ HTML;
 
     public function radioTransfers()
     {
-        return view('frontend.radio.transfers');
+
+        $transfers = RadioBroadcast::query()
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->paginate(12);
+
+        return view('frontend.radio.transfers', [
+            'transfers' => $transfers,
+        ]);
     }
 
     public function radioBooks()
     {
-        return view('frontend.radio.books');
+
+        $books = Audiobook::query()
+            ->orderBy('id', 'desc')
+            ->paginate(12);
+
+        return view('frontend.radio.books', [
+            'books' => $books,
+        ]);
     }
 
     public function eventSingle(RadioNews $event)

@@ -11,7 +11,7 @@
                 <div class="transfers__inner">
                     <div class="transfers__top">
                         <h1 class="page-title">
-                            Радио программы
+                            Программы
                         </h1>
                         {{--                        <div class="news-content__tabs_wrapper">--}}
                         {{--                            <div class="tabs">--}}
@@ -41,7 +41,6 @@
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
-                                        <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
                                     </li>
                                 @endforeach
                             @endif

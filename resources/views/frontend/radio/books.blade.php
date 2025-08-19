@@ -32,16 +32,16 @@
                     </div>
                     <div class="transfers__bottom">
                         <ul class="list-reset transfers__list">
-                            @if(isset($transfers))
-                                @foreach($transfers as $transfer)
+                            @if(isset($books))
+                                @foreach($books as $book)
                                     <li class="transferItem active">
                                         <div class="transferItem_media" style="height: 158px !important;">
-                                            <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
+                                            <img src="{{asset('storage/public/' . $book->image)}}" alt="{{$book->title}}">
                                         </div>
                                         <h6 class="transferItem_title">
-                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
+                                            <a>{{$book->title}}</a>
                                         </h6>
-                                        <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
+                                        <span class="transferItem_count">Автор: {{$book->author->name}}</span>
                                     </li>
                                 @endforeach
                             @endif
