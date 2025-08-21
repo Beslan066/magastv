@@ -31,7 +31,7 @@
                                 <img src="{{asset('assets/img/pricelist.jpg')}}" alt="Price list">
                             </picture>
                         </div>
-                        <a href="{{asset('assets/img/pricelist.jpg')}}" download="Цены"
+                        <a href="{{asset('assets/Цены.pdf')}}" download="Цены"
                            class="advertising__priceList_download">Скачать прай-лист на ТВ-рекламу</a>
                     </div>
                     <div class="advertising__text">

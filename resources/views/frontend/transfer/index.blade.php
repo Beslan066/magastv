@@ -11,7 +11,7 @@
                 <div class="transfers__inner">
                     <div class="transfers__top">
                         <h1 class="page-title">
-                            Передачи
+                            Телепроекты
                         </h1>
 {{--                        <div class="news-content__tabs_wrapper">--}}
 {{--                            <div class="tabs">--}}

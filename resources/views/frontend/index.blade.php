@@ -127,10 +127,8 @@
                                             </li>
                                         @endforeach
                                     @endif
-
                                 </ul>
                             </div>
-
 
                             <div class="content__popular popular-sidebar">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
@@ -241,8 +239,8 @@
             <div class="container">
                 <div class="main-transfers__inner">
                     <div class="main-transfers__header">
-                        <h2 class="main-transfers__title">Наши передачи</h2>
-                        <a href="{{route('transfers')}}" class="main-transfers__all">Все передачи</a>
+                        <h2 class="main-transfers__title">Телепроекты</h2>
+                        <a href="{{route('transfers')}}" class="main-transfers__all">Все телепроекты</a>
                     </div>
                     <div class="main-transfers__body">
                         <ul class="list-reset main-transfers__list">
@@ -264,8 +262,7 @@
                             @endforeach
                         </ul>
                     </div>
-                    <a href="{{route('transfers')}}" class="main-transfers__all main-transfers__all--mobile">Все
-                        передачи</a>
+                    <a href="{{route('transfers')}}" class="main-transfers__all main-transfers__all--mobile">Все телепроекты</a>
                 </div>
             </div>
         </section>

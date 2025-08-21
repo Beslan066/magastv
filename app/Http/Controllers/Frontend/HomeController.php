@@ -30,9 +30,8 @@ class HomeController extends Controller
 
         // Новость из главного банера
         $mainPost = News::query()
-            ->orderBy('published_at', 'desc')
             ->where('main_material', 1)
-            ->latest()
+            ->latest('published_at') // или ->latest('created_at')
             ->first();
 
         // Базовые запросы

@@ -91,11 +91,6 @@
                         <div class="single-news__content">
                             <div class="single-news__content--main">
 
-
-                                <p class="single-news__paragraph single-news__paragraph--first">
-                                    {{$news->lead}}
-                                </p>
-
                                 <div class="single-news__image single-news__image--main">
                                     <div class="single-news__image_content" style="margin-bottom: 10px">
                                         <img src="{{asset('storage/public/' . $news->image)}}" alt="{{$news->title}}">
@@ -111,6 +106,10 @@
                                         </div>
                                     @endif
                                 </div>
+
+                                <p class="single-news__paragraph single-news__paragraph--first">
+                                    {{$news->lead}}
+                                </p>
 
                                 <div class="single-news__subInner" style="margin-top: 10px">
                                     <div class="single-news__text"
@@ -282,13 +281,11 @@
                     </div>
                     <div class="video-news__bottom">
                         <div class="single-news__content video-news__content">
-                            @if($news->lead)
-                                <p class="single-news__paragraph">{{$news->lead}}</p>
-                            @endif
 
                             <div>
                                 {!! $news->video !!}
                             </div>
+                            
                             <div class="video-player">
 
                                 <div class="video-navigation hidden">

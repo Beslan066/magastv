@@ -65,10 +65,10 @@
     @endif
     @endif
 <header class="header">
-    
+
     <div class="header__top">
         <div class="container">
-            
+
             <div class="header__top_inner">
                 <div class="header__media">
                     <div class="header__media_tabs">
@@ -306,7 +306,7 @@
                         </li>
                         <li class="header__item">
                             <a href="{{route('transfers')}}">
-                                Передачи
+                                Телепроекты
                             </a>
                         </li>
                         <li class="header__item">
@@ -421,7 +421,7 @@
                             </li>
                             <li class="header__item">
                                 <a href="{{route('transfers')}}">
-                                    Передачи
+                                    Телепроекты
                                 </a>
                             </li>
                             <li class="header__item">
@@ -484,7 +484,7 @@
                             <a href="{{route('tvProgram')}}">Телепрограмма</a>
                         </li>
                         <li class="footer__nav_item">
-                            <a href="{{route('transfers')}}">Передачи</a>
+                            <a href="{{route('transfers')}}">Телепроекты</a>
                         </li>
                         <li class="footer__nav_item">
                             <a href="{{route('watch')}}">Где смотреть</a>

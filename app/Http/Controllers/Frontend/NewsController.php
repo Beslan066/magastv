@@ -17,9 +17,8 @@ class NewsController extends Controller
 
         // Новость из главного банера
         $mainPost = News::query()
-            ->orderBy('published_at', 'desc')
             ->where('main_material', 1)
-            ->latest()
+            ->latest('published_at')
             ->first();
 
         $perPage = 6;
