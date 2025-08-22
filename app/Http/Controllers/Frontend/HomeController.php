@@ -67,7 +67,7 @@ class HomeController extends Controller
         $popularVideos = VideoTransfer::query()
             ->select('id', 'title', 'preview', 'video', 'transfer_id')
             ->orderBy('id', 'desc')
-            ->limit(6)
+            ->limit(8)
             ->get();
 
 

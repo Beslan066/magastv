@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
             'slug' => 'nullable|string|max:255|unique:news,slug',
             'lead' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'audio' => 'nullable|file|mimes:mp3',
+            'audio' => 'nullable|file|mimes:mp3|max:102400', // 100MB в KB
             'user_id' => 'required|exists:users,id',
             'deleter_id' => 'nullable|exists:users,id',
             'image_author' => 'nullable|string|max:255',
@@ -79,6 +79,7 @@ class StoreRequest extends FormRequest
 
             'audio.file' => 'Файл должен быть корректным аудиофайлом.',
             'audio.mimes' => 'Поддерживается только формат MP3.',
+            'audio.max' => __('Размер аудиофайла не должен превышать 100MB'),
         ];
     }
 }
