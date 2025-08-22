@@ -508,7 +508,7 @@
             <div class="footer__mid_inner">
                 <address class="footer__info">
                     <span> ГАУ РИ НТРК “Магас”</span>
-                    <a href="#"> 386001 Республика Ингушетия, г. Магас, пр-т И. Зязикова, 15</a>
+                    <a> 386001 Республика Ингушетия, г. Магас, пр-т И. Зязикова, 15</a>
                     <a href="tel:787325702222">Тел.: 8 (8734) 55-40-55 </a>
                     <a href="mailto:ntrkmagas@mail.ru"> E-mail: magas.tv@magas.tv</a>
                 </address>
@@ -516,7 +516,7 @@
                     <span class="footer__socials_title">Подписывайтесь на нас:</span>
                     <ul class="list-reset footer__socials_list">
                         <li class="footer__socials_item">
-                            <a href="https://vk.com/public220873017">
+                            <a href="https://vk.com/public220873017" target="_blank">
                                 <svg width="26" height="16" viewBox="0 0 26 16" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -526,7 +526,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="https://t.me/magas_tv">
+                            <a href="https://t.me/magas_tv" target="_blank">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -536,7 +536,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="https://rutube.ru/u/magastv/">
+                            <a href="https://rutube.ru/u/magastv/" target="_blank">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -549,7 +549,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="https://dzen.ru/ntrkmagas">
+                            <a href="https://dzen.ru/ntrkmagas" target="_blank">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
