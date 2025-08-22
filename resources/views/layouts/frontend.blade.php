@@ -516,7 +516,7 @@
                     <span class="footer__socials_title">Подписывайтесь на нас:</span>
                     <ul class="list-reset footer__socials_list">
                         <li class="footer__socials_item">
-                            <a href="#">
+                            <a href="https://vk.com/public220873017">
                                 <svg width="26" height="16" viewBox="0 0 26 16" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -526,7 +526,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="#">
+                            <a href="https://t.me/magas_tv">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd"
@@ -536,7 +536,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="#">
+                            <a href="https://rutube.ru/u/magastv/">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -549,7 +549,7 @@
                             </a>
                         </li>
                         <li class="footer__socials_item">
-                            <a href="#">
+                            <a href="https://dzen.ru/ntrkmagas">
                                 <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path

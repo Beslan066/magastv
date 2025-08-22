@@ -18,7 +18,8 @@
                                 <iframe src="https://public.mediacdn.ru/magas/"
                                         frameborder="0"
                                         allowfullscreen
-                                        allow="autoplay">
+                                        allow="autoplay"
+                                        style="height: 700px">
                                 </iframe>
                                 <div class="live-programs">
                                     <h2 class="live-programs__title">Смотрите дальше</h2>
