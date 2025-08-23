@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgeRestriction;
 use App\Models\TvShow;
 use App\Models\TvShowType;
 use Illuminate\Http\Request;
@@ -26,8 +27,9 @@ class TvProgramController extends Controller
     {
 
         $categories = TvShowType::all();
+        $ages = AgeRestriction::all();
 
-        return view('admin.tv-programs.create', compact('categories'));
+        return view('admin.tv-programs.create', compact('categories', 'ages'));
     }
 
     public function store(Request $request)
@@ -40,6 +42,7 @@ class TvProgramController extends Controller
             'description' => 'nullable|string',
             'top_show' => 'nullable',
             'tv_show_type_id' => 'nullable',
+            'age_restriction_id' => 'nullable',
         ]);
 
         if ($request->hasFile('image')) {
@@ -62,8 +65,10 @@ class TvProgramController extends Controller
     {
 
         $categories = TvShowType::all();
+        $ages = AgeRestriction::all();
 
-        return view('admin.tv-programs.edit', compact('tvProgram', 'categories'));
+
+        return view('admin.tv-programs.edit', compact('tvProgram', 'categories', 'ages'));
     }
 
     public function update(Request $request, TvShow $tvProgram)
@@ -75,6 +80,7 @@ class TvProgramController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'tv_show_type_id' => 'nullable',
+            'age_restriction_id' => 'nullable',
             'top_show' => 'nullable',
         ]);
 

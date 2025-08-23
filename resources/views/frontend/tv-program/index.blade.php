@@ -59,7 +59,7 @@
                                             <div class="programListItem__info">
                                                 <h6 class="programListItem__title">
                                                     {{$show->title}}
-                                                    <span class="programListItem__age"></span>
+                                                    <span class="programListItem__age">{{$show->age_restriction->title}}</span>
                                                 </h6>
                                                 <span class="programListItem__type">
                                                 @if($show->tvShowType)

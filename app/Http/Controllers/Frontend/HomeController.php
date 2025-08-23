@@ -62,7 +62,9 @@ class HomeController extends Controller
             ->where('main_material', 1)
             ->get();
 
-        $allTransfers = Transfer::query()->select('id', 'title', 'image', 'slider_video')->orderBy('id', 'desc')->limit(12)->get();
+        $allTransfers = Transfer::query()->select('id', 'title', 'image', 'slider_video', 'age_restriction_id')
+            ->with('age_restriction')
+            ->orderBy('id', 'desc')->limit(12)->get();
 
         $popularVideos = VideoTransfer::query()
             ->select('id', 'title', 'preview', 'video', 'transfer_id')

@@ -19,7 +19,7 @@ class TvShow extends Model
         'description',
         'user_id',
         'tv_show_type_id',
-        'age_restriction',
+        'age_restriction_id',
         'top_show',
     ];
 
@@ -70,6 +70,11 @@ class TvShow extends Model
     public function getIsPastAttribute()
     {
         return \Carbon\Carbon::now()->gt($this->end_time);
+    }
+
+    public function age_restriction()
+    {
+        return $this->belongsTo(AgeRestriction::class, 'age_restriction_id', 'id');
     }
 
 }

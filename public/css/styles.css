@@ -242,6 +242,10 @@ body.active {
     margin: 0;
 }
 
+.schedule-list__item span {
+    color: #8a8a8a;
+}
+
 .header__top_inner {
     padding-top: 16px;
     padding-bottom: 20px;
@@ -1754,7 +1758,7 @@ body.active {
     position: absolute;
     transform: translate(5px, -5px);
     font-weight: 400;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 133%;
     color: var(--neutral-neutral-500);
     font-family: var(--font-family);
@@ -2255,10 +2259,6 @@ body.active {
 
 
 
-
-
-
-
 /* transfer Item */
 .transferItem {
     flex-basis: 280px;
@@ -2327,6 +2327,16 @@ body.active {
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
+}
+
+.transferItem_title span {
+    position: absolute;
+    transform: translate(5px, -5px);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 133%;
+    color: var(--neutral-neutral-500);
+    font-family: var(--font-family);
 }
 
 .transferItem_count {
@@ -2632,4 +2642,9 @@ body.active {
 
 .single-news__info div {
     margin-left: 20px;
+}
+
+.ageIcon {
+    width: 22px;
+    height: 22px;
 }

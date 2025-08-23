@@ -33,6 +33,7 @@ class StoreRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'deleter_id' => 'nullable|exists:users,id',
             'main_material' => 'nullable',
+            'age_restriction_id' => 'nullable'
         ];
     }
     public function messages()

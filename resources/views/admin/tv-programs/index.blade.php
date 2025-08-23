@@ -26,6 +26,7 @@
                     <th class="fw-bold">Время</th>
                     <th class="fw-bold">Название</th>
                     <th class="fw-bold">Тип</th>
+                    <th class="fw-bold">Возрастное ограничение</th>
                     <th class="fw-bold">Дата</th>
                     <th class="fw-bold">Действие</th>
                 </tr>
@@ -38,6 +39,12 @@
                         @if(isset($program->tvShowType->title))
                             <td>{{ $program->tvShowType->title }}</td>
                         @endif
+                        @if(isset($program->age_restriction->title))
+                            <td>{{ $program->age_restriction->title }}</td>
+                        @else
+                            <td>Нет</td>
+                        @endif
+
                         <td>
                             @if($program->image)
                                 <img src="{{asset('storage/public/' . $program->image)}}" class="img-thumbnail old-image-preview" style="max-width: 120px">

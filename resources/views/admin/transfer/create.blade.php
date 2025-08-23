@@ -177,6 +177,18 @@
                                 {{--                            </select>--}}
                                 {{--                        </div>--}}
 
+                                <div class="input-group mb-4">
+                                    <select class="form-select" id="inputGroupSelect02" name="age_restriction_id">
+                                        <option value="">Нет</option>
+                                        @foreach($ages as $age)
+                                            <option value="{{ $age->id }}">
+                                                {{ $age->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <label class="input-group-text" for="inputGroupSelect02">Возрастное ограничение</label>
+                                </div>
+
                                 <div class="mb-2">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                 </div>

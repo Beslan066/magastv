@@ -85,7 +85,11 @@
                                             @endif
                                         </div>
                                         <h6 class="transferItem_title">
-                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
+                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}
+                                                @if(isset($transfer->age_restriction))
+                                                        <span>{{$transfer->age_restriction->title}}</span>
+                                                @endif
+                                            </a>
                                         </h6>
                                         <span class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>
                                     </li>

@@ -39,6 +39,7 @@
                                 <label class="input-group-text" for="inputGroupSelect02">Категории</label>
                             </div>
 
+
                             <div class="mb-4">
                                 <input type="text" class="form-control" placeholder="Время (например: 10:00 - 12:00)" name="time_range" required>
                             </div>
@@ -71,6 +72,18 @@
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+
+                            <div class="input-group mb-4">
+                                <select class="form-select" id="inputGroupSelect02" name="age_restriction_id">
+                                    <option value="">Нет</option>
+                                    @foreach($ages as $age)
+                                        <option value="{{ $age->id }}">
+                                            {{ $age->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <label class="input-group-text" for="inputGroupSelect02">Возрастное ограничение</label>
                             </div>
 
                             <div class="form-check form-switch mb-2">

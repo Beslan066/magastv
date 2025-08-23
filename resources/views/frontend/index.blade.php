@@ -258,7 +258,7 @@
                                              style="background: rgba(0,0,0,0.3);"></div>
                                     @else
                                         <div class="programs-slide__image-background"
-                                             style="background-image: url({{asset('storage/public/' . $transfer->slider_image)}});"></div>
+                                             style="background:  url({{asset('storage/public/' . $transfer->slider_image) }}); no-repeat center"></div>
                                     @endif
 
                                     <div class="programs-slide__inner">
@@ -345,7 +345,11 @@
                                     </div>
                                     <div class="transferItem__info">
                                         <h6 class="transferItem_title">
-                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
+                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}
+                                                @if(isset($transfer->age_restriction))
+                                                    <span>{{$transfer->age_restriction->title}}</span>
+                                                @endif
+                                            </a>
                                         </h6>
                                         <span
                                             class="transferItem_count">Выпусков: {{$transfer->getVideosCountAttribute()}}</span>

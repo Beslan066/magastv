@@ -48,7 +48,7 @@
             @method('patch')
             <div class="row mb-6 gy-6">
                 <div class="col-xl">
-                    <div class="card">
+                    <div class="card w-50">
                         <div class="card-body">
                             <div class="mb-4">
                                 <input type="text" class="form-control" placeholder="Заголовок" name="title"
@@ -209,7 +209,7 @@
                 </div>
             </div>
             <div class="col-xl">
-                <div class="card">
+                <div class="card w-50">
                     <div class="card-body">
                         <div class="mb-4">
                             <div class="input-group">
@@ -271,6 +271,23 @@
                         {{--                                @endif--}}
                         {{--                            </select>--}}
                         {{--                        </div>--}}
+
+                        <div class="input-group mb-4">
+                            <select class="form-select" id="inputGroupSelect02" name="age_restriction_id">
+                                @if(isset($tvProgram->age_restriction))
+                                    <option value="{{$tvProgram->age_restriction->id}}">{{ $tvProgram->age_restriction->title }}</option>
+                                @else
+                                    <option value="">Нет</option>
+                                    @foreach($ages as $age)
+                                        <option value="{{ $age->id }}">
+                                            {{ $age->title }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                            <label class="input-group-text" for="inputGroupSelect02">Возрастное ограничение</label>
+                        </div>
+
 
                         <div class="mb-2">
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">

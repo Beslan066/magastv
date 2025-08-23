@@ -15,6 +15,7 @@
                     <th class="fw-bold">Заголовок</th>
                     <th class="fw-bold">Автор</th>
                     <th class="fw-bold">Создан</th>
+                    <th class="fw-bold">Ограничение</th>
                     <th class="fw-bold">Выводить в слайдер</th>
                     <th class="fw-bold">Действие</th>
                 </tr>
@@ -34,7 +35,13 @@
                                 <td>Нет автора</td>
                             @endif
                             <td>{{$item->created_at}}</td>
-                            @if($item->main_material == 1)
+                            @if(isset($item->age_restriction->title))
+                                <td>{{$item->age_restriction->title}}</td>
+                            @else
+                                <td>Нет</td>
+                            @endif
+
+                        @if($item->main_material == 1)
                                 <td><span class="badge bg-label-success me-1">Да</span></td>
                             @else
                                 <td><span class="badge bg-label-primary me-1">Нет</span></td>

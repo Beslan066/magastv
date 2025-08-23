@@ -20,6 +20,7 @@ class Transfer extends Model
         'category_id',
         'deleter_id',
         'main_material',
+        'age_restriction_id',
     ];
 
     protected $dates = ['created_at', 'deleted_at'];
@@ -36,6 +37,11 @@ class Transfer extends Model
     public function category()
     {
         return $this->belongsTo(TvShowType::class, 'category_id', 'id');
+    }
+
+    public function age_restriction()
+    {
+        return $this->belongsTo(AgeRestriction::class, 'age_restriction_id', 'id');
     }
 
     public function deleter()

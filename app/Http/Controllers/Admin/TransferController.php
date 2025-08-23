@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Transfer\StoreRequest;
 use App\Http\Requests\Admin\Transfer\UpdateRequest;
+use App\Models\AgeRestriction;
 use App\Models\Category;
 use App\Models\News;
 use App\Models\Transfer;
@@ -33,9 +34,12 @@ class TransferController extends Controller
     public function create()
     {
         $categories = TvShowType::all();
+        $ages = AgeRestriction::all();
+
 
         return view('admin.transfer.create', [
             'categories' => $categories,
+            'ages' => $ages,
         ]);
     }
 
@@ -140,10 +144,12 @@ class TransferController extends Controller
     public function edit(Transfer $transfer)
     {
         $categories = TvShowType::all();
+        $ages = AgeRestriction::all();
 
         return view('admin.transfer.edit', [
             'transfer' => $transfer,
             'categories' => $categories,
+            'ages' => $ages,
         ]);
     }
 

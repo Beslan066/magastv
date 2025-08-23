@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\AgeRestrictionController;
 use App\Http\Controllers\Admin\AudiobookController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -99,6 +100,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
         Route::resource('/video-reportages', VideoReportageController::class);
         Route::resource('/tv-show-type', TvShowTypeController::class);
         Route::resource('/transfers', TransferController::class);
+        Route::resource('/ages', AgeRestrictionController::class);
         Route::post('/transfers/upload-video', [TransferController::class, 'uploadVideo'])->name('transfers.uploadVideo');
         Route::resource('/video-transfers', VideoTransferController::class);
         Route::resource('/radio-show-type', RadioShowTypeController::class);

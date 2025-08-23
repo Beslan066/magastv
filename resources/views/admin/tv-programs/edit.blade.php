@@ -95,6 +95,23 @@
                                 </div>
                             </div>
 
+                            <div class="input-group mb-4">
+                                <select class="form-select" id="inputGroupSelect02" name="age_restriction_id">
+                                    @if(isset($tvProgram->age_restriction))
+                                        <option value="{{$tvProgram->age_restriction->id}}">{{ $tvProgram->age_restriction->title }}</option>
+                                    @else
+                                        <option value="">Нет</option>
+                                        @foreach($ages as $age)
+                                            <option value="{{ $age->id }}">
+                                                {{ $age->title }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <label class="input-group-text" for="inputGroupSelect02">Возрастное ограничение</label>
+                            </div>
+
+
                             <div class="form-check form-switch mb-2">
                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" name="top_show" @if($tvProgram->top_show == 1)
                                     checked

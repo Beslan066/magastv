@@ -160,6 +160,12 @@
                     </li>
 
                     <li class="menu-item">
+                        <a href="{{route('ages.index')}}" class="menu-link">
+                            <div class="text-truncate" data-i18n="Basic">Возрастные ограничения</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
                         <a href="{{route('supervisors.index')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-male"></i>
                             <div class="text-truncate" data-i18n="Basic">Руководитель</div>
@@ -190,6 +196,8 @@
                             <div class="text-truncate" data-i18n="Basic">Роли</div>
                         </a>
                     </li>
+
+
 
                     <li class="menu-item">
                         <a href="{{route('users.index')}}" class="menu-link">
