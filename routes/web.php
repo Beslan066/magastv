@@ -99,6 +99,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
         Route::resource('/video-reportages', VideoReportageController::class);
         Route::resource('/tv-show-type', TvShowTypeController::class);
         Route::resource('/transfers', TransferController::class);
+        Route::post('/transfers/upload-video', [TransferController::class, 'uploadVideo'])->name('transfers.uploadVideo');
         Route::resource('/video-transfers', VideoTransferController::class);
         Route::resource('/radio-show-type', RadioShowTypeController::class);
         Route::resource('/users', UserController::class);

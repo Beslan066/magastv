@@ -58,11 +58,11 @@ class HomeController extends Controller
 
         $transfers = Transfer::query()
             ->orderBy('id', 'desc')
-            ->select(['id', 'title', 'lead', 'published', 'slider_image'])
+            ->select(['id', 'title', 'lead', 'published', 'slider_image', 'slider_video'])
             ->where('main_material', 1)
             ->get();
 
-        $allTransfers = Transfer::query()->select('id', 'title', 'image')->orderBy('id', 'desc')->limit(12)->get();
+        $allTransfers = Transfer::query()->select('id', 'title', 'image', 'slider_video')->orderBy('id', 'desc')->limit(12)->get();
 
         $popularVideos = VideoTransfer::query()
             ->select('id', 'title', 'preview', 'video', 'transfer_id')

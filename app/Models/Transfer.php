@@ -12,6 +12,9 @@ class Transfer extends Model
         'lead',
         'image',
         'slider_image',
+        'slider_video',
+        'video_upload_status',
+        'video_upload_progress',
         'user_id',
         'published',
         'category_id',
@@ -19,8 +22,11 @@ class Transfer extends Model
         'main_material',
     ];
 
-
     protected $dates = ['created_at', 'deleted_at'];
+
+    protected $casts = [
+        'video_upload_progress' => 'integer',
+    ];
 
     public function user()
     {

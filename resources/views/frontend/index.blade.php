@@ -1,5 +1,79 @@
 @extends('layouts.frontend')
 
+@push('styles')
+    <style>
+        .programs-slide {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .programs-slide__video,
+        .programs-slide__image-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .programs-slide__video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        .programs-slide__inner {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Для мобильного изображения */
+        .programs-slide__mobile-image video,
+        .programs-slide__mobile-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        transferItem_media {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .transferItem__video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .transferItem__image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        /* При наведении скрываем изображение и показываем видео */
+        .transferItem:hover .transferItem__video {
+            opacity: 1;
+        }
+
+        .transferItem:hover .transferItem__image {
+            opacity: 0;
+        }
+    </style>
+@endpush
 
 @section('content')
     <main class="main" data-main>
@@ -165,22 +239,30 @@
         </section>
         <section class="programs">
             <div class="programs__inner">
-                <!-- Slider main container -->
                 <div
                     class="swiper programs__slider swiper-initialized swiper-horizontal swiper-ios swiper-backface-hidden">
-                    <!-- Additional required wrapper -->
                     <div class="swiper-wrapper" id="swiper-wrapper-5ff3ee537489f80b" aria-live="polite">
-                        <!-- Slides -->
                         @if(isset($transfers))
                             @foreach($transfers as $transfer)
                                 <div class="swiper-slide programs-slide swiper-slide-active"
-                                     style="background-image: url({{asset('storage/public/' . $transfer->slider_image)}}); width: 430px; "
+                                     style="width: 430px;"
                                      role="group" aria-label="1 / 3" data-swiper-slide-index="0">
+
+                                    <!-- Видео вместо фонового изображения -->
+                                    @if(!empty($transfer->slider_video))
+                                        <video class="programs-slide__video" autoplay muted loop playsinline>
+                                            <source src="{{asset('storage/public/' . $transfer->slider_video)}}"
+                                                    type="video/mp4">
+                                        </video>
+                                        <div class="programs-slide__video-overlay"
+                                             style="background: rgba(0,0,0,0.3);"></div>
+                                    @else
+                                        <div class="programs-slide__image-background"
+                                             style="background-image: url({{asset('storage/public/' . $transfer->slider_image)}});"></div>
+                                    @endif
+
                                     <div class="programs-slide__inner">
-                                        <div class="programs-slide__mobile-image">
-                                            <img src="{{asset('storage/public/' . $transfer->slider_image)}}"
-                                                 alt="Slide image">
-                                        </div>
+
                                         <div class="container programs-slide__container">
                                             <div class="programs-slide__info">
                                                 <div class="programs-slide__schedule">
@@ -201,7 +283,6 @@
                                                     </a>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -231,9 +312,9 @@
                             </div>
                         </div>
                     </div>
-                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></div>
+                    <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+                </div>
             </div>
-
         </section>
         <section class="main-transfers">
             <div class="container">
@@ -247,11 +328,22 @@
                             @foreach($allTransfers as $transfer)
                                 <li class="transferItem transferItem--index">
                                     <div class="transferItem_media">
-                                        <img src="{{asset('storage/public/' . $transfer->image)}}"
-                                             alt="{{$transfer->title}}">
+                                        @if(isset($transfer->slider_video))
+                                            <!-- Видео элемент (скрыт по умолчанию) -->
+                                            <video class="transferItem__video" muted loop preload="metadata">
+                                                <source src="{{asset('storage/public/' . $transfer->slider_video)}}"
+                                                        type="video/mp4">
+                                            </video>
+                                            <!-- Изображение (показывается по умолчанию) -->
+                                            <img class="transferItem__image"
+                                                 src="{{asset('storage/public/' . $transfer->image)}}"
+                                                 alt="{{$transfer->title}}">
+                                        @else
+                                            <img src="{{asset('storage/public/' . $transfer->image)}}"
+                                                 alt="{{$transfer->title}}">
+                                        @endif
                                     </div>
                                     <div class="transferItem__info">
-
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
                                         </h6>
@@ -262,10 +354,12 @@
                             @endforeach
                         </ul>
                     </div>
-                    <a href="{{route('transfers')}}" class="main-transfers__all main-transfers__all--mobile">Все телепроекты</a>
+                    <a href="{{route('transfers')}}" class="main-transfers__all main-transfers__all--mobile">Все
+                        телепроекты</a>
                 </div>
             </div>
         </section>
+
         <section class="popular">
             <div class="container">
                 <div class="popular__inner">
@@ -278,21 +372,20 @@
                                 @foreach($popularVideos as $video)
                                     <div class="releases__items">
                                         {!! $video->video !!}
-{{--                                        <div class="popular-item__info">--}}
-{{--                                            <h6 class="popular-item__title">--}}
-{{--                                                <a href="{{route('transfer', $video->transfer_id)}}">--}}
-{{--                                                    {{$video->title}}--}}
-{{--                                                </a>--}}
-{{--                                            </h6>--}}
-{{--                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">--}}
-{{--                                                {{$video->formated_created_at}}--}}
-{{--                                            </time>--}}
-{{--                                        </div>--}}
+                                        {{--                                        <div class="popular-item__info">--}}
+                                        {{--                                            <h6 class="popular-item__title">--}}
+                                        {{--                                                <a href="{{route('transfer', $video->transfer_id)}}">--}}
+                                        {{--                                                    {{$video->title}}--}}
+                                        {{--                                                </a>--}}
+                                        {{--                                            </h6>--}}
+                                        {{--                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">--}}
+                                        {{--                                                {{$video->formated_created_at}}--}}
+                                        {{--                                            </time>--}}
+                                        {{--                                        </div>--}}
                                     </div>
                                 @endforeach
                             @endif
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -496,5 +589,29 @@
             // Инициализация
             updateArrows();
         });
+
+
+        // Воспроизведение видео при наведении на передачи
+        document.addEventListener('DOMContentLoaded', function() {
+            // Функция для управления видео при наведении
+            const videoItems = document.querySelectorAll('.transferItem');
+
+            videoItems.forEach(item => {
+                const video = item.querySelector('.transferItem__video');
+                if (!video) return;
+
+                item.addEventListener('mouseenter', function() {
+                    video.play().catch(e => {
+                        console.log('Автовоспроизведение заблокировано:', e);
+                    });
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    video.pause();
+                    video.currentTime = 0; // Сбрасываем видео в начало
+                });
+            });
+        });
+
     </script>
 @endpush

@@ -25,7 +25,17 @@
                             @endif
                             @if(auth()->user())
                             @if(auth()->user()->role->name !== 'Обычный пользователь')
-                            <a href="{{route('news.edit', $news->slug)}}">Изменить</a>
+                                    <div class="flex-row">
+                                        <a href="{{route('news.edit', $news->slug)}}">Изменить</a>
+
+                                        <form action="{{route('news.destroy', $news->slug)}}" method="post">
+                                            @csrf
+                                            @method('delete')
+                                            <button type="submit" onclick="return confirm('Вы точно хотите удалить эту новость?');">
+                                                <img src="{{asset('assets/delete.png')}}" alt="">
+                                            </button>
+                                        </form>
+                                    </div>
                             @endif
                             @endif
                         </div>
@@ -217,7 +227,17 @@
                             @endif
                             @if(auth()->user())
                             @if(auth()->user()->role->name !== 'Обычный пользователь')
-                            <a href="{{route('video-reportages.edit', $news->id)}}">Изменить</a>
+                                <div class="flex-row">
+                                    <a href="{{route('video-reportages.edit', $news->id)}}">Изменить</a>
+
+                                    <form action="{{route('video-reportages.destroy', $news->id)}}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" onclick="return confirm('Вы точно хотите удалить эту новость?');">
+                                            <img src="{{asset('assets/delete.png')}}" alt="">
+                                        </button>
+                                    </form>
+                                </div>
                             @endif
                             @endif
                         </div>
@@ -285,7 +305,7 @@
                             <div>
                                 {!! $news->video !!}
                             </div>
-                            
+
                             <div class="video-player">
 
                                 <div class="video-navigation hidden">

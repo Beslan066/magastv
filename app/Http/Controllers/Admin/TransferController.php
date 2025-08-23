@@ -46,32 +46,84 @@ class TransferController extends Controller
     {
         $data = $request->validated();
 
-
-
         // Главное изображение
         if (isset($data['image'])) {
             $path = Storage::disk('public')->put('images', $data['image']);
-            // Сохранение пути к изображению в базе данных
             $data['image'] = $path ?? null;
         }
 
-        // Изображение для слайдера телепередач на главной
+        // Изображение для слайдера
         if (isset($data['slider_image'])) {
             $path = Storage::disk('public')->put('slides', $data['slider_image']);
-            // Сохранение пути к изображению в базе данных
             $data['slider_image'] = $path ?? null;
         }
 
+        // Видео для слайдера
+        // Видео для слайдера
+        if ($request->hasFile('slider_video')) {
+            $data['video_upload_status'] = 'uploading';
+            $data['video_upload_progress'] = 0;
+        } elseif ($request->filled('video_path')) {
+            // Если видео было загружено через AJAX
+            $data['slider_video'] = $request->video_path;
+            $data['video_upload_status'] = 'completed';
+            $data['video_upload_progress'] = 100;
+        }
 
         $data['slug'] = Str::slug($data['title']);
-
-        // Главный материал
         $data['main_material'] = $request->has('main_material') ? 1 : 0;
-
 
         $transfer = Transfer::create($data);
 
+        // Загрузка видео (если есть)
+        if ($request->hasFile('slider_video')) {
+            $this->handleVideoUpload($transfer, $request->file('slider_video'));
+        }
+
         return redirect()->route('transfers.index');
+    }
+
+    private function handleVideoUpload(Transfer $transfer, $videoFile)
+    {
+        try {
+            $path = Storage::disk('public')->put('videos', $videoFile);
+
+            $transfer->update([
+                'slider_video' => $path,
+                'video_upload_status' => 'completed',
+                'video_upload_progress' => 100
+            ]);
+
+        } catch (\Exception $e) {
+            $transfer->update([
+                'video_upload_status' => 'failed',
+                'video_upload_progress' => 0
+            ]);
+        }
+    }
+
+// Отдельный метод для AJAX загрузки (если нужно)
+    public function uploadVideo(Request $request)
+    {
+        $request->validate([
+            'video' => 'required|file|mimes:mp4,avi,mov,wmv|max:102400'
+        ]);
+
+        try {
+            $path = Storage::disk('public')->put('videos', $request->file('video'));
+
+            return response()->json([
+                'success' => true,
+                'path' => $path,
+                'message' => 'Видео успешно загружено'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ошибка загрузки видео: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -102,21 +154,50 @@ class TransferController extends Controller
     {
         $data = $request->validated();
 
+        // Главное изображение
         if (isset($data['image'])) {
+            // Удаляем старое изображение если есть
+            if ($transfer->image) {
+                Storage::disk('public')->delete($transfer->image);
+            }
             $path = Storage::disk('public')->put('images', $data['image']);
-            // Сохранение пути к изображению в базе данных
             $data['image'] = $path ?? null;
         }
 
+        // Изображение для слайдера
         if (isset($data['slider_image'])) {
+            // Удаляем старое изображение если есть
+            if ($transfer->slider_image) {
+                Storage::disk('public')->delete($transfer->slider_image);
+            }
             $path = Storage::disk('public')->put('slides', $data['slider_image']);
-            // Сохранение пути к изображению в базе данных
             $data['slider_image'] = $path ?? null;
         }
 
-        $data['slug'] = Str::slug($data['title']);
+        // Видео для слайдера
+        if ($request->hasFile('slider_video')) {
+            // Удаляем старое видео если есть
+            if ($transfer->slider_video) {
+                Storage::disk('public')->delete($transfer->slider_video);
+            }
 
-        // Главный материал
+            $path = Storage::disk('public')->put('videos', $request->file('slider_video'));
+            $data['slider_video'] = $path;
+            $data['video_upload_status'] = 'completed';
+            $data['video_upload_progress'] = 100;
+        }
+
+        // Удаление видео если запрошено
+        if ($request->has('remove_slider_video') && $request->remove_slider_video == 1) {
+            if ($transfer->slider_video) {
+                Storage::disk('public')->delete($transfer->slider_video);
+            }
+            $data['slider_video'] = null;
+            $data['video_upload_status'] = null;
+            $data['video_upload_progress'] = 0;
+        }
+
+        $data['slug'] = Str::slug($data['title']);
         $data['main_material'] = $request->has('main_material') ? 1 : 0;
 
         $transfer->update($data);

@@ -101,6 +101,39 @@
                                 </div>
 
                                 <div class="mb-4">
+                                    <!-- Поле для загрузки видео -->
+                                    <div class="mb-4">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" id="sliderVideo" name="slider_video" accept="video/*">
+                                            <label class="input-group-text" for="sliderVideo">Видео для слайдера</label>
+                                        </div>
+
+                                        <!-- Индикатор загрузки -->
+                                        <div id="videoUploadProgress" class="mt-2" style="display: none;">
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar" style="width: 0%"></div>
+                                            </div>
+                                            <small class="text-muted">Загрузка: <span id="progressPercent">0</span>%</small>
+                                            <div id="uploadStatus" class="mt-1"></div>
+                                        </div>
+
+                                        <!-- Предпросмотр видео -->
+                                        <div id="videoPreviewWrapper" class="mt-3" style="display: none;">
+                                            <video id="videoPreview" controls class="img-thumbnail" style="max-height: 200px; width: 100%;">
+                                                Ваш браузер не поддерживает видео
+                                            </video>
+                                            <button type="button" class="btn btn-light btn-sm mt-1" id="clearVideoPreview">
+                                                <i class="bx bx-trash"></i> Удалить видео
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Скрытые поля для хранения данных о видео -->
+                                <input type="hidden" name="video_path" id="videoPath" value="">
+                                <input type="hidden" name="video_progress" id="videoProgress" value="0">
+
+                                <div class="mb-4">
                                     <div class="input-group">
                                         <input type="file" class="form-control" id="inputGroupFile03" name="slider_image" accept="image/*">
                                         <label class="input-group-text" for="inputGroupFile03">Изображение в слайдере</label>
@@ -225,6 +258,83 @@
             document.getElementById('inputGroupFile03').value = '';
             document.getElementById('sliderImagePreview').src = '';
             document.querySelector('.new-slider-image-wrapper').style.display = 'none';
+        });
+    </script>
+
+    <script>
+        // Обработка выбора видео
+        document.getElementById('sliderVideo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Показываем предпросмотр
+                const videoPreview = document.getElementById('videoPreview');
+                const videoURL = URL.createObjectURL(file);
+                videoPreview.src = videoURL;
+                document.getElementById('videoPreviewWrapper').style.display = 'block';
+
+                // Показываем индикатор прогресса
+                document.getElementById('videoUploadProgress').style.display = 'block';
+
+                // Начинаем реальную загрузку
+                uploadVideoFile(file);
+            }
+        });
+
+        // Реальная загрузка видео с прогрессом
+        function uploadVideoFile(file) {
+            const progressBar = document.querySelector('.progress-bar');
+            const progressPercent = document.getElementById('progressPercent');
+            const uploadStatus = document.getElementById('uploadStatus');
+
+            const formData = new FormData();
+            formData.append('video', file);
+            formData.append('_token', '{{ csrf_token() }}');
+
+            uploadStatus.innerHTML = '<div class="text-info">Загрузка начата...</div>';
+
+            const xhr = new XMLHttpRequest();
+
+            xhr.upload.addEventListener('progress', function(e) {
+                if (e.lengthComputable) {
+                    const percent = (e.loaded / e.total) * 100;
+                    progressBar.style.width = percent + '%';
+                    progressPercent.textContent = Math.round(percent);
+
+                    // Обновляем скрытое поле прогресса (если нужно)
+                    document.getElementById('videoProgress').value = Math.round(percent);
+                }
+            });
+
+            xhr.addEventListener('load', function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.response);
+                    if (response.success) {
+                        uploadStatus.innerHTML = '<div class="text-success">Видео успешно загружено!</div>';
+                        // Сохраняем путь к видео в скрытом поле
+                        document.getElementById('videoPath').value = response.path;
+                    } else {
+                        uploadStatus.innerHTML = '<div class="text-danger">Ошибка: ' + response.message + '</div>';
+                    }
+                } else {
+                    uploadStatus.innerHTML = '<div class="text-danger">Ошибка загрузки</div>';
+                }
+            });
+
+            xhr.addEventListener('error', function() {
+                uploadStatus.innerHTML = '<div class="text-danger">Ошибка сети</div>';
+            });
+
+            xhr.open('POST', '{{ route("transfers.uploadVideo") }}', true);
+            xhr.send(formData);
+        }
+
+        // Очистка видео
+        document.getElementById('clearVideoPreview').addEventListener('click', function() {
+            document.getElementById('sliderVideo').value = '';
+            document.getElementById('videoPreview').src = '';
+            document.getElementById('videoPreviewWrapper').style.display = 'none';
+            document.getElementById('videoUploadProgress').style.display = 'none';
+            document.getElementById('videoPath').value = '';
         });
     </script>
 @endpush
