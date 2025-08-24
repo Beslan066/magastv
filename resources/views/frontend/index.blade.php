@@ -202,6 +202,11 @@
                                         @endforeach
                                     @endif
                                 </ul>
+
+                                <div class="all-news-link">
+                                    <a href="{{route('home.news.index')}}" class="main-transfers__all">Все
+                                        новости</a>
+                                </div>
                             </div>
 
                             <div class="content__popular popular-sidebar">
@@ -258,7 +263,7 @@
                                              style="background: rgba(0,0,0,0.3);"></div>
                                     @else
                                         <div class="programs-slide__image-background"
-                                             style="background:  url({{asset('storage/public/' . $transfer->slider_image) }}); no-repeat center"></div>
+                                             style="background:  url({{asset('storage/public/' . $transfer->slider_image) }}) no-repeat center;"></div>
                                     @endif
 
                                     <div class="programs-slide__inner">
