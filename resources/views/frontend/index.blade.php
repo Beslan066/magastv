@@ -133,7 +133,7 @@
                                             </a>
                                             <div class="news-item__bottom">
                                                 <h6 class="news-item__title">
-                                                    <a href="{{ $mainPost->type === 'news' ? route('home.news.single', $mainPost->slug) : route('home.video.single', $mainPost->slug) }}">
+                                                    <a href="{{ $mainPost->type === 'news' ? route('home.news.single', $mainPost->slug) : route('home.news.single', $mainPost->slug) }}">
                                                         {{ $mainPost->title }}
                                                     </a>
                                                 </h6>
