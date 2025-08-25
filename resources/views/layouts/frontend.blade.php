@@ -498,7 +498,7 @@
         <div class="container">
             <div class="footer__mid_inner">
                 <address class="footer__info">
-                    <span> ГАУ РИ НТРК “Магас” <img src="{{asset('assets/16.png')}}" alt="16+" class="ageIcon"></span>
+                    <span> ГАУ РИ НТРК “Магас”</span>
                     <a> 386001 Республика Ингушетия, г. Магас, пр-т И. Зязикова, 15</a>
                     <a href="tel:787325702222">Тел.: 8 (8734) 55-40-55 </a>
                     <a href="mailto:ntrkmagas@mail.ru"> E-mail: magas.tv@magas.tv</a>
@@ -558,7 +558,10 @@
                                 </svg>
                             </a>
                         </li>
+
+                        <img src="{{asset('assets/16.png')}}" alt="16+" class="ageIcon" style="margin-left: 20px;">
                     </ul>
+
                 </div>
             </div>
         </div>
