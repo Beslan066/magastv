@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'lead' => 'required|string|max:255',
+            'lead' => 'required|string',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
             'video' => 'nullable',

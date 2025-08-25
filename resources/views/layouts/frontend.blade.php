@@ -226,7 +226,7 @@
                     <div class="header__schedule_inner">
                         <div class="header__schedule_top">
                                 <span class="header__schedule_title">
-                                    Расписание
+                                    Телепрограмма
                                 </span>
                             <div class="schedule-navigation">
                                 <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">

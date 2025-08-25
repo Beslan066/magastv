@@ -176,12 +176,14 @@ class NewsController extends Controller
         // Получаем похожие материалы
         $similarNews = News::query()
             ->where('category_id', $item->category_id)
+            ->orderBy('published_at', 'desc')
             ->where('id', '!=', $item->id ?? null)
             ->limit(3)
             ->get();
 
         $similarVideos = VideoReportage::query()
             ->where('category_id', $item->category_id)
+            ->orderBy('published_at', 'desc')
             ->where('id', '!=', $item->id ?? null)
             ->limit(3)
             ->get();

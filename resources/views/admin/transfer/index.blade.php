@@ -25,7 +25,9 @@
                     @foreach($transfers as $item)
                         <tr>
                             <td><span>{{$item->id}}</span></td>
-                            <td>{{$item->title}}</td>
+                            <td><a href="{{route('transfer', $item->id)}}">
+                                    {{$item->title}}
+                                </a></td>
 {{--                            <td><div class="bg-label-primary rounded-3 text-center mb-4 pt-6">--}}
 {{--                                    <img class="img-fluid" src="{{asset('storage/' . $item->image)}}" alt="Card girl image">--}}
 {{--                                </div></td>--}}

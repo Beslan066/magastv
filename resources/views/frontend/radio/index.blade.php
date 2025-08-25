@@ -42,8 +42,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="radio-slide__btns" style="padding-left: 52px">
-                                                        <a  href="{{route('event.single', $event->id)}}"
-                                                            class="btn-reset radio-slide__btn radio-slide__btn--primary">
+                                                        <a href="{{route('event.single', $event->id)}}"
+                                                           class="btn-reset radio-slide__btn radio-slide__btn--primary">
                                                             Подробнее
                                                         </a>
                                                     </div>
@@ -73,29 +73,37 @@
 
                         <div class="radio-events">
                             <div class="tabs-container">
-                                <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории" style="display: none;">
-                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории"
+                                        style="display: none;">
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2"
+                                              stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </button>
 
                                 <div class="tabs">
                                     <ul class="list-reset tabs__list">
-                                        <li class="tab {{ ($selectedCategory ?? 'all') == 'all' ? 'active' : '' }}" data-category-id="all">
+                                        <li class="tab {{ ($selectedCategory ?? 'all') == 'all' ? 'active' : '' }}"
+                                            data-category-id="all">
                                             <span>Все</span>
                                         </li>
                                         @if(isset($radioShowTypes))
                                             @foreach($radioShowTypes as $category)
-                                                <li class="tab {{ ($selectedCategory ?? '') == $category->id ? 'active' : '' }}" data-category-id="{{ $category->id }}">
+                                                <li class="tab {{ ($selectedCategory ?? '') == $category->id ? 'active' : '' }}"
+                                                    data-category-id="{{ $category->id }}">
                                                     <span>{{$category->title}}</span>
                                                 </li>
                                             @endforeach
                                         @endif
                                     </ul>
                                 </div>
-                                <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории" style="display: none;">
-                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории"
+                                        style="display: none;">
+                                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2"
+                                              stroke-linecap="round" stroke-linejoin="round"></path>
                                     </svg>
                                 </button>
                             </div>
@@ -112,23 +120,30 @@
                                     @foreach($news as $item)
                                         <div class="radio-item">
                                             <div class="radio-item__image">
-                                                <img src="{{asset('storage/public/' . $item->image)}}" alt="{{$item->title}}">
+                                                <img src="{{asset('storage/public/' . $item->image)}}"
+                                                     alt="{{$item->title}}">
                                             </div>
                                             <div class="radio-item__bottom">
                                                 <div class="radio-item__nav">
                                                     <audio class="audio" preload="auto"
                                                            src="{{asset('storage/public/' . $item->audio)}}"></audio>
                                                     <button class="btn-reset radio-item__play_btn">
-                                                        <svg class="radio-item__play_btn--play-svg" width="12" height="14"
-                                                             viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <svg class="radio-item__play_btn--play-svg" width="12"
+                                                             height="14"
+                                                             viewBox="0 0 12 14" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
                                                             <path
                                                                 d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
                                                                 fill="#545454"/>
                                                         </svg>
-                                                        <svg class="radio-item__play_btn--stop-svg" width="24" height="24"
-                                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect x="6" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
-                                                            <rect x="14" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
+                                                        <svg class="radio-item__play_btn--stop-svg" width="24"
+                                                             height="24"
+                                                             viewBox="0 0 24 24" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <rect x="6" y="4" width="4" height="16" rx="1"
+                                                                  fill="#14AB28"/>
+                                                            <rect x="14" y="4" width="4" height="16" rx="1"
+                                                                  fill="#14AB28"/>
                                                         </svg>
                                                     </button>
                                                     <div class="radio-item__progress">
@@ -137,14 +152,16 @@
                                                             <span class="duration">00:00</span>
                                                         </div>
                                                     </div>
-                                                    <a href="{{asset('storage/public/' . $item->audio)}}" download class="btn-reset radio-item__download">
+                                                    <a href="{{asset('storage/public/' . $item->audio)}}" download
+                                                       class="btn-reset radio-item__download">
                                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                                              xmlns="http://www.w3.org/2000/svg">
                                                             <path
                                                                 d="M5 14V17C5 18.1046 5.89543 19 7 19H17C18.1046 19 19 18.1046 19 17V14"
                                                                 stroke="#545454" stroke-width="2"/>
                                                             <path d="M12 3V15" stroke="#545454" stroke-width="2"/>
-                                                            <path d="M17 10L12 15L7 10" stroke="#545454" stroke-width="2"/>
+                                                            <path d="M17 10L12 15L7 10" stroke="#545454"
+                                                                  stroke-width="2"/>
                                                         </svg>
                                                     </a>
                                                 </div>
@@ -153,7 +170,8 @@
                                                         <a>{{$item->title}}</a>
                                                     </h6>
                                                     <div class="radio-item__meta">
-                                                        <time datetime="2025-04-1 18:35">{{$item->formatted_published_at}}</time>
+                                                        <time
+                                                            datetime="2025-04-1 18:35">{{$item->formatted_published_at}}</time>
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,7 +179,8 @@
                                     @endforeach
                                 @else
                                     <div class="no-programs-message">
-                                        <p style="font-family: 'Golos Text', sans-serif">Программ на выбранную категорию нет</p>
+                                        <p style="font-family: 'Golos Text', sans-serif">Программ на выбранную категорию
+                                            нет</p>
                                     </div>
                                 @endif
                             </div>
@@ -178,23 +197,30 @@
                                     @foreach($books as $item)
                                         <div class="radio-item">
                                             <div class="radio-item__image">
-                                                <img src="{{asset('storage/public/' . $item->image)}}" alt="{{$item->title}}">
+                                                <img src="{{asset('storage/public/' . $item->image)}}"
+                                                     alt="{{$item->title}}">
                                             </div>
                                             <div class="radio-item__bottom">
                                                 <div class="radio-item__nav">
                                                     <audio class="audio" preload="auto"
                                                            src="{{asset('storage/public/' . $item->audio)}}"></audio>
                                                     <button class="btn-reset radio-item__play_btn">
-                                                        <svg class="radio-item__play_btn--play-svg" width="12" height="14"
-                                                             viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <svg class="radio-item__play_btn--play-svg" width="12"
+                                                             height="14"
+                                                             viewBox="0 0 12 14" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
                                                             <path
                                                                 d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
                                                                 fill="#545454"/>
                                                         </svg>
-                                                        <svg class="radio-item__play_btn--stop-svg" width="24" height="24"
-                                                             viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <rect x="6" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
-                                                            <rect x="14" y="4" width="4" height="16" rx="1" fill="#14AB28"/>
+                                                        <svg class="radio-item__play_btn--stop-svg" width="24"
+                                                             height="24"
+                                                             viewBox="0 0 24 24" fill="none"
+                                                             xmlns="http://www.w3.org/2000/svg">
+                                                            <rect x="6" y="4" width="4" height="16" rx="1"
+                                                                  fill="#14AB28"/>
+                                                            <rect x="14" y="4" width="4" height="16" rx="1"
+                                                                  fill="#14AB28"/>
                                                         </svg>
                                                     </button>
                                                     <div class="radio-item__progress">
@@ -254,7 +280,7 @@
                                         <div class="player__controls">
                                             <!-- На прод-->
                                             <audio src="/proxy/audio"></audio>
-{{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
+                                            {{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
                                             <div class="player__controls_controls">
                                                 <button class="btn-reset player__controls_btn">
                                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -322,15 +348,18 @@
                                             $isActive = $now->between($startTime, $endTime);
                                         @endphp
                                         <div class="programListItem {{ $isActive ? 'active' : '' }}">
-                                            <time datetime="2025-04-1 14:00">{{mb_substr($item->time_range, 0, 5)}}</time>
+                                            <time
+                                                datetime="2025-04-1 14:00">{{mb_substr($item->time_range, 0, 5)}}</time>
                                             <div class="programListItem__info">
                                                 <h6 class="programListItem__title">
                                                     {{$item->title}}
                                                     <span class="programListItem__age"></span>
                                                 </h6>
-                                                <span class="programListItem__type">
-                                            {{$item->radioShowType->title}}
-                                        </span>
+                                                @if(isset($item->radioShowType))
+                                                    <span class="programListItem__type">
+                                                    {{$item->radioShowType->title}}
+                                                    </span>
+                                                @endif
                                                 <p class="programListItem__text">
                                                 </p>
                                             </div>
@@ -351,7 +380,7 @@
     <script defer src="{{asset('js/radio.js')}}"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.tab');
             const programsContainer = document.getElementById('programs-container');
             const loadingIndicator = document.createElement('div');
@@ -361,7 +390,7 @@
             programsContainer.parentNode.insertBefore(loadingIndicator, programsContainer);
 
             tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
+                tab.addEventListener('click', function () {
                     const categoryId = this.getAttribute('data-category-id');
 
                     // Убираем активный класс у всех табов

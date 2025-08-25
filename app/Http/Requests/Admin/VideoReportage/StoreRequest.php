@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'required|string|max:255',
+            'lead' => 'required|string',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
 //            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800', // 200MB

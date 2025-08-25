@@ -404,7 +404,7 @@
                                         @foreach($similarNews as $news)
                                             <li class="news-item @if($news->type === 'video') news-item--media @endif">
                                                 <div class="news-item__media">
-                                                    <img src="{{asset('storage/public/' . $news->image)}}"
+                                                    <img src="{{asset('storage/public/' . $news->media)}}"
                                                          alt="{{$news->title}}">
                                                     <button class="btn-reset news-item--media__btn">
                                                         <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
@@ -421,7 +421,7 @@
                                                     </h6>
                                                     <div class="news-item__info">
                                                         <time datetime="2025-04-1 18:35" class="news-item_time">
-                                                            {{$news->published_at}}
+                                                            {{$news->formatted_published_at}}
                                                         </time>
                                                         <div class="news-item_views">
                                                             <div class="item-views__icon">
@@ -433,7 +433,7 @@
                                                                         d="M7 0.333496C11.6523 0.333496 13.9857 5.21553 14 5.24561C14 5.24561 11.6667 9.6665 7 9.6665C2.33333 9.6665 0 5.24561 0 5.24561C0.0143304 5.21553 2.34771 0.333496 7 0.333496ZM7 2.6665C5.71134 2.6665 4.66699 3.71182 4.66699 5.00049C4.66717 6.289 5.71144 7.3335 7 7.3335C8.28856 7.3335 9.33283 6.289 9.33301 5.00049C9.33301 3.71182 8.28866 2.6665 7 2.6665Z"/>
                                                                 </svg>
                                                             </div>
-                                                            <span>12</span>
+                                                            <span>{{$news->views}}</span>
                                                         </div>
                                                     </div>
                                                 </div>

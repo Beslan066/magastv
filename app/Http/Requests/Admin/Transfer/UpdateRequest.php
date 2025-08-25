@@ -28,7 +28,7 @@ class UpdateRequest extends FormRequest
             'published' => 'required|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
             'slider_image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'slider_video' => 'nullable|file|mimes:mp4,avi,mov,wmv|max:102400',
+            'slider_video' => 'nullable|file|mimes:mp4,avi,mov,wmv|max:215040', // Максимум 210MB
             'remove_slider_video' => 'nullable|boolean',
             'user_id' => 'required|exists:users,id',
             'category_id' => 'required|exists:categories,id',
@@ -72,7 +72,7 @@ class UpdateRequest extends FormRequest
             'deleter_id.exists' => __('Указанный удалитель не найден'),
             'slider_video.file' => __('Видео должно быть файлом'),
             'slider_video.mimes' => __('Видео должно быть в формате: mp4, avi, mov, wmv'),
-            'slider_video.max' => __('Размер видео не должен превышать 100MB'),
+            'slider_video.max' => __('Размер видео не должен превышать 210MB'),
         ];
     }
 }
