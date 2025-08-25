@@ -115,7 +115,7 @@
                                 <ul class="list-reset news-block__list" id="news-items-container">
                                     @if(isset($mainPost))
                                         <li class="news-item main-news-item" data-static="true">
-                                            <a href="{{ $mainPost->type === 'news' ? route('home.news.single', $mainPost->slug) : route('home.video.single', $mainPost->slug) }}">
+                                            <a href="{{ $mainPost->type === 'news' ? route('home.news.single', $mainPost->slug) : route('home.news.single', $mainPost->slug) }}">
                                                 <div class="news-item__media">
                                                     <img src="{{ asset('storage/public/' . ($mainPost->type === 'news' ? $mainPost->media : $mainPost->media)) }}"
                                                          alt="{{ $mainPost->title }}">
