@@ -28,10 +28,21 @@ class HomeController extends Controller
     {
         $categories = Category::query()->orderBy('id', 'desc')->get();
 
-        // Новость из главного банера
-        $mainPost = News::query()
+        // Новость или видеорепортаж из главного банера
+        $newsQuery = News::query()
+            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
             ->where('main_material', 1)
-            ->latest('published_at') // или ->latest('created_at')
+            ->addSelect(DB::raw("'news' as type"));
+
+        $videosQuery = VideoReportage::query()
+            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
+            ->where('main_material', 1)
+            ->addSelect(DB::raw("'video' as type"));
+
+        $mainPost = $newsQuery->unionAll($videosQuery)
+            ->orderBy('published_at', 'desc')
             ->first();
 
         // Базовые запросы
@@ -71,8 +82,6 @@ class HomeController extends Controller
             ->orderBy('id', 'desc')
             ->limit(8)
             ->get();
-
-
 
         // Популярные материалы (новости + видео)
         $popularQuery = News::query()
