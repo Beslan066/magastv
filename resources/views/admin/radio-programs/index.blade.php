@@ -35,7 +35,9 @@
                     <tr>
                         <td>{{ $program->time_range }}</td>
                         <td>{{ $program->title }}</td>
-                        <td>{{ $program->radioShowType->title }}</td>
+                        @if(isset($program->radioShowType))
+                            <td>{{ $program->radioShowType->title }}</td>
+                        @endif
                         <td>
                             @if($program->image)
                                 <img src="{{asset('storage/public/' . $program->image)}}" class="img-thumbnail old-image-preview" style="max-width: 120px">
