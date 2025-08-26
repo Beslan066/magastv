@@ -88,7 +88,11 @@
                                     <circle cx="4" cy="4" r="4" fill="#70E780"/>
                                 </svg>
                                 <h6 class="video__title">
-                                    Автостопом по России
+                                    @if($currentTvProgram && $currentTvProgram->title)
+                                        {{ $currentTvProgram->title }}
+                                    @else
+                                        Нет текущей передачи
+                                    @endif
                                 </h6>
                             </div>
                         </button>
@@ -113,7 +117,11 @@
                                     <circle cx="4" cy="4" r="4" fill="#70E780"/>
                                 </svg>
                                 <h6 class="video__title">
-                                    Интервью с Зауром
+                                    @if($currentRadioProgram && $currentRadioProgram->title)
+                                        {{ $currentRadioProgram->title }}
+                                    @else
+                                        Нет текущей передачи
+                                    @endif
                                 </h6>
                             </div>
                         </button>
@@ -187,7 +195,12 @@
                                 <circle cx="4" cy="4" r="4" fill="#70E780"/>
                             </svg>
                             <h6 class="video__title">
-                                Автостопом по России
+
+                                @if($currentTvProgram && $currentTvProgram->title)
+                                    {{ $currentTvProgram->title }}
+                                @else
+                                    Нет текущей передачи
+                                @endif
                             </h6>
                         </div>
                     </div>

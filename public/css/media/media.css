@@ -1332,4 +1332,8 @@
     .news__main .main-transfers__all {
         display: flex;
     }
+
+    .news-item--media:first-child {
+        margin-bottom: 20px;
+    }
 }

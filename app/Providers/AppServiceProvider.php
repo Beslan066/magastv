@@ -30,7 +30,6 @@ class AppServiceProvider extends ServiceProvider
             $now = Carbon::now('Europe/Moscow');
 
             $tvProgramsRaw = TvShow::whereDate('program_date', $today)->get();
-
             $tvActive = null;
             $tvUpcoming = [];
 
@@ -45,7 +44,6 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
 
-            // Соберём окончательный список: сначала active, потом будущие
             $tvProgramsToday = collect(array_filter([$tvActive]))
                 ->merge($tvUpcoming)
                 ->sortBy(function ($program) {
@@ -81,6 +79,8 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'tvProgramsToday' => $tvProgramsToday,
                 'radioProgramsToday' => $radioProgramsToday,
+                'currentTvProgram' => $tvActive, // Добавляем текущую TV программу
+                'currentRadioProgram' => $radioActive, // Добавляем текущую Radio программу
             ]);
         });
 
