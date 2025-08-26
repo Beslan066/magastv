@@ -1333,7 +1333,7 @@
         display: flex;
     }
 
-    .news-item--media:first-child {
+    li.news-item:first-child {
         margin-bottom: 20px;
     }
 }
