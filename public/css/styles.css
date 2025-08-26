@@ -380,13 +380,13 @@ body.active {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
 .schedule-navigation {
     display: flex;
     align-items: center;
     gap: 20px;
+    margin-bottom: 10px;
 }
 
 .schedule-navigation__btn svg {
@@ -403,7 +403,6 @@ body.active {
 
 .header__schedule_slider {
     display: none;
-    margin-top: 10px;
     overflow-x: hidden;
 }
 

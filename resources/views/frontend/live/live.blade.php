@@ -37,12 +37,16 @@
                                                         <span class="programListItem__age"></span>
                                                     </h6>
                                                     <span class="programListItem__type">
-                                                        Новости
+                                                        @if(isset($program->tvShowType))
+                                                            {{$program->tvShowType->title}}
+                                                        @endif
                                                     </span>
                                                     <div class="programListItem__media programListItem__media--mobile">
                                                         <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
                                                     </div>
-                                                    <p class="programListItem__text">{{$program->description}}</p>
+                                                    <p class="programListItem__text">@if(isset($program->description))
+                                                            {{$program->description}}
+                                                    @endif</p>
                                                 </div>
                                                 <div class="programListItem__media">
                                                     <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">

@@ -223,25 +223,26 @@
                 </div>
                 <div class="header__schedule">
                     <div class="header__schedule_inner">
-                        <div class="header__schedule_top">
+
+                        <div class="header__schedule_slider" data-schedule="tv">
+                            <div class="header__schedule_top">
                                 <span class="header__schedule_title">
                                     Телепрограмма
                                 </span>
-                            <div class="schedule-navigation">
-                                <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
-                                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M9 15L2 8L9 1" stroke-width="1.5"/>
-                                    </svg>
-                                </button>
-                                <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
-                                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M1 1L8 8L1 15" stroke-width="1.5"/>
-                                    </svg>
-                                </button>
+                                <div class="schedule-navigation">
+                                    <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9 15L2 8L9 1" stroke-width="1.5"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 1L8 8L1 15" stroke-width="1.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="header__schedule_slider" data-schedule="tv">
                             <ul class="list-reset header__schedule_list schedule-list schedule-wrapper">
                                 @foreach($tvProgramsToday as $program)
                                     @php
@@ -264,6 +265,24 @@
                             </ul>
                         </div>
                         <div class="header__schedule_slider" data-schedule="radio">
+                            <div class="header__schedule_top">
+                                <span class="header__schedule_title">
+                                    Радиопрограмма
+                                </span>
+                                <div class="schedule-navigation">
+                                    <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M9 15L2 8L9 1" stroke-width="1.5"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M1 1L8 8L1 15" stroke-width="1.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                             <ul class="list-reset header__schedule_list schedule-list schedule-wrapper">
                                 @if(isset($radioProgramsToday))
                                     @foreach($radioProgramsToday as $program)
@@ -595,12 +614,11 @@
                         href="#">Тел.: 8 (8734) 55-40-55.</a> <a href="#">E-mail: magas.tv@magas.tv</a></address>
                 <span>
                         При использовании материалов сайта в интернете обязательна активная гиперссылка на www.magas.tv.
-                        При использовании видеоматериалов необходимо письменное разрешение.
+                        При использовании необходимо письменное разрешение.
                     </span>
-                <span> Используя настоящий сайт, вы обязуетесь выполнять условия <a href="#">данного соглашения.</a>
+                <span> Используя настоящий сайт, вы обязуетесь выполнять условия <a href="{{route('pravila')}}">Правила использования материалов</a>
                     </span>
-                <span><a href="#">Положение об обработке и защите персональных данных</a> в ГАУ
-                        РИ «НТРК «Магас»</span>
+                <span><a href="{{route('soglasie')}}">Согласие на обработку персональных данных</a></span>
             </div>
         </div>
     </div>

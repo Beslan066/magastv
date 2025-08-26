@@ -83,6 +83,8 @@ Route::post('/radio/filter-programs', [HomeController::class, 'filterPrograms'])
     ->name('radio.filter.programs')
     ->withoutMiddleware(['csrf']);
 Route::get('/sort-news', [HomeController::class, 'sortNews']);
+Route::get('/pravila-ispolzovaniya-materialov', [HomeController::class, 'pravila'])->name('pravila');
+Route::get('/soglasie-na-obrabotku-personalnykh-dannykh', [HomeController::class, 'soglasie'])->name('soglasie');
 
 
 
@@ -107,7 +109,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
         Route::resource('/users', UserController::class);
         Route::resource('/supervisors', SupervisorController::class);
         Route::resource('/contacts', ContactController::class);
-
         Route::resource('/about', AboutController::class);
 
         Route::resource('/roles', RoleController::class);

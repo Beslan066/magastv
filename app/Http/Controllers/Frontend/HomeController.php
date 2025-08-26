@@ -498,5 +498,14 @@ HTML;
         $categoryId = $request->get('category_id');
     }
 
+    public function pravila()
+    {
+        return view('frontend.pravila');
+    }
+
+    public function soglasie() {
+        return view('frontend.soglasie');
+    }
+
 
 }
