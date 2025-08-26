@@ -389,6 +389,12 @@
                             </div>
 
 
+                            <p class="single-news__paragraph single-news__paragraph--first">
+                                @if(isset($news->lead))
+                                    {{$news->lead}}
+                                @endif
+                            </p>
+
                             @if($news->content)
                                 <div class="single-news__subInner" style="margin-top: 10px">
                                     <div class="video-news__text"
