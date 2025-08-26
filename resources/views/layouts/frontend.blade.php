@@ -268,7 +268,11 @@
                                         @endphp
                                         <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
                                             <time>{{$program->time_range}}</time>
-                                            <a>{{$program->title}} <span>{{$program->age_restriction->title}}</span></a>
+                                            <a>@if(isset($program->title))
+                                                    {{$program->title}}
+                                            @endif <span>@if(isset($program->age_restriction))
+                                                        {{$program->age_restriction->title}}
+                                            @endif</span></a>
                                         </li>
                                     @endforeach
                                 @endif
