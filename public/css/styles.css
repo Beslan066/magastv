@@ -376,13 +376,6 @@ body.active {
     overflow: hidden;
 }
 
-.schedule-list__item a:hover {
-    color: var(--primary-primary-500)
-}
-
-.schedule-list__item a:active {
-    color: var(--primary-primary-700)
-}
 .header__schedule_top {
     width: 100%;
     display: flex;

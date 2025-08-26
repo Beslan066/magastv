@@ -21,33 +21,35 @@
                                         allow="autoplay"
                                         style="height: 500px">
                                 </iframe>
-                                <div class="live-programs">
-                                    <h2 class="live-programs__title">Смотрите дальше</h2>
-                                    <div class="live-programs__items">
-                                        @if($tvProgramsToday)
-                                            @foreach($tvProgramsToday as $program)
-                                                <div class="programListItem @if($program->top_show === 1) programListItem--third @endif">
-                                                    <time datetime="2025-04-1 15:30">15:30</time>
-                                                    <div class="programListItem__info">
-                                                        <h6 class="programListItem__title">
-                                                            {{$program->title}}
-                                                            <span class="programListItem__age"></span>
-                                                        </h6>
-                                                        <span class="programListItem__type">
+
+                            </div>
+
+                            <div class="live-programs">
+                                <h2 class="live-programs__title">Смотрите дальше</h2>
+                                <div class="live-programs__items">
+                                    @if($tvProgramsToday)
+                                        @foreach($tvProgramsToday as $program)
+                                            <div class="programListItem @if($program->top_show === 1) programListItem--third @endif">
+                                                <time datetime="2025-04-1 15:30">15:30</time>
+                                                <div class="programListItem__info">
+                                                    <h6 class="programListItem__title">
+                                                        {{$program->title}}
+                                                        <span class="programListItem__age"></span>
+                                                    </h6>
+                                                    <span class="programListItem__type">
                                                         Новости
                                                     </span>
-                                                        <div class="programListItem__media programListItem__media--mobile">
-                                                            <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
-                                                        </div>
-                                                        <p class="programListItem__text">{{$program->description}}</p>
-                                                    </div>
-                                                    <div class="programListItem__media">
+                                                    <div class="programListItem__media programListItem__media--mobile">
                                                         <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
                                                     </div>
+                                                    <p class="programListItem__text">{{$program->description}}</p>
                                                 </div>
-                                            @endforeach
-                                        @endif
-                                    </div>
+                                                <div class="programListItem__media">
+                                                    <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                             </div>
 

@@ -163,6 +163,14 @@ class NewsController extends Controller
         if (!$item) {
             $item = VideoReportage::where('slug', $slug)->first();
             $type = 'video';
+
+            // Добавляем поле media для видеорепортажей
+            if ($item) {
+                $item->media = $item->preview;
+            }
+        } else {
+            // Для новостей также добавляем поле media
+            $item->media = $item->image;
         }
 
         // Если ничего не найдено — 404
@@ -170,47 +178,63 @@ class NewsController extends Controller
             abort(404);
         }
 
+        // Форматируем дату
+        $item->formatted_published_at = \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i');
+
         // Увеличиваем счетчик просмотров
         $item->incrementViews();
 
-        // Получаем похожие материалы
+        // Получаем похожие материалы (перемешанные новости и видео)
         $similarNews = News::query()
             ->where('category_id', $item->category_id)
-            ->orderBy('published_at', 'desc')
             ->where('id', '!=', $item->id ?? null)
-            ->limit(3)
-            ->get();
+            ->where('status', 1)
+            ->select('id', 'title', 'slug', 'image as media', 'published_at', 'views', 'category_id')
+            ->addSelect(DB::raw("'news' as type"))
+            ->limit(3);
 
         $similarVideos = VideoReportage::query()
             ->where('category_id', $item->category_id)
-            ->orderBy('published_at', 'desc')
             ->where('id', '!=', $item->id ?? null)
-            ->limit(3)
-            ->get();
+            ->where('status', 1)
+            ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views', 'category_id')
+            ->addSelect(DB::raw("'video' as type"))
+            ->limit(3);
 
-        $similarItems = $similarNews->concat($similarVideos)->shuffle();
+        // Объединяем и перемешиваем
+        $similarItems = $similarNews->unionAll($similarVideos)
+            ->orderBy('published_at', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $item->formatted_published_at = \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i');
+                return $item;
+            })
+            ->shuffle();
 
         // Популярные материалы (новости + видео)
         $popularQuery = News::query()
-            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+            ->select('id', 'title', 'slug', 'image as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
             ->addSelect(DB::raw("'news' as type"))
             ->unionAll(
                 VideoReportage::query()
-                    ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+                    ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'category_id', 'views')
                     ->where('status', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('views', 'desc')
             ->limit(7);
 
-        $popularItems = $popularQuery->get();
-
+        $popularItems = $popularQuery->get()
+            ->map(function ($item) {
+                $item->formatted_published_at = \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i');
+                return $item;
+            });
 
         return view('frontend.news.single', [
             'news' => $item,
             'type' => $type,
-            'similarNews' => $similarItems,
+            'similarItems' => $similarItems, // переименовано для ясности
             'popularItems' => $popularItems,
         ]);
     }

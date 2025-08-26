@@ -222,13 +222,17 @@
                     </div>
                 </div>
                 <div class="header__schedule">
-
                     <div class="header__schedule_inner">
                         <div class="header__schedule_top">
                                 <span class="header__schedule_title">
                                     Телепрограмма
                                 </span>
                             <div class="schedule-navigation">
+                                <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
+                                    <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 15L2 8L9 1" stroke-width="1.5"/>
+                                    </svg>
+                                </button>
                                 <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
                                     <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
@@ -249,8 +253,12 @@
                                     @endphp
 
                                     <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
-                                        <time>{{ $program->time_range }}</time>
-                                        <a>{{ $program->title }}  <span>{{$program->age_restriction->title}}</a>
+                                        <time>{{$program->time_range}}</time>
+                                        <a>@if(isset($program->title))
+                                                {{$program->title}}
+                                            @endif <span>@if(isset($program->age_restriction))
+                                                    {{$program->age_restriction->title}}
+                                                @endif</span></a>
                                     </li>
                                 @endforeach
                             </ul>
@@ -739,7 +747,86 @@
     });
 </script>
 
-<script defer src="{{asset('js/script.js')}}"></script>
+<script defer src="{{asset('js/script.js')}}">
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализация для всех слайдеров телепрограммы
+        const scheduleSliders = document.querySelectorAll('[data-schedule]');
+
+        scheduleSliders.forEach(slider => {
+            initScheduleSlider(slider);
+        });
+    });
+
+    function initScheduleSlider(slider) {
+        const list = slider.querySelector('.schedule-list');
+        const items = slider.querySelectorAll('.schedule-list__item');
+        const prevBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--prev');
+        const nextBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--next');
+
+        if (!list || !prevBtn || !nextBtn) return;
+
+        let currentPosition = 0;
+        const itemWidth = items[0]?.offsetWidth + parseInt(getComputedStyle(items[0]).marginRight) || 215; // ширина элемента + отступ
+        const visibleItems = Math.floor(slider.offsetWidth / itemWidth);
+        const maxPosition = Math.max(0, items.length - visibleItems) * itemWidth;
+
+        // Функция для обновления состояния кнопок
+        function updateButtons() {
+            prevBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition === 0);
+            nextBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition >= maxPosition);
+        }
+
+        // Функция для прокрутки
+        function scrollTo(position) {
+            currentPosition = Math.max(0, Math.min(position, maxPosition));
+            list.style.transform = `translateX(-${currentPosition}px)`;
+            updateButtons();
+        }
+
+        // Обработчики кликов
+        prevBtn.addEventListener('click', function() {
+            if (currentPosition > 0) {
+                scrollTo(currentPosition - itemWidth * visibleItems);
+            }
+        });
+
+        nextBtn.addEventListener('click', function() {
+            if (currentPosition < maxPosition) {
+                scrollTo(currentPosition + itemWidth * visibleItems);
+            }
+        });
+
+        // Обработчик ресайза окна
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                const newVisibleItems = Math.floor(slider.offsetWidth / itemWidth);
+                const newMaxPosition = Math.max(0, items.length - newVisibleItems) * itemWidth;
+
+                if (newMaxPosition < currentPosition) {
+                    scrollTo(newMaxPosition);
+                } else {
+                    updateButtons();
+                }
+            }, 250);
+        });
+
+        // Инициализация
+        updateButtons();
+
+        // Автоматическая прокрутка к активному элементу
+        const activeItem = slider.querySelector('.schedule-list__item.active');
+        if (activeItem) {
+            const activeIndex = Array.from(items).indexOf(activeItem);
+            if (activeIndex >= visibleItems) {
+                setTimeout(() => {
+                    scrollTo(Math.min(activeIndex * itemWidth, maxPosition));
+                }, 100);
+            }
+        }
+    }
+</script>
 @stack('scripts')
 </body>
 
