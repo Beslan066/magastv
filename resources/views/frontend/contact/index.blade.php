@@ -55,7 +55,7 @@
                             <!-- <a href="./assets/add.jpg" download="test">download</a> -->
                             <div class="requisite__header">
                                 <h6 class="requisite__title">Реквизиты организации</h6>
-                                <a href="#" class="requisite__download">
+                                <a href="{{asset('assets/rekvizity.doc')}}" class="requisite__download">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
                                         <path d="M4 12V15C4 16.1046 4.89543 17 6 17H14C15.1046 17 16 16.1046 16 15V12"

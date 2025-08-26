@@ -29,58 +29,91 @@ class AppServiceProvider extends ServiceProvider
             $today = Carbon::now('Europe/Moscow')->toDateString();
             $now = Carbon::now('Europe/Moscow');
 
-            $tvProgramsRaw = TvShow::whereDate('program_date', $today)->get();
+            // Получаем TV программы на сегодня и сортируем по времени начала
+            $tvProgramsToday = TvShow::whereDate('program_date', $today)
+                ->get()
+                ->sortBy(function($program) {
+                    $timeParts = explode('-', $program->time_range);
+                    return trim($timeParts[0]);
+                });
+
             $tvActive = null;
             $tvUpcoming = [];
 
-            foreach ($tvProgramsRaw as $program) {
-                $start = Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . explode('-', $program->time_range)[0]);
-                $end = Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . explode('-', $program->time_range)[1]);
+            foreach ($tvProgramsToday as $program) {
+                $timeParts = explode('-', $program->time_range);
+                $startTime = trim($timeParts[0]);
+                $endTime = trim($timeParts[1] ?? $startTime);
+
+                $start = Carbon::createFromFormat(
+                    'Y-m-d H:i',
+                    $program->program_date->format('Y-m-d') . ' ' . $startTime
+                );
+
+                $end = Carbon::createFromFormat(
+                    'Y-m-d H:i',
+                    $program->program_date->format('Y-m-d') . ' ' . $endTime
+                );
 
                 if ($now->between($start, $end)) {
                     $tvActive = $program;
-                } elseif ($end->isFuture()) {
+                } elseif ($start->isFuture()) {
                     $tvUpcoming[] = $program;
                 }
             }
 
-            $tvProgramsToday = collect(array_filter([$tvActive]))
-                ->merge($tvUpcoming)
-                ->sortBy(function ($program) {
-                    $start = Carbon::createFromFormat('H:i', explode('-', $program->time_range)[0]);
-                    return $start;
-                })
-                ->values();
+            // Формируем итоговый список TV программ
+            $tvProgramsList = collect();
+            if ($tvActive) {
+                $tvProgramsList->push($tvActive);
+            }
+            $tvProgramsList = $tvProgramsList->merge($tvUpcoming);
 
-            // То же для radio
-            $radioProgramsRaw = RadioShow::whereDate('program_date', $today)->get();
+            // Получаем Radio программы на сегодня и сортируем по времени начала
+            $radioProgramsToday = RadioShow::whereDate('program_date', $today)
+                ->get()
+                ->sortBy(function($program) {
+                    $timeParts = explode('-', $program->time_range);
+                    return trim($timeParts[0]);
+                });
+
             $radioActive = null;
             $radioUpcoming = [];
 
-            foreach ($radioProgramsRaw as $program) {
-                $start = Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . explode('-', $program->time_range)[0]);
-                $end = Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . explode('-', $program->time_range)[1]);
+            foreach ($radioProgramsToday as $program) {
+                $timeParts = explode('-', $program->time_range);
+                $startTime = trim($timeParts[0]);
+                $endTime = trim($timeParts[1] ?? $startTime);
+
+                $start = Carbon::createFromFormat(
+                    'Y-m-d H:i',
+                    $program->program_date->format('Y-m-d') . ' ' . $startTime
+                );
+
+                $end = Carbon::createFromFormat(
+                    'Y-m-d H:i',
+                    $program->program_date->format('Y-m-d') . ' ' . $endTime
+                );
 
                 if ($now->between($start, $end)) {
                     $radioActive = $program;
-                } elseif ($end->isFuture()) {
+                } elseif ($start->isFuture()) {
                     $radioUpcoming[] = $program;
                 }
             }
 
-            $radioProgramsToday = collect(array_filter([$radioActive]))
-                ->merge($radioUpcoming)
-                ->sortBy(function ($program) {
-                    $start = Carbon::createFromFormat('H:i', explode('-', $program->time_range)[0]);
-                    return $start;
-                })
-                ->values();
+            // Формируем итоговый список Radio программ
+            $radioProgramsList = collect();
+            if ($radioActive) {
+                $radioProgramsList->push($radioActive);
+            }
+            $radioProgramsList = $radioProgramsList->merge($radioUpcoming);
 
             $view->with([
-                'tvProgramsToday' => $tvProgramsToday,
-                'radioProgramsToday' => $radioProgramsToday,
-                'currentTvProgram' => $tvActive, // Добавляем текущую TV программу
-                'currentRadioProgram' => $radioActive, // Добавляем текущую Radio программу
+                'tvProgramsToday' => $tvProgramsList,
+                'radioProgramsToday' => $radioProgramsList,
+                'currentTvProgram' => $tvActive,
+                'currentRadioProgram' => $radioActive,
             ]);
         });
 
