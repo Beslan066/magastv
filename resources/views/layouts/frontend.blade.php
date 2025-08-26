@@ -266,7 +266,7 @@
                         </div>
                         <div class="header__schedule_slider" data-schedule="radio">
                             <div class="header__schedule_top">
-                                <span class="header__schedule_title">
+                                <span class="header__schedule_title radio-header__schedule_title">
                                     Радиопрограмма
                                 </span>
                                 <div class="schedule-navigation">
