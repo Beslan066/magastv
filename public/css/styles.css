@@ -380,6 +380,7 @@ body.active {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
 .schedule-navigation {
@@ -401,9 +402,6 @@ body.active {
     color: var(--neutral-neutral-500);
 }
 
-.radio-header__schedule_title {
-    margin-bottom: 10px;
-}
 
 .header__schedule_slider {
     display: none;

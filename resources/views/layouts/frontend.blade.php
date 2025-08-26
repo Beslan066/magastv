@@ -68,23 +68,19 @@
 
     <div class="header__top">
         <div class="container">
-
             <div class="header__top_inner">
                 <div class="header__media">
                     <div class="header__media_tabs">
                         <button class="btn-reset header__media_tab header-tab active" data-media-tab="tv">
                             <div class="header-tab__main_content">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect x="4" y="8" width="12" height="8" rx="2" stroke-width="1.5"/>
-                                    <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5"
-                                          stroke-linejoin="bevel"/>
+                                    <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5" stroke-linejoin="bevel"/>
                                 </svg>
                                 ТВ
                             </div>
                             <div class="header__media_info--mobile">
-                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
+                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="4" cy="4" r="4" fill="#70E780"/>
                                 </svg>
                                 <h6 class="video__title">
@@ -98,22 +94,15 @@
                         </button>
                         <button class="btn-reset header__media_tab header-tab" data-media-tab="radio">
                             <div class="header-tab__main_content">
-
-                                <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M13.5 13C15.1568 11.3431 15.1568 8.65684 13.5 6.99999M7.50001 13C5.84316 11.3431 5.84316 8.65684 7.50001 6.99999"
-                                        stroke-width="1.5"/>
-                                    <path
-                                        d="M15.5 15C18.2614 12.2385 18.2614 7.76141 15.5 4.99999M5.50001 15C2.73859 12.2385 2.73859 7.76141 5.50001 4.99999"
-                                        stroke-width="1.5"/>
+                                <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.5 13C15.1568 11.3431 15.1568 8.65684 13.5 6.99999M7.50001 13C5.84316 11.3431 5.84316 8.65684 7.50001 6.99999" stroke-width="1.5"/>
+                                    <path d="M15.5 15C18.2614 12.2385 18.2614 7.76141 15.5 4.99999M5.50001 15C2.73859 12.2385 2.73859 7.76141 5.50001 4.99999" stroke-width="1.5"/>
                                     <circle cx="10.5" cy="10" r="2"/>
                                 </svg>
                                 Радио
                             </div>
                             <div class="header__media_info--mobile">
-                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
+                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="4" cy="4" r="4" fill="#70E780"/>
                                 </svg>
                                 <h6 class="video__title">
@@ -127,7 +116,6 @@
                         </button>
                     </div>
                     <div class="header__media_content  header__media_content--video active" id="tv">
-
                         <a href="{{route('onAir')}}">
                             <div class="radio__inner">
                                 <div class="radio-content">
@@ -138,64 +126,40 @@
                         <div class="overlay">
                             <div class="overlay__inner">
                                 <div class="video-custom-controls">
-                                    <button
-                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute hidden"
-                                        data-id="muteVideo">
-                                        <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                  d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z"/>
-                                        </svg>
-
-                                    </button>
-                                    <button
-                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute"
-                                        data-id="unmuteVideo">
-
-                                        <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" clip-rule="evenodd"
-                                                  d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z"/>
+                                    <button class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute hidden" data-id="muteVideo">
+                                        <svg width="19" height="16" viewBox="0 0 19 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z"/>
                                         </svg>
                                     </button>
-                                    <button
-                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--play"
-                                        data-id="play">
-                                        <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"/>
+                                    <button class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute" data-id="unmuteVideo">
+                                        <svg width="18" height="16" viewBox="0 0 18 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z"/>
                                         </svg>
-
                                     </button>
-                                    <button
-                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--pause hidden"
-                                        data-id="pause">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
+                                    <button class="btn-reset video-custom-controls__btn video-custom-controls__btn--play" data-id="play">
+                                        <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="btn-reset video-custom-controls__btn video-custom-controls__btn--pause hidden" data-id="pause">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <rect x="6" y="4" width="4" height="16" rx="1"/>
                                             <rect x="14" y="4" width="4" height="16" rx="1"/>
                                         </svg>
                                     </button>
                                     <button class="btn-reset video-custom-controls__btn" data-id="fullScreenVideo">
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M12 1H15C16.1046 1 17 1.89543 17 3V6M6 1H3C1.89543 1 1 1.89543 1 3V6M1 12V15C1 16.1046 1.89543 17 3 17H6M12 17H15C16.1046 17 17 16.1046 17 15V12"
-                                                stroke-width="2"/>
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 1H15C16.1046 1 17 1.89543 17 3V6M6 1H3C1.89543 1 1 1.89543 1 3V6M1 12V15C1 16.1046 1.89543 17 3 17H6M12 17H15C16.1046 17 17 16.1046 17 15V12" stroke-width="2"/>
                                         </svg>
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                         <div class="overlay__info">
-                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
-                                 xmlns="http://www.w3.org/2000/svg">
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="4" cy="4" r="4" fill="#70E780"/>
                             </svg>
                             <h6 class="video__title">
-
                                 @if($currentTvProgram && $currentTvProgram->title)
                                     {{ $currentTvProgram->title }}
                                 @else
@@ -208,17 +172,12 @@
                         <div class="radio__inner">
                             <div class="radio-content">
                                 <span>88.8 FM</span>
-                                <svg width="29" height="28" viewBox="0 0 29 28" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M22.9674 4.74665C22.2538 4.74665 21.6733 5.32847 21.6733 6.04367V21.9646C21.7386 23.6858 24.2015 23.6796 24.2664 21.9646V6.04367C24.2664 5.32853 23.6837 4.74665 22.9674 4.74665ZM14.5 4.74665C13.7837 4.74665 13.201 5.32847 13.201 6.04367V21.9646C13.2665 23.6834 15.7342 23.682 15.799 21.9646V6.04367C15.799 5.32853 15.2163 4.74665 14.5 4.74665ZM18.7336 9.48915C18.0201 9.48915 17.4397 10.071 17.4397 10.7862V17.2222C17.505 18.9435 19.9678 18.9371 20.0327 17.2222V10.7862C20.0327 10.071 19.4499 9.48915 18.7336 9.48915ZM27.201 11.8605C26.4875 11.8605 25.907 12.4423 25.907 13.1575V14.8509C25.9723 16.5722 28.4351 16.5659 28.5 14.8509V13.1575C28.5 12.4423 27.9173 11.8605 27.201 11.8605ZM1.79905 11.8605C1.08275 11.8605 0.5 12.4423 0.5 13.1574V14.8509C0.565516 16.5671 3.02837 16.5709 3.09301 14.8509V13.1574C3.09301 12.4423 2.51255 11.8605 1.79905 11.8605ZM6.03268 7.1179C5.31638 7.1179 4.73363 7.69972 4.73363 8.41492V19.5934C4.79915 21.3097 7.26205 21.3133 7.32675 19.5934V8.41492C7.32675 7.69972 6.74624 7.1179 6.03268 7.1179ZM10.2664 0.00415039C9.55007 0.00415039 8.96737 0.585971 8.96737 1.30117V26.7071C9.03284 28.4234 11.4957 28.427 11.5604 26.7071V1.30117C11.5604 0.585971 10.9799 0.00415039 10.2664 0.00415039Z"
-                                        fill="white"/>
+                                <svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22.9674 4.74665C22.2538 4.74665 21.6733 5.32847 21.6733 6.04367V21.9646C21.7386 23.6858 24.2015 23.6796 24.2664 21.9646V6.04367C24.2664 5.32853 23.6837 4.74665 22.9674 4.74665ZM14.5 4.74665C13.7837 4.74665 13.201 5.32847 13.201 6.04367V21.9646C13.2665 23.6834 15.7342 23.682 15.799 21.9646V6.04367C15.799 5.32853 15.2163 4.74665 14.5 4.74665ZM18.7336 9.48915C18.0201 9.48915 17.4397 10.071 17.4397 10.7862V17.2222C17.505 18.9435 19.9678 18.9371 20.0327 17.2222V10.7862C20.0327 10.071 19.4499 9.48915 18.7336 9.48915ZM27.201 11.8605C26.4875 11.8605 25.907 12.4423 25.907 13.1575V14.8509C25.9723 16.5722 28.4351 16.5659 28.5 14.8509V13.1575C28.5 12.4423 27.9173 11.8605 27.201 11.8605ZM1.79905 11.8605C1.08275 11.8605 0.5 12.4423 0.5 13.1574V14.8509C0.565516 16.5671 3.02837 16.5709 3.09301 14.8509V13.1574C3.09301 12.4423 2.51255 11.8605 1.79905 11.8605ZM6.03268 7.1179C5.31638 7.1179 4.73363 7.69972 4.73363 8.41492V19.5934C4.79915 21.3097 7.26205 21.3133 7.32675 19.5934V8.41492C7.32675 7.69972 6.74624 7.1179 6.03268 7.1179ZM10.2664 0.00415039C9.55007 0.00415039 8.96737 0.585971 8.96737 1.30117V26.7071C9.03284 28.4234 11.4957 28.427 11.5604 26.7071V1.30117C11.5604 0.585971 10.9799 0.00415039 10.2664 0.00415039Z" fill="white"/>
                                 </svg>
                             </div>
-
                             <div class="radio-overlay">
-                                <svg width="6" height="6" viewBox="0 0 6 6" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
+                                <svg width="6" height="6" viewBox="0 0 6 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="3" cy="3" r="3" fill="#70E780"/>
                                 </svg>
                                 <h6 class="radio-overlay__title">
@@ -236,12 +195,11 @@
                 </div>
                 <div class="header__schedule">
                     <div class="header__schedule_inner">
-
                         <div class="header__schedule_slider" data-schedule="tv">
                             <div class="header__schedule_top">
-                                <span class="header__schedule_title">
-                                    Телепрограмма
-                                </span>
+                    <span class="header__schedule_title">
+                        Телепрограмма
+                    </span>
                                 <div class="schedule-navigation">
                                     <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
                                         <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -249,8 +207,7 @@
                                         </svg>
                                     </button>
                                     <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
-                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 1L8 8L1 15" stroke-width="1.5"/>
                                         </svg>
                                     </button>
@@ -259,29 +216,44 @@
                             <ul class="list-reset header__schedule_list schedule-list schedule-wrapper">
                                 @foreach($tvProgramsToday as $program)
                                     @php
-                                        [$start, $end] = explode('-', $program->time_range);
+                                        // Используем тот же алгоритм, что и в провайдере
+                                        $timeParts = explode('-', $program->time_range);
+                                        $startTime = trim($timeParts[0]);
+                                        $endTime = trim($timeParts[1] ?? $startTime);
+
+                                        $start = \Carbon\Carbon::createFromFormat(
+                                            'Y-m-d H:i',
+                                            $program->program_date->format('Y-m-d') . ' ' . $startTime,
+                                            'Europe/Moscow'
+                                        );
+
+                                        $end = \Carbon\Carbon::createFromFormat(
+                                            'Y-m-d H:i',
+                                            $program->program_date->format('Y-m-d') . ' ' . $endTime,
+                                            'Europe/Moscow'
+                                        );
+
                                         $now = \Carbon\Carbon::now('Europe/Moscow');
-                                        $startTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . trim($start));
-                                        $endTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . trim($end));
-                                        $isActive = $now->between($startTime, $endTime);
+                                        $isActive = $now->between($start, $end);
                                     @endphp
 
                                     <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
-                                        <time>{{$program->time_range}}</time>
-                                        <a>@if(isset($program->title))
-                                                {{$program->title}}
-                                            @endif <span>@if(isset($program->age_restriction))
-                                                    {{$program->age_restriction->title}}
-                                                @endif</span></a>
+                                        <time>{{ $program->time_range }}</time>
+                                        <a>
+                                            {{ $program->title ?? 'Без названия' }}
+                                            @if($program->age_restriction)
+                                                <span>{{ $program->age_restriction->title }}</span>
+                                            @endif
+                                        </a>
                                     </li>
                                 @endforeach
                             </ul>
                         </div>
                         <div class="header__schedule_slider" data-schedule="radio">
                             <div class="header__schedule_top">
-                                <span class="header__schedule_title radio-header__schedule_title">
-                                    Радиопрограмма
-                                </span>
+                    <span class="header__schedule_title radio-header__schedule_title">
+                        Радиопрограмма
+                    </span>
                                 <div class="schedule-navigation">
                                     <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--prev">
                                         <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -289,33 +261,44 @@
                                         </svg>
                                     </button>
                                     <button class="btn-reset schedule-navigation__btn schedule-navigation__btn--next">
-                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none"
-                                             xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="10" height="16" viewBox="0 0 10 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 1L8 8L1 15" stroke-width="1.5"/>
                                         </svg>
                                     </button>
                                 </div>
                             </div>
                             <ul class="list-reset header__schedule_list schedule-list schedule-wrapper">
-                                @if(isset($radioProgramsToday))
-                                    @foreach($radioProgramsToday as $program)
-                                        @php
-                                            [$start, $end] = explode('-', $program->time_range);
-                                            $now = \Carbon\Carbon::now('Europe/Moscow');
-                                            $startTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . trim($start));
-                                            $endTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $program->program_date->format('Y-m-d') . ' ' . trim($end));
-                                            $isActive = $now->between($startTime, $endTime);
-                                        @endphp
-                                        <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
-                                            <time>{{$program->time_range}}</time>
-                                            <a>@if(isset($program->title))
-                                                    {{$program->title}}
-                                            @endif <span>@if(isset($program->age_restriction))
-                                                        {{$program->age_restriction->title}}
-                                            @endif</span></a>
-                                        </li>
-                                    @endforeach
-                                @endif
+                                @foreach($radioProgramsToday as $program)
+                                    @php
+                                        $timeParts = explode('-', $program->time_range);
+                                        $startTime = trim($timeParts[0]);
+                                        $endTime = trim($timeParts[1] ?? $startTime);
+
+                                        $start = \Carbon\Carbon::createFromFormat(
+                                            'Y-m-d H:i',
+                                            $program->program_date->format('Y-m-d') . ' ' . $startTime,
+                                            'Europe/Moscow'
+                                        );
+
+                                        $end = \Carbon\Carbon::createFromFormat(
+                                            'Y-m-d H:i',
+                                            $program->program_date->format('Y-m-d') . ' ' . $endTime,
+                                            'Europe/Moscow'
+                                        );
+
+                                        $now = \Carbon\Carbon::now('Europe/Moscow');
+                                        $isActive = $now->between($start, $end);
+                                    @endphp
+                                    <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
+                                        <time>{{ $program->time_range }}</time>
+                                        <a>
+                                            {{ $program->title ?? 'Без названия' }}
+                                            @if($program->age_restriction)
+                                                <span>{{ $program->age_restriction->title }}</span>
+                                            @endif
+                                        </a>
+                                    </li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

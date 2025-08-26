@@ -56,4 +56,22 @@ class RadioShow extends Model
     {
         return \Carbon\Carbon::now()->gt($this->end_time);
     }
+
+    public function age_restriction()
+    {
+        return $this->belongsTo(AgeRestriction::class, 'age_restriction_id', 'id');
+    }
+
+    // Получаем только время (часы:минуты)
+    public function getTimeAttribute()
+    {
+        return \Carbon\Carbon::parse($this->time_range)->format('H:i');
+    }
+
+    // Получаем полную дату и время
+    public function getDateTimeAttribute()
+    {
+        return $this->program_date->format('Y-m-d') . ' ' . $this->time;
+    }
+
 }
