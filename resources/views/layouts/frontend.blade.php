@@ -327,6 +327,11 @@
                             </a>
                         </li>
                         <li class="header__item">
+                            <a href="{{route('newsIng')}}">
+                                Хоамаш
+                            </a>
+                        </li>
+                        <li class="header__item">
                             <a href="{{route('tvProgram')}}">
                                 Телепрограмма
                             </a>
@@ -341,16 +346,13 @@
                                 Радио
                             </a>
                         </li>
+
                         <li class="header__item">
-                            <a href="{{route('watch')}}">
-                                Где смотреть
+                            <a href="{{route('musicalCard')}}">
+                                Музыкальная открытка
                             </a>
                         </li>
-                        <li class="header__item">
-                            <a href="{{route('about')}}">
-                                О нас
-                            </a>
-                        </li>
+
                         <li class="header__item">
                             <a href="{{route('ads')}}">
                                 Реклама
@@ -410,8 +412,6 @@
                 <div class="burger__menu_top">
 
                     <button class="btn-reset burger__menu_close">
-
-
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
 
@@ -423,8 +423,6 @@
 
 
                         </svg>
-
-
                     </button>
 
                 </div>
@@ -441,6 +439,12 @@
                                     Новости
                                 </a>
                             </li>
+
+                            <li class="header__item">
+                                <a href="{{route('newsIng')}}">
+                                    Хоамаш
+                                </a>
+                            </li>
                             <li class="header__item">
                                 <a href="{{route('tvProgram')}}">
                                     Телепрограмма
@@ -454,6 +458,11 @@
                             <li class="header__item">
                                 <a href="{{route('radio')}}">
                                     Радио
+                                </a>
+                            </li>
+                            <li class="header__item">
+                                <a href="{{route('musicalCard')}}">
+                                    Музыкальная открытка
                                 </a>
                             </li>
                             <li class="header__item">
@@ -499,11 +508,18 @@
                             <a href="{{route('home.news.index')}}">Новости</a>
                         </li>
                         <li class="footer__nav_item">
+                            <a href="{{route('newsIng')}}">Хоамаш</a>
+                        </li>
+                        <li class="footer__nav_item">
                             <a href="{{route('tvProgram')}}">Телепрограмма</a>
                         </li>
                         <li class="footer__nav_item">
                             <a href="{{route('transfers')}}">Телепроекты</a>
                         </li>
+                        <li class="footer__nav_item">
+                            <a href="{{route('radio')}}">Радио</a>
+                        </li>
+                        
                         <li class="footer__nav_item">
                             <a href="{{route('watch')}}">Где смотреть</a>
                         </li>

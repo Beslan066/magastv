@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'lead' => 'required|string',
+            'lead' => 'nullable|string',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
             'video' => 'nullable',
@@ -44,6 +44,7 @@ class UpdateRequest extends FormRequest
             'deleter_id' => 'nullable|exists:users,id',
             'published_at' => 'nullable|date_format:Y-m-d\TH:i',
             'main_material' => 'nullable',
+            'ing_news' => 'nullable',
 
         ];
     }

@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'required|string',
+            'lead' => 'nullable|string',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
 //            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800', // 200MB
@@ -44,6 +44,7 @@ class StoreRequest extends FormRequest
             'deleter_id' => 'nullable|exists:users,id',
             'published_at' => 'required|date_format:Y-m-d\TH:i',
             'main_material' => 'nullable',
+            'ing_news' => 'nullable',
         ];
     }
     public function messages()

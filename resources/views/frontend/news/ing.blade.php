@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="news-content__inner">
                     <div class="news-content__top">
-                        <h1 class="page-title">Новости</h1>
+                        <h1 class="page-title">Керда хоамаш</h1>
                         <div class="news-content__tabs_wrapper">
                             <div class="tabs">
                                 <button class="btn-reset news-content__filters_btn news-content__filters_btn--mobile">
@@ -50,23 +50,10 @@
                                 <div class="dropdown">
                                     <button type="button" class="dropdown__button">По дате</button>
                                     <ul class="dropdown__list">
-                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="date">По дате</li>
+                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="published_at">По дате</li>
                                         <li class="dropdown__list-item" data-value="views">По просмотрам</li>
                                     </ul>
-                                    <input type="text" name="select-sort" value="date" class="dropdown__input_hidden">
-                                </div>
-                            </div>
-                            <div class="filter-item filters--time">
-                                <span class="filter-item__title">Период</span>
-                                <div class="dropdown">
-                                    <button type="button" class="dropdown__button">Весь период</button>
-                                    <ul class="dropdown__list">
-                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="all">Весь период</li>
-                                        <li class="dropdown__list-item" data-value="week">Последняя неделя</li>
-                                        <li class="dropdown__list-item" data-value="month">Последний месяц</li>
-                                        <li class="dropdown__list-item" data-value="year">Последний год</li>
-                                    </ul>
-                                    <input type="text" name="select-period" value="all" class="dropdown__input_hidden">
+                                    <input type="text" name="select-sort" value="published_at" class="dropdown__input_hidden">
                                 </div>
                             </div>
                             <div class="filter-item filters--time">
@@ -88,50 +75,10 @@
                         <div class="news-content__left">
                             <div class="news-content__news-block">
                                 <ul class="list-reset news-block__list news-block__list--second" id="news-list">
-                                    @if($mainPost)
-                                        <li class="news-item news-item--second main-news-item">
-                                            <a href="{{route('home.news.single', $mainPost->slug)}}">
-                                                <div class="news-item__media">
-                                                    <img src="{{asset('storage/public/' . $mainPost->media)}}"
-                                                         alt="С началом весны участились случаи возгорания сухой травы и сжигания мусора.">
-                                                    <button class="btn-reset news-item--media__btn">
-                                                        <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
-                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z"
-                                                                fill="white" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </a>
-                                            <div class="news-item__bottom">
-                                                <h6 class="news-item__title">
-                                                    <a href="{{route('home.news.single', $mainPost->slug)}}">{{$mainPost->title}}</a>
-                                                </h6>
-                                                <div class="news-item__descr">
-                                                    <p>{{$mainPost->lead}}</p>
-                                                </div>
-                                                <div class="news-item__info">
-                                                    <time datetime="2025-04-1 18:35" class="news-item_time">
-                                                        {{$mainPost->formatted_published_at}}
-                                                    </time>
-                                                    <div class="news-item_views">
-                                                        <div class="item-views__icon">
-
-                                                            <svg width="14" height="10" viewBox="0 0 14 10" fill="none"
-                                                                 xmlns="http://www.w3.org/2000/svg">
-                                                                <path
-                                                                    d="M7 0.333496C11.6523 0.333496 13.9857 5.21553 14 5.24561C14 5.24561 11.6667 9.6665 7 9.6665C2.33333 9.6665 0 5.24561 0 5.24561C0.0143304 5.21553 2.34771 0.333496 7 0.333496ZM7 2.6665C5.71134 2.6665 4.66699 3.71182 4.66699 5.00049C4.66717 6.289 5.71144 7.3335 7 7.3335C8.28856 7.3335 9.33283 6.289 9.33301 5.00049C9.33301 3.71182 8.28866 2.6665 7 2.6665Z" />
-                                                            </svg>
-                                                        </div>
-                                                        <span>12</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    @endif
-                                    @if($items)
-                                            @include('frontend.partials.news.news_items', ['items' => $items])
+                                    @if($news->count() > 0)
+                                        @include('frontend.partials.news.news_items', ['items' => $news])
+                                    @else
+                                        <li class="no-items">Нет видеорепортажей</li>
                                     @endif
                                 </ul>
                             </div>
@@ -147,25 +94,27 @@
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
                                 <ul class="list-reset popular-sidebar__list">
-                                    @if($popularItems)
-                                        @foreach($popularItems as $news)
+                                    @if($popularItems->count() > 0)
+                                        @foreach($popularItems as $item)
                                             <li class="popular-sidebar__item">
-                                                <a href="{{route('home.news.single', $news->slug)}}" class="popular-sidebar__item_text">
-                                                    {{$news->title}}
+                                                <a href="{{ route('home.news.single', $item->slug) }}" class="popular-sidebar__item_text">
+                                                    {{ $item->title }}
                                                 </a>
                                                 <div class="popular-sidebar__item_info">
-                                                    <time datetime="2024-09-19 21:34" class="popular-sidebar__item_time">
-                                                        {{$news->formatted_published_at}}
+                                                    <time datetime="{{ $item->published_at->format('Y-m-d H:i') }}" class="popular-sidebar__item_time">
+                                                        {{ $item->formatted_published_at }}
                                                     </time>
                                                     <div class="popular-sidebar__item_views">
                                                         <div class="item-views__icon">
-                                                            <img src="{{asset('assets/img/views1.svg')}}" alt="Eye icon">
+                                                            <img src="{{ asset('assets/img/views1.svg') }}" alt="Eye icon">
                                                         </div>
-                                                        <span>{{$news->views}}</span>
+                                                        <span>{{ $item->views }}</span>
                                                     </div>
                                                 </div>
                                             </li>
                                         @endforeach
+                                    @else
+                                        <li class="no-items">Нет популярных видео</li>
                                     @endif
                                 </ul>
                             </div>
@@ -182,24 +131,19 @@
         document.addEventListener('DOMContentLoaded', function() {
             let isLoading = false;
             let currentPage = 1;
-            let initialScrollPosition = 0;
             let hasMorePages = true;
             let currentFilters = {
                 category: null,
-                sort: 'date',
-                period: null,
-                content: null
+                sort: 'published_at',
+                period: null
             };
             let isInitialLoad = true;
             let scrollTimeout = null;
 
             // Сохраняем начальное состояние
             const saveInitialState = () => {
-                initialScrollPosition = window.scrollY;
                 const newsList = document.getElementById('news-list');
-                const mainNewsItem = newsList.querySelector('.main-news-item');
-                const initialHtml = mainNewsItem ? mainNewsItem.outerHTML : '';
-                newsList.setAttribute('data-initial-html', initialHtml);
+                newsList.setAttribute('data-initial-html', newsList.innerHTML);
             };
 
             saveInitialState();
@@ -229,7 +173,7 @@
                     this.classList.add('active');
 
                     // Устанавливаем фильтр категории
-                    const newCategory = this.dataset.categoryId || null;
+                    const newCategory = this.dataset.categoryId || '';
 
                     // Проверяем, изменились ли фильтры
                     const newFilters = {
@@ -250,6 +194,7 @@
             document.querySelectorAll('.dropdown').forEach(dropdown => {
                 const button = dropdown.querySelector('.dropdown__button');
                 const items = dropdown.querySelectorAll('.dropdown__list-item');
+                const input = dropdown.querySelector('.dropdown__input_hidden');
 
                 items.forEach(item => {
                     item.addEventListener('click', function() {
@@ -259,23 +204,26 @@
                         this.classList.add('dropdown__list-item_active');
                         // Обновляем текст кнопки
                         button.textContent = this.textContent;
+                        // Обновляем скрытое поле
+                        input.value = this.dataset.value;
 
-                        // Определяем тип фильтра
-                        const filterType = dropdown.closest('.filter-item').classList[1].split('--')[1];
+                        // Определяем тип фильтра по имени input
+                        const inputName = input.getAttribute('name');
+                        let filterType = '';
+
+                        if (inputName === 'select-sort') {
+                            filterType = 'sort';
+                        } else if (inputName === 'select-period') {
+                            filterType = 'period';
+                        }
 
                         let newFilters = { ...currentFilters };
 
                         // Устанавливаем значение фильтра
-                        switch(filterType) {
-                            case 'sort':
-                                newFilters.sort = this.dataset.value;
-                                break;
-                            case 'time':
-                                newFilters.period = this.dataset.value === 'all' ? null : this.dataset.value;
-                                break;
-                            case 'content':
-                                newFilters.content = this.dataset.value === 'all' ? null : this.dataset.value;
-                                break;
+                        if (filterType === 'sort') {
+                            newFilters.sort = this.dataset.value;
+                        } else if (filterType === 'period') {
+                            newFilters.period = this.dataset.value === 'all' ? null : this.dataset.value;
                         }
 
                         // Проверяем, изменились ли фильтры
@@ -289,37 +237,31 @@
                 });
             });
 
-            // Улучшенная проверка скролла для мобильных устройств
+            // Улучшенная проверка скролла
             const checkScroll = () => {
                 if (isLoading || !hasMorePages) return;
 
-                // Используем requestAnimationFrame для оптимизации
                 if (scrollTimeout) {
-                    window.cancelAnimationFrame(scrollTimeout);
+                    clearTimeout(scrollTimeout);
                 }
 
-                scrollTimeout = window.requestAnimationFrame(() => {
+                scrollTimeout = setTimeout(() => {
                     const scrollPosition = window.scrollY || window.pageYOffset;
                     const windowHeight = window.innerHeight;
-                    const documentHeight = getDocumentHeight();
-                    const threshold = 200; // Увеличиваем порог для мобильных устройств
+                    const documentHeight = Math.max(
+                        document.body.scrollHeight,
+                        document.body.offsetHeight,
+                        document.documentElement.clientHeight,
+                        document.documentElement.scrollHeight,
+                        document.documentElement.offsetHeight
+                    );
+                    const threshold = 200;
 
                     // Проверяем, достигли ли мы нижней части страницы
                     if (scrollPosition + windowHeight >= documentHeight - threshold) {
                         loadMoreNews();
                     }
-                });
-            };
-
-            // Функция для получения точной высоты документа на мобильных устройствах
-            const getDocumentHeight = () => {
-                return Math.max(
-                    document.body.scrollHeight,
-                    document.body.offsetHeight,
-                    document.documentElement.clientHeight,
-                    document.documentElement.scrollHeight,
-                    document.documentElement.offsetHeight
-                );
+                }, 100);
             };
 
             // Загрузка новостей
@@ -334,18 +276,21 @@
 
                 // Формируем параметры запроса
                 const params = new URLSearchParams({
-                    page: currentPage,
-                    ...currentFilters
+                    page: currentPage
                 });
 
-                // Убираем пустые параметры
-                Object.keys(currentFilters).forEach(key => {
-                    if (currentFilters[key] === null || currentFilters[key] === '') {
-                        params.delete(key);
-                    }
-                });
+                // Добавляем фильтры
+                if (currentFilters.category) {
+                    params.append('category', currentFilters.category);
+                }
+                if (currentFilters.sort) {
+                    params.append('sort', currentFilters.sort);
+                }
+                if (currentFilters.period) {
+                    params.append('period', currentFilters.period);
+                }
 
-                fetch(`/news?${params.toString()}`, {
+                fetch(`/news-ing?${params.toString()}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'Accept': 'application/json'
@@ -360,10 +305,7 @@
                             const newsList = document.getElementById('news-list');
 
                             if (isInitialLoad && currentPage === 1) {
-                                // Сохраняем main-news-item если он есть
-                                const mainNewsItem = newsList.querySelector('.main-news-item');
-                                newsList.innerHTML = mainNewsItem ? mainNewsItem.outerHTML : '';
-                                newsList.insertAdjacentHTML('beforeend', data.html);
+                                newsList.innerHTML = data.html;
                                 isInitialLoad = false;
                             } else {
                                 newsList.insertAdjacentHTML('beforeend', data.html);
@@ -387,37 +329,19 @@
                     });
             };
 
-            // Добавляем обработчик скролла с throttle для производительности
-            let isScrolling = false;
-            window.addEventListener('scroll', () => {
-                if (!isScrolling) {
-                    window.requestAnimationFrame(() => {
-                        checkScroll();
-                        isScrolling = false;
-                    });
-                    isScrolling = true;
-                }
-            });
-
-            // Также обрабатываем touch события для мобильных устройств
+            // Добавляем обработчик скролла
+            window.addEventListener('scroll', checkScroll);
             window.addEventListener('touchmove', checkScroll);
 
-            // Инициализация табов категорий
+            // Инициализация
             document.querySelectorAll('.tabs__list .tab').forEach((tab, index) => {
                 if (index === 0) {
                     tab.classList.add('active');
                 }
             });
 
-            // Инициализация активных dropdown items
-            document.querySelectorAll('.dropdown__list-item').forEach(item => {
-                if (item.classList.contains('dropdown__list-item_active')) {
-                    item.closest('.dropdown').querySelector('.dropdown__button').textContent = item.textContent;
-                }
-            });
-
-            // Загружаем первую порцию контента при загрузке страницы
-            setTimeout(checkScroll, 1000);
+            // Загружаем первую порцию контента
+            setTimeout(checkScroll, 500);
         });
     </script>
 @endpush

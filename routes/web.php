@@ -45,6 +45,7 @@ Route::get('/proxy/live-stream', function() {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/on-air', [HomeController::class, 'onAir'])->name('onAir');
 Route::get('/news', [NewsController::class, 'news'])->name('home.news.index');
+Route::get('/news-inh', [NewsController::class, 'newsIng'])->name('newsIng');
 Route::get('/news/{slug}', [NewsController::class, 'newsSingle'])->name('home.news.single');
 Route::get('/videos/{slug}', [HomeController::class, 'videoSingle'])->name('home.videos.single');
 Route::get('/tv-program', [HomeController::class, 'tvProgram'])->name('tvProgram');
@@ -74,7 +75,7 @@ Route::get('/realeses', [HomeController::class, 'realese'])->name('realeses');
 Route::get('/ads', [HomeController::class, 'ads'])->name('ads');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contacts');
-
+Route::get('/musical-card', [HomeController::class, 'musicalCard'])->name('musicalCard');
 Route::get('/search', [SearchController::class, 'search']);
 Route::get('/search/all', [SearchController::class, 'allResults'])->name('search.all');
 Route::get('/filter-news', [HomeController::class, 'filterNews'])->name('home.news.filter');

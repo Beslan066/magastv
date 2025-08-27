@@ -38,6 +38,7 @@ class HomeController extends Controller
         $videosQuery = VideoReportage::query()
             ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
+            ->whereNot('ing_news', 1)
             ->where('main_material', 1)
             ->addSelect(DB::raw("'video' as type"));
 
@@ -54,6 +55,7 @@ class HomeController extends Controller
         $videosQuery = VideoReportage::query()
             ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
+            ->whereNot('ing_news', 1)
             ->addSelect(DB::raw("'video' as type"));
 
         // Применяем фильтр по категории, если он есть
@@ -92,6 +94,7 @@ class HomeController extends Controller
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
                     ->where('status', 1)
+                    ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('views', 'desc')
@@ -122,6 +125,7 @@ class HomeController extends Controller
         $videosQuery = VideoReportage::query()
             ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
+            ->whereNot('ing_news', 1)
             ->addSelect(DB::raw("'video' as type"));
 
 
@@ -183,11 +187,8 @@ HTML;
         return response()->json(['html' => $html]);
     }
 
-
-
     public function onAir()
     {
-
         $today = Carbon::today()->format('Y-m-d');
 
         $tvProgramsToday = TvShow::whereDate('program_date', $today)
@@ -505,6 +506,11 @@ HTML;
 
     public function soglasie() {
         return view('frontend.soglasie');
+    }
+
+    public function musicalCard()
+    {
+        return view('frontend.musical-card');
     }
 
 

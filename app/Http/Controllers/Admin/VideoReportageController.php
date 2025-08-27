@@ -63,6 +63,7 @@ class VideoReportageController extends Controller
 
         $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
         $data['main_material'] = $request->has('main_material') ? 1 : 0;
+        $data['ing_news'] = $request->has('ing_news') ? 1 : 0;
         $data['status'] = $request->has('status') ? 1 : 0;
 
         VideoReportage::create($data);
@@ -133,6 +134,7 @@ class VideoReportageController extends Controller
 
         $data['slug'] = $data['slug'] ?? Str::slug($data['title']);
         $data['main_material'] = $request->has('main_material') ? 1 : 0;
+        $data['ing_news'] = $request->has('ing_news') ? 1 : 0;
         $data['status'] = $request->has('status') ? 1 : 0;
 
         $video_reportage->update($data);

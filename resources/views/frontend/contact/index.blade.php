@@ -111,7 +111,19 @@
                     </div>
                     <div class="contacts__ads">
                         <div class="ads-block">
-                            <img src="./assets/add.jpg" alt="add">
+                            <div class="navbar">
+                                <ul>
+                                    <li>
+                                        <a href="{{route('contacts')}}">Контакты</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('about')}}">О нас</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{route('watch')}}">Где смотреть</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

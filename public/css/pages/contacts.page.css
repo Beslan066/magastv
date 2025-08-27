@@ -180,3 +180,42 @@ color: var(--bw-black);
 .aboutUs__text p {
     margin-top: 20px;
 }
+
+.contacts__main {
+    width: 80%;
+}
+
+.contacts__ads {
+    width: 20%;
+}
+
+.navbar {
+    background-color: #14ab28;
+    width: 100%;
+    border: unset;
+}
+
+.navbar ul {
+    height: 100%;
+    width: 100%;
+
+
+}
+
+.navbar li {
+    padding: 10px;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    cursor: pointer;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar li a {
+    color: #fff;
+}
+
+.contacts__page .ads-block {
+    border-radius: unset !important;
+}

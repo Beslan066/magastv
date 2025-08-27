@@ -15,10 +15,21 @@ class NewsController extends Controller
     {
         $categories = Category::query()->orderBy('id', 'desc')->get();
 
-        // Новость из главного банера
-        $mainPost = News::query()
+        $newsQuery = News::query()
+            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
             ->where('main_material', 1)
-            ->latest('published_at')
+            ->addSelect(DB::raw("'news' as type"));
+
+        $videosQuery = VideoReportage::query()
+            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
+            ->whereNot('ing_news', 1)
+            ->where('main_material', 1)
+            ->addSelect(DB::raw("'video' as type"));
+
+        $mainPost = $newsQuery->unionAll($videosQuery)
+            ->orderBy('published_at', 'desc')
             ->first();
 
         $perPage = 6;
@@ -49,6 +60,7 @@ class NewsController extends Controller
                 $videosQuery = VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
                     ->where('status', 1)
+                    ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"));
 
                 // Применяем фильтры
@@ -125,6 +137,7 @@ class NewsController extends Controller
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
                     ->where('status', 1)
+                    ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('published_at', 'desc')
@@ -144,6 +157,7 @@ class NewsController extends Controller
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
                     ->where('status', 1)
+                    ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('views', 'desc')
@@ -197,6 +211,7 @@ class NewsController extends Controller
             ->where('category_id', $item->category_id)
             ->where('id', '!=', $item->id ?? null)
             ->where('status', 1)
+            ->whereNot('ing_news', 1)
             ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views', 'category_id')
             ->addSelect(DB::raw("'video' as type"))
             ->limit(3);
@@ -220,6 +235,7 @@ class NewsController extends Controller
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'category_id', 'views')
                     ->where('status', 1)
+                    ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('views', 'desc')
@@ -237,5 +253,109 @@ class NewsController extends Controller
             'similarItems' => $similarItems, // переименовано для ясности
             'popularItems' => $popularItems,
         ]);
+    }
+
+    public function newsIng(Request $request)
+    {
+        $categories = Category::query()->orderBy('id', 'desc')->get();
+
+        if ($request->ajax()) {
+            try {
+                $page = $request->input('page', 1);
+                $perPage = 12;
+                $offset = ($page - 1) * $perPage;
+
+                // Получаем параметры фильтрации
+                $categoryId = $request->input('category');
+                $sort = $request->input('sort', 'published_at');
+                $period = $request->input('period');
+
+                // Валидация параметров
+                $categoryId = is_numeric($categoryId) ? (int)$categoryId : null;
+                $sort = in_array($sort, ['published_at', 'views']) ? $sort : 'published_at';
+                $period = in_array($period, ['week', 'month', 'year']) ? $period : null;
+
+                // Базовый запрос
+                $query = VideoReportage::query()
+                    ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
+                    ->where('ing_news', 1)
+                    ->where('status', 1);
+
+                // Применяем фильтры
+                if ($categoryId) {
+                    $query->where('category_id', $categoryId);
+                }
+
+                if ($period) {
+                    $dateFilter = now();
+                    switch ($period) {
+                        case 'week': $dateFilter = now()->subWeek(); break;
+                        case 'month': $dateFilter = now()->subMonth(); break;
+                        case 'year': $dateFilter = now()->subYear(); break;
+                    }
+                    $query->where('published_at', '>=', $dateFilter);
+                }
+
+                // Сортировка
+                $sortDirection = 'desc';
+                $query->orderBy($sort, $sortDirection);
+
+                // Получаем элементы
+                $total = $query->count();
+                $items = $query->offset($offset)
+                    ->limit($perPage)
+                    ->get()
+                    ->map(function ($item) {
+                        $item->published_at = \Carbon\Carbon::parse($item->published_at);
+                        $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
+                        // Правильный путь к изображению
+                        $item->media = $item->media ? asset('storage/public/' . $item->media) : asset('assets/default-image.jpg');
+                        return $item;
+                    });
+
+                $hasMore = ($offset + $perPage) < $total;
+
+                return response()->json([
+                    'html' => view('frontend.partials.news.news_items', compact('items'))->render(),
+                    'hasMore' => $hasMore
+                ]);
+
+            } catch (\Exception $e) {
+                \Log::error('Ing news loading error: ' . $e->getMessage());
+                return response()->json([
+                    'html' => '',
+                    'hasMore' => false
+                ], 500);
+            }
+        }
+
+        // Первоначальная загрузка
+        $news = VideoReportage::query()
+            ->where('ing_news', 1)
+            ->where('status', 1)
+            ->orderBy('published_at', 'desc')
+            ->take(12)
+            ->get()
+            ->map(function ($item) {
+                $item->published_at = \Carbon\Carbon::parse($item->published_at);
+                $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
+                $item->media = $item->preview ? asset('storage/public/' . $item->preview) : asset('assets/default-image.jpg');
+                return $item;
+            });
+
+        // Популярные видео
+        $popularItems = VideoReportage::query()
+            ->where('ing_news', 1)
+            ->where('status', 1)
+            ->orderBy('views', 'desc')
+            ->limit(15)
+            ->get()
+            ->map(function ($item) {
+                $item->published_at = \Carbon\Carbon::parse($item->published_at);
+                $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
+                return $item;
+            });
+
+        return view('frontend.news.ing', compact('categories', 'news', 'popularItems'));
     }
 }

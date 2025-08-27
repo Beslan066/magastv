@@ -107,6 +107,11 @@
                             </div>
 
                             <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="mainMaterialSwitch" name="ing_news">
+                                <label class="form-check-label" for="mainMaterialSwitch">Ингушская новость</label>
+                            </div>
+
+                            <div class="form-check form-switch mb-3">
                                 <input class="form-check-input" type="checkbox" id="statusSwitch" name="status" checked>
                                 <label class="form-check-label" for="statusSwitch">Опубликовано</label>
                             </div>

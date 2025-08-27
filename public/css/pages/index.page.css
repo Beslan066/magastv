@@ -22,7 +22,7 @@
 }
 
 .programs {
-    height: 650px;
+    height: 620px;
 }
 
 .programs-slide {
@@ -143,7 +143,7 @@
 
 .programs__slider {
     position: relative;
-    height: 650px;
+    height: 620px;
 }
 
 .slider-nav-wrapper {

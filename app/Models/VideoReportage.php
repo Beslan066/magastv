@@ -24,6 +24,7 @@ class VideoReportage extends Model
         'deleter_id',
         'published_at',
         'main_material',
+        'ing_news',
         'views'
     ];
 
