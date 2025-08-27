@@ -5,8 +5,10 @@
         .programs-slide {
             position: relative;
             overflow: hidden;
+            height: 100%;
         }
 
+        /* Стили для десктопного фона */
         .programs-slide__video,
         .programs-slide__image-background {
             position: absolute;
@@ -30,9 +32,31 @@
         .programs-slide__inner {
             position: relative;
             z-index: 3;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
-        /* Для мобильного изображения */
+        .programs-slide__container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .programs-slide__info {
+            width: 100%;
+            max-width: 600px; /* Ограничиваем ширину контента */
+            text-align: left; /* Выравниваем текст по левому краю */
+            margin-right: auto; /* Прижимаем к левому краю */
+        }
+
+        /* Стили для мобильного изображения */
+        .programs-slide__mobile-image {
+            display: none;
+            width: 100%;
+        }
+
         .programs-slide__mobile-image video,
         .programs-slide__mobile-image img {
             width: 100%;
@@ -40,7 +64,63 @@
             display: block;
         }
 
-        transferItem_media {
+        /* Скрываем десктопный фон на мобильных */
+        @media (max-width: 768px) {
+            .programs-slide__video,
+            .programs-slide__image-background,
+            .programs-slide__video-overlay {
+                display: none;
+            }
+
+            .programs-slide__mobile-image {
+                display: block;
+            }
+
+            .programs-slide__inner {
+                flex-direction: column;
+            }
+
+            .programs-slide__info {
+                max-width: 100%;
+                text-align: center; /* На мобильных можно оставить по центру или тоже слева */
+                margin: 0 auto;
+            }
+        }
+
+        /* Скрываем мобильное изображение на десктопе */
+        @media (min-width: 769px) {
+            .programs-slide__mobile-image {
+                display: none;
+            }
+
+            .programs-slide__info {
+                padding: 40px 0; /* Добавляем отступы сверху и снизу */
+            }
+        }
+
+        /* Дополнительные стили для текста */
+        .programs-slide__text {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .programs-slide__title {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .programs-slide__paragraph {
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .programs-slide__btns {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start; /* Кнопки тоже слева */
+        }
+
+        .transferItem_media {
             position: relative;
             overflow: hidden;
         }
@@ -64,7 +144,6 @@
             transition: opacity 0.3s ease;
         }
 
-        /* При наведении скрываем изображение и показываем видео */
         .transferItem:hover .transferItem__video {
             opacity: 1;
         }
@@ -246,29 +325,32 @@
         </section>
         <section class="programs">
             <div class="programs__inner">
-                <div
-                    class="swiper programs__slider swiper-initialized swiper-horizontal swiper-ios swiper-backface-hidden">
-                    <div class="swiper-wrapper" id="swiper-wrapper-5ff3ee537489f80b" aria-live="polite">
+                <div class="swiper programs__slider swiper-initialized swiper-horizontal swiper-ios swiper-backface-hidden">
+                    <div class="swiper-wrapper" aria-live="polite">
                         @if(isset($transfers))
                             @foreach($transfers as $transfer)
-                                <div class="swiper-slide programs-slide swiper-slide-active"
-                                     style="width: 430px;"
-                                     role="group" aria-label="1 / 3" data-swiper-slide-index="0">
-
-                                    <!-- Видео вместо фонового изображения -->
+                                <div class="swiper-slide programs-slide" role="group" aria-label="{{ $loop->iteration }} / {{ count($transfers) }}">
+                                    <!-- Видео или изображение для десктопа -->
                                     @if(!empty($transfer->slider_video))
                                         <video class="programs-slide__video" autoplay muted loop playsinline>
-                                            <source src="{{asset('storage/public/' . $transfer->slider_video)}}"
-                                                    type="video/mp4">
+                                            <source src="{{asset('storage/public/' . $transfer->slider_video)}}" type="video/mp4">
                                         </video>
-                                        <div class="programs-slide__video-overlay"
-                                             style="background: rgba(0,0,0,0.3);"></div>
+                                        <div class="programs-slide__video-overlay" style="background: rgba(0,0,0,0.3);"></div>
                                     @else
-                                        <div class="programs-slide__image-background"
-                                             style="background:  url({{asset('storage/public/' . $transfer->slider_image) }}) no-repeat center;"></div>
+                                        <div class="programs-slide__image-background" style="background: url({{asset('storage/public/' . $transfer->slider_image) }}) no-repeat center; background-size: cover;"></div>
                                     @endif
 
                                     <div class="programs-slide__inner">
+                                        <!-- Мобильное изображение/видео -->
+                                        <div class="programs-slide__mobile-image">
+                                            @if(!empty($transfer->slider_video))
+                                                <video autoplay muted loop playsinline>
+                                                    <source src="{{asset('storage/public/' . $transfer->slider_video)}}" type="video/mp4">
+                                                </video>
+                                            @else
+                                                <img src="{{asset('storage/public/' . $transfer->slider_image) }}" alt="{{$transfer->title}}">
+                                            @endif
+                                        </div>
 
                                         <div class="container programs-slide__container">
                                             <div class="programs-slide__info">
@@ -284,8 +366,7 @@
                                                     </p>
                                                 </div>
                                                 <div class="programs-slide__btns">
-                                                    <a href="{{route('transfer', $transfer->id)}}"
-                                                       class="btn-reset programs-slide__btn programs-slide__btn--primary">
+                                                    <a href="{{route('transfer', $transfer->id)}}" class="btn-reset programs-slide__btn programs-slide__btn--primary">
                                                         Подробнее
                                                     </a>
                                                 </div>
@@ -299,20 +380,16 @@
                     <div class="slider-nav-wrapper">
                         <div class="container">
                             <div class="slider-navigation">
-                                <button class="btn-reset slider-btn slider-btn--prev" tabindex="0"
-                                        aria-label="Previous slide" aria-controls="swiper-wrapper-5ff3ee537489f80b">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
+                                <button class="btn-reset slider-btn slider-btn--prev" tabindex="0" aria-label="Previous slide">
+                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M11.25 1L2.25 10L11.25 19" stroke="#BDBDBD" stroke-width="2"></path>
                                     </svg>
                                 </button>
                                 <div class="swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
-                                    <span class="swiper-pagination-current">1</span> / <span
-                                        class="swiper-pagination-total">3</span></div>
-                                <button class="btn-reset slider-btn slider-btn--next" tabindex="0"
-                                        aria-label="Next slide" aria-controls="swiper-wrapper-5ff3ee537489f80b">
-                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
+                                    <span class="swiper-pagination-current">1</span> / <span class="swiper-pagination-total">3</span>
+                                </div>
+                                <button class="btn-reset slider-btn slider-btn--next" tabindex="0" aria-label="Next slide">
+                                    <svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M1.25 1L10.25 10L1.25 19" stroke="#BDBDBD" stroke-width="2"></path>
                                     </svg>
                                 </button>
