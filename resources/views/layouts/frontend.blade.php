@@ -519,7 +519,7 @@
                         <li class="footer__nav_item">
                             <a href="{{route('radio')}}">Радио</a>
                         </li>
-                        
+
                         <li class="footer__nav_item">
                             <a href="{{route('watch')}}">Где смотреть</a>
                         </li>
