@@ -68,7 +68,7 @@ class HomeController extends Controller
             ->get();
 
         $transfers = Transfer::query()
-            ->orderBy('id', 'desc')
+            ->orderBy('id', 'asc')
             ->select(['id', 'title', 'lead', 'published', 'slider_image', 'slider_video'])
             ->where('main_material', 1)
             ->get();
