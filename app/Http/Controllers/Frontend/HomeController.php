@@ -75,7 +75,7 @@ class HomeController extends Controller
 
         $allTransfers = Transfer::query()->select('id', 'title', 'image', 'slider_video', 'age_restriction_id')
             ->with('age_restriction')
-            ->orderBy('id', 'asc')->limit(12)->get();
+            ->orderBy('id', 'asc')->limit(16)->get();
 
         $popularVideos = VideoTransfer::query()
             ->select('id', 'title', 'preview', 'video', 'transfer_id')
