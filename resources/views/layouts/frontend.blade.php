@@ -17,6 +17,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
           rel="stylesheet">
 
+    <link rel="icon" href="{{asset('assets/favicon.ico')}}" type="image/x-icon">
+
     <link rel="stylesheet" href="{{asset('css/vendor/normalize.css')}}">
     <link rel="stylesheet" href="{{asset('css/vendor/swiper.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/vendor/nouislider.css')}}">

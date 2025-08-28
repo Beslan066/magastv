@@ -2,49 +2,181 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/transfer.page.css')}}">
+    <style>
+        .programs-slide {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            min-height: 500px; /* Минимальная высота баннера */
+        }
+
+        /* Стили для десктопного фона */
+        .programs-slide__video,
+        .programs-slide__image-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .programs-slide__video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .programs-slide__inner {
+            position: relative;
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .programs-slide__container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .programs-slide__info {
+            width: 100%;
+            max-width: 600px;
+            text-align: left;
+            margin-right: auto;
+        }
+
+        /* Стили для мобильного изображения */
+        .programs-slide__mobile-image {
+            display: none;
+            width: 100%;
+        }
+
+        .programs-slide__mobile-image video,
+        .programs-slide__mobile-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Скрываем десктопный фон на мобильных */
+        @media (max-width: 768px) {
+            .programs-slide__video,
+            .programs-slide__image-background,
+            .programs-slide__video-overlay {
+                display: none;
+            }
+
+            .programs-slide__mobile-image {
+                display: block;
+            }
+
+            .programs-slide__inner {
+                flex-direction: column;
+            }
+
+            .programs-slide__info {
+                max-width: 100%;
+                text-align: center;
+                margin: 0 auto;
+            }
+        }
+
+        /* Скрываем мобильное изображение на десктопе */
+        @media (min-width: 769px) {
+            .programs-slide__mobile-image {
+                display: none;
+            }
+
+            .programs-slide__info {
+                padding: 40px 0;
+            }
+        }
+
+        /* Дополнительные стили для текста */
+        .programs-slide__text {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .programs-slide__title {
+            text-align: left;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .programs-slide__paragraph {
+            text-align: left;
+            line-height: 1.6;
+            color: white;
+        }
+
+        .programs-slide__schedule span {
+            color: white;
+        }
+    </style>
 @endpush
 
 @section('content')
     <main class="transfer__page" data-main>
         <section class="programs">
             <div class="programs__inner">
-                <!-- Slider main container -->
-                <div
-                        class="swiper programs__slider swiper-initialized swiper-horizontal swiper-ios swiper-backface-hidden">
-                    <!-- Additional required wrapper -->
-                    <div class="swiper-wrapper" id="swiper-wrapper-5ff3ee537489f80b" aria-live="polite">
-                        <!-- Slides -->
+                <div class="swiper programs__slider">
+                    <div class="swiper-wrapper">
                         @if(isset($transfer))
-                            <div class="swiper-slide programs-slide swiper-slide-active"
-                                 style="background-image: url('{{asset($transfer->slider_image
-                                        ? 'storage/public/' . $transfer->slider_image
-                                        : 'storage/public/' . $transfer->image) }}'); width: 430px;"
-                                 role="group" aria-label="1 / 3" data-swiper-slide-index="0">
+                            <div class="swiper-slide programs-slide swiper-slide-active">
+                                <!-- Десктопная версия -->
+                                @if(!empty($transfer->slider_video))
+                                    <video class="programs-slide__video" autoplay muted loop playsinline>
+                                        <source src="{{asset('storage/public/' . $transfer->slider_video)}}" type="video/mp4">
+                                    </video>
+                                    <div class="programs-slide__video-overlay"></div>
+                                @elseif(!empty($transfer->slider_image))
+                                    <div class="programs-slide__image-background" style="background: url('{{asset('storage/public/' . $transfer->slider_image)}}') no-repeat center; background-size: cover;"></div>
+                                @else
+                                    <div class="programs-slide__image-background" style="background: url('{{asset('storage/public/' . $transfer->image)}}') no-repeat center; background-size: cover;"></div>
+                                @endif
+
                                 <div class="programs-slide__inner">
+                                    <!-- Мобильная версия -->
                                     <div class="programs-slide__mobile-image">
-                                        @if(isset($transfer->slider_image))
-                                            <img src="{{asset('storage/public/' . $transfer->slider_image)}}"
-                                                 alt="Slide image">
+                                        @if(!empty($transfer->slider_video))
+                                            <video autoplay muted loop playsinline>
+                                                <source src="{{asset('storage/public/' . $transfer->slider_video)}}" type="video/mp4">
+                                            </video>
+                                        @elseif(!empty($transfer->slider_image))
+                                            <img src="{{asset('storage/public/' . $transfer->slider_image)}}" alt="{{$transfer->title}}">
                                         @else
-                                            <img src="{{asset('storage/public/' . $transfer->image)}}"
-                                                 alt="Slide image">
+                                            <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
                                         @endif
                                     </div>
+
                                     <div class="container programs-slide__container">
                                         <div class="programs-slide__info">
-                                            <div class="programs-slide__schedule">
-                                                <span>{{$transfer->published}}</span>
-                                            </div>
+                                            @if($transfer->published)
+                                                <div class="programs-slide__schedule">
+                                                    <span>{{$transfer->published}}</span>
+                                                </div>
+                                            @endif
                                             <div class="programs-slide__text">
                                                 <h2 class="programs-slide__title">
                                                     {{$transfer->title}}
                                                 </h2>
-                                                <p class="programs-slide__paragraph">
-                                                    {{$transfer->lead}}
-                                                </p>
+                                                @if($transfer->lead)
+                                                    <p class="programs-slide__paragraph">
+                                                        {{$transfer->lead}}
+                                                    </p>
+                                                @endif
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -52,8 +184,8 @@
                     </div>
                 </div>
             </div>
-
         </section>
+
         <section class="transfer-releases releases">
             <div class="container">
                 <div class="releases__inner">
@@ -61,26 +193,26 @@
                         Выпуски передач
                     </h2>
                     <div class="releases__content">
-                        @if($transferVideos)
+                        @if($transferVideos && count($transferVideos) > 0)
                             <div class="releases__items">
                                 @foreach($transferVideos as $video)
-                                    <div class="releases__items">
-                                        <div class="popular-item releases-item">
-                                            <div class="popular-item__media">
-                                                {!! $video->video !!}
-                                            </div>
-                                            <div class="popular-item__info">
-                                                <h6 class="popular-item__title">
-                                                    <a>
-                                                        {{$video->title}}
-                                                    </a>
-                                                </h6>
-                                                <time datetime="{{$video->formatted_created_at}}" class="popular-item__time">{{$video->formatted_created_at}}</time>
-                                            </div>
+                                    <div class="popular-item releases-item">
+                                        <div class="popular-item__media">
+                                            {!! $video->video !!}
+                                        </div>
+                                        <div class="popular-item__info">
+                                            <h6 class="popular-item__title">
+                                                <a>
+                                                    {{$video->title}}
+                                                </a>
+                                            </h6>
+                                            <time datetime="{{$video->formatted_created_at}}" class="popular-item__time">{{$video->formatted_created_at}}</time>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
+                        @else
+                            <p>Нет доступных выпусков</p>
                         @endif
                     </div>
                 </div>
@@ -88,34 +220,3 @@
         </section>
     </main>
 @endsection
-
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const videos = document.querySelectorAll('.popular-item__media_video-tag');
-
-            videos.forEach(video => {
-                // Проверяем, был ли уже учтён просмотр
-                const videoId = video.closest('.popular-item').dataset.videoId;
-                const storageKey = `video_view_${videoId}`;
-
-                video.addEventListener('play', function () {
-                    if (!localStorage.getItem(storageKey)) {
-                        fetch(`/videos/${videoId}/view`, {
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                localStorage.setItem(storageKey, 'viewed');
-                                console.log('Просмотр учтён!', data);
-                            });
-                    }
-                });
-            });
-        });
-    </script>
-@endpush
