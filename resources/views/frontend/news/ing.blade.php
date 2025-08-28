@@ -10,7 +10,7 @@
             <div class="container">
                 <div class="news-content__inner">
                     <div class="news-content__top">
-                        <h1 class="page-title">Керда хоамаш</h1>
+                        <h1 class="page-title">Хоамаш</h1>
                         <div class="news-content__tabs_wrapper">
                             <div class="tabs">
                                 <button class="btn-reset news-content__filters_btn news-content__filters_btn--mobile">

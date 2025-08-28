@@ -7,6 +7,33 @@
         <link rel="stylesheet" href="{{asset('css/components/video-player.css')}}">
     @endif
 
+    <style>
+        @media (max-width: 768px) {
+            .single-news__content iframe {
+                height: 250px !important;
+                overflow: hidden; /* Убирает скролл на мобильных */
+            }
+        }
+
+        @media (max-width: 429px) {
+            .single-news__content iframe {
+                height: 230px !important;
+            }
+        }
+
+        @media (max-width: 404px) {
+            .single-news__content iframe {
+                height: 219px !important;
+            }
+        }
+
+        @media (max-width: 381px) {
+            .single-news__content iframe {
+                height: 204px !important;
+            }
+        }
+    </style>
+
 @endpush
 
 @section('content')

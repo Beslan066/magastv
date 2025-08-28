@@ -2,6 +2,33 @@
 
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/live.page.css')}}">
+
+    <style>
+        @media (max-width: 768px) {
+            .live__main-media iframe {
+                height: 250px !important;
+                overflow: hidden; /* Убирает скролл на мобильных */
+            }
+        }
+
+        @media (max-width: 429px) {
+            .live__main-media iframe {
+                height: 230px !important;
+            }
+        }
+
+        @media (max-width: 404px) {
+            .live__main-media iframe {
+                height: 219px !important;
+            }
+        }
+
+        @media (max-width: 381px) {
+            .live__main-media iframe {
+                height: 204px !important;
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
