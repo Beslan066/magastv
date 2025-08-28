@@ -1522,7 +1522,6 @@ body.active {
     font-size: 18px;
     line-height: 156%;
     color: var(--bw-black);
-    display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;

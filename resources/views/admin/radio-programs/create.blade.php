@@ -87,6 +87,83 @@
 
 @section('scripts')
     <script>
+
+        // Валидация формата времени при изменении поля
+        document.querySelector('input[name="time_range"]').addEventListener('blur', function() {
+            validateTimeFormat(this);
+        });
+
+        // Валидация перед отправкой формы
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const timeInput = document.querySelector('input[name="time_range"]');
+            if (!validateTimeFormat(timeInput)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        function validateTimeFormat(input) {
+            const value = input.value.trim();
+            // Регулярное выражение для формата: 10:00-12:00 или 10:00 - 12:00
+            const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*-\s*([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+
+            if (value && !timeRegex.test(value)) {
+                // Показываем ошибку
+                showTimeError('Формат времени должен быть: 10:00-12:00 и т.д.');
+                input.classList.add('is-invalid');
+                return false;
+            } else {
+                // Убираем ошибку
+                hideTimeError();
+                input.classList.remove('is-invalid');
+                return true;
+            }
+        }
+
+        function showTimeError(message) {
+            // Убираем старую ошибку если есть
+            hideTimeError();
+
+            // Создаем элемент ошибки
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'invalid-feedback d-block';
+            errorDiv.id = 'time-error';
+            errorDiv.textContent = message;
+
+            // Добавляем после поля ввода
+            const timeInput = document.querySelector('input[name="time_range"]');
+            timeInput.parentNode.appendChild(errorDiv);
+        }
+
+        function hideTimeError() {
+            const existingError = document.getElementById('time-error');
+            if (existingError) {
+                existingError.remove();
+            }
+        }
+
+        // Остальной существующий код...
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.querySelector('.new-image-wrapper').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('clearPreview').addEventListener('click', function() {
+            document.getElementById('imageUpload').value = '';
+            document.getElementById('imagePreview').src = '';
+            document.querySelector('.new-image-wrapper').style.display = 'none';
+        });
+
+        // Установка текущей даты по умолчанию
+        document.querySelector('input[name="program_date"]').valueAsDate = new Date();
+
         document.getElementById('imageUpload').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
@@ -108,4 +185,6 @@
         // Установка текущей даты по умолчанию
         document.querySelector('input[name="program_date"]').valueAsDate = new Date();
     </script>
+
+
 @endsection
