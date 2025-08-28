@@ -293,7 +293,6 @@
             const checkScroll = () => {
                 if (isLoading || !hasMorePages) return;
 
-                // Используем requestAnimationFrame для оптимизации
                 if (scrollTimeout) {
                     window.cancelAnimationFrame(scrollTimeout);
                 }
@@ -302,11 +301,26 @@
                     const scrollPosition = window.scrollY || window.pageYOffset;
                     const windowHeight = window.innerHeight;
                     const documentHeight = getDocumentHeight();
-                    const threshold = 200; // Увеличиваем порог для мобильных устройств
 
-                    // Проверяем, достигли ли мы нижней части страницы
-                    if (scrollPosition + windowHeight >= documentHeight - threshold) {
-                        loadMoreNews();
+                    // Для мобильных устройств используем другой подход
+                    if (window.innerWidth <= 768) {
+                        // Проверяем, достигли ли мы последнего элемента в списке новостей
+                        const newsItems = document.querySelectorAll('#news-list .news-item');
+                        if (newsItems.length > 0) {
+                            const lastNewsItem = newsItems[newsItems.length - 1];
+                            const lastItemRect = lastNewsItem.getBoundingClientRect();
+
+                            // Если последний элемент виден или почти виден - подгружаем
+                            if (lastItemRect.top <= windowHeight + 300) { // 300px запас
+                                loadMoreNews();
+                            }
+                        }
+                    } else {
+                        // Для десктопа используем старую логику
+                        const threshold = 200;
+                        if (scrollPosition + windowHeight >= documentHeight - threshold) {
+                            loadMoreNews();
+                        }
                     }
                 });
             };

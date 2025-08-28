@@ -622,9 +622,6 @@
         max-width: 350px;
     }
 
-    .news-page .news-content__right {
-        display: none;
-    }
 }
 
 @media (max-width: 320px) {
