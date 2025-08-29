@@ -2643,3 +2643,20 @@ body.active {
     justify-content: end;
 }
 
+.payment-block {
+    display: flex;
+}
+
+.payment-button {
+    background-color: #14AB28;
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
+    width: 120px;
+    height: 60px;
+    margin-left: 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
