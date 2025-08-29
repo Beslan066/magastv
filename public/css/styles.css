@@ -1519,7 +1519,7 @@ body.active {
 .news-item__title a {
     width: 100%;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 156%;
     color: var(--bw-black);
     -webkit-box-orient: vertical;
