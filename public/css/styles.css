@@ -1400,7 +1400,7 @@ body.active {
 
 .tab.active {
     border-bottom: 2px solid var(--primary-primary-500);
-    margin-bottom: -2px;
+    margin-bottom: -3px;
 }
 
 .tab.active span {

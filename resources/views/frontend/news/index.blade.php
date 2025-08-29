@@ -12,27 +12,33 @@
                     <div class="news-content__top">
                         <h1 class="page-title">Новости</h1>
                         <div class="news-content__tabs_wrapper">
+                            <button class="tab-arrow tab-arrow-prev" aria-label="Предыдущие категории" style="display: none;">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+
                             <div class="tabs">
-                                <button class="btn-reset news-content__filters_btn news-content__filters_btn--mobile">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 6L13 6" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <path d="M17 14L7 14" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <circle cx="5" cy="14" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <circle cx="15" cy="6" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
-                                    </svg>
-                                </button>
-                                <ul class="list-reset tabs__list">
-                                    <li class="tab active" data-category-id="">
+                                <ul class="list-reset tabs__list" id="categories-list">
+                                    <li class="tab active" data-category-id="all">
                                         <span>Все</span>
                                     </li>
                                     @foreach($categories as $category)
                                         <li class="tab" data-category-id="{{ $category->id }}">
-                                            <span>{{ $category->name }}</span>
+                                            <span>{{$category->name}}</span>
                                         </li>
                                     @endforeach
                                 </ul>
                             </div>
+                            <button class="tab-arrow tab-arrow-next" aria-label="Следующие категории">
+                                <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                          stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                             <button class="btn-reset news-content__filters_btn">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
@@ -219,6 +225,79 @@
                 return JSON.stringify(newFilters) !== JSON.stringify(currentFilters);
             };
 
+            // Функция для листания категорий
+            const initCategoryTabsScroll = () => {
+                const tabsList = document.getElementById('categories-list');
+                const prevBtn = document.querySelector('.tab-arrow-prev');
+                const nextBtn = document.querySelector('.tab-arrow-next');
+                const tabs = tabsList.querySelectorAll('.tab');
+
+                let scrollPosition = 0;
+                const scrollStep = 150;
+
+                // Проверяем видимость стрелок
+                const checkArrowsVisibility = () => {
+                    if (window.innerWidth <= 768) {
+                        prevBtn.style.display = 'none';
+                        nextBtn.style.display = 'none';
+                        tabsList.style.overflowX = 'auto';
+                        tabsList.style.WebkitOverflowScrolling = 'touch';
+                        return;
+                    }
+
+                    const maxScroll = tabsList.scrollWidth - tabsList.clientWidth;
+
+                    prevBtn.style.display = scrollPosition > 0 ? 'flex' : 'none';
+                    nextBtn.style.display = scrollPosition < maxScroll ? 'flex' : 'none';
+                };
+
+                // Листание вперед
+                nextBtn.addEventListener('click', () => {
+                    scrollPosition += scrollStep;
+                    const maxScroll = tabsList.scrollWidth - tabsList.clientWidth;
+
+                    if (scrollPosition > maxScroll) {
+                        scrollPosition = maxScroll;
+                    }
+
+                    tabsList.scrollTo({
+                        left: scrollPosition,
+                        behavior: 'smooth'
+                    });
+
+                    setTimeout(checkArrowsVisibility, 300);
+                });
+
+                // Листание назад
+                prevBtn.addEventListener('click', () => {
+                    scrollPosition -= scrollStep;
+
+                    if (scrollPosition < 0) {
+                        scrollPosition = 0;
+                    }
+
+                    tabsList.scrollTo({
+                        left: scrollPosition,
+                        behavior: 'smooth'
+                    });
+
+                    setTimeout(checkArrowsVisibility, 300);
+                });
+
+                // Обновляем позицию при ручном скролле
+                tabsList.addEventListener('scroll', () => {
+                    scrollPosition = tabsList.scrollLeft;
+                    checkArrowsVisibility();
+                });
+
+                // Проверяем при загрузке и ресайзе
+                setTimeout(checkArrowsVisibility, 100);
+                window.addEventListener('resize', checkArrowsVisibility);
+            };
+
+            // Инициализируем листание категорий
+            initCategoryTabsScroll();
+
             // Обработчики для табов категорий
             document.querySelectorAll('.tabs__list .tab').forEach((tab) => {
                 tab.addEventListener('click', function() {
@@ -228,7 +307,7 @@
                     this.classList.add('active');
 
                     // Устанавливаем фильтр категории
-                    const newCategory = this.dataset.categoryId || null;
+                    const newCategory = this.dataset.categoryId === 'all' ? null : this.dataset.categoryId;
 
                     // Проверяем, изменились ли фильтры
                     const newFilters = {
@@ -249,6 +328,7 @@
             document.querySelectorAll('.dropdown').forEach(dropdown => {
                 const button = dropdown.querySelector('.dropdown__button');
                 const items = dropdown.querySelectorAll('.dropdown__list-item');
+                const input = dropdown.querySelector('.dropdown__input_hidden');
 
                 items.forEach(item => {
                     item.addEventListener('click', function() {
@@ -258,6 +338,10 @@
                         this.classList.add('dropdown__list-item_active');
                         // Обновляем текст кнопки
                         button.textContent = this.textContent;
+                        // Обновляем скрытое поле
+                        if (input) {
+                            input.value = this.dataset.value;
+                        }
 
                         // Определяем тип фильтра
                         const filterType = dropdown.closest('.filter-item').classList[1].split('--')[1];
@@ -414,13 +498,6 @@
 
             // Также обрабатываем touch события для мобильных устройств
             window.addEventListener('touchmove', checkScroll);
-
-            // Инициализация табов категорий
-            document.querySelectorAll('.tabs__list .tab').forEach((tab, index) => {
-                if (index === 0) {
-                    tab.classList.add('active');
-                }
-            });
 
             // Инициализация активных dropdown items
             document.querySelectorAll('.dropdown__list-item').forEach(item => {
