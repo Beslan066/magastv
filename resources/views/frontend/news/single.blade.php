@@ -214,10 +214,10 @@
                                                     <h6 class="news-item__title">
                                                         <a href="{{route('home.news.single', $item->slug)}}">{{$item->title}}</a>
                                                     </h6>
-                                                    <div class="news-item__info">
-                                                        <time datetime="{{$item->published_at}}" class="news-item_time">
-                                                            {{$item->formatted_published_at}}
-                                                        </time>
+{{--                                                    <div class="news-item__info">--}}
+{{--                                                        <time datetime="{{$item->published_at}}" class="news-item_time">--}}
+{{--                                                            {{$item->formatted_published_at}}--}}
+{{--                                                        </time>--}}
 {{--                                                        <div class="news-item_views">--}}
 {{--                                                            <div class="item-views__icon">--}}
 {{--                                                                <svg width="14" height="10" viewBox="0 0 14 10"--}}
@@ -229,7 +229,7 @@
 {{--                                                            </div>--}}
 {{--                                                            <span>{{$item->views}}</span>--}}
 {{--                                                        </div>--}}
-                                                    </div>
+{{--                                                    </div>--}}
                                                 </div>
                                             </li>
                                         @endforeach
@@ -459,10 +459,10 @@
                                                     <h6 class="news-item__title">
                                                         <a href="{{route('home.news.single', $item->slug)}}">{{$item->title}}</a>
                                                     </h6>
-                                                    <div class="news-item__info">
-                                                        <time datetime="{{$item->published_at}}" class="news-item_time">
-                                                            {{$item->formatted_published_at}}
-                                                        </time>
+{{--                                                    <div class="news-item__info">--}}
+{{--                                                        <time datetime="{{$item->published_at}}" class="news-item_time">--}}
+{{--                                                            {{$item->formatted_published_at}}--}}
+{{--                                                        </time>--}}
 {{--                                                        <div class="news-item_views">--}}
 {{--                                                            <div class="item-views__icon">--}}
 {{--                                                                <svg width="14" height="10" viewBox="0 0 14 10"--}}
@@ -474,7 +474,7 @@
 {{--                                                            </div>--}}
 {{--                                                            <span>{{$item->views}}</span>--}}
 {{--                                                        </div>--}}
-                                                    </div>
+{{--                                                    </div>--}}
                                                 </div>
                                             </li>
                                         @endforeach
