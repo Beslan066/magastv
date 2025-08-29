@@ -622,6 +622,9 @@
         max-width: 350px;
     }
 
+    .news-item__bottom {
+        height: unset;
+    }
 }
 
 @media (max-width: 320px) {
