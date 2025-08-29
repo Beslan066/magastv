@@ -185,7 +185,7 @@ color: var(--bw-black);
     width: 80%;
 }
 
-.contacts__ads {
+.contacts__nav {
     width: 20%;
 }
 
@@ -216,6 +216,6 @@ color: var(--bw-black);
     color: #fff;
 }
 
-.contacts__page .ads-block {
+.contacts__page .nav-block {
     border-radius: unset !important;
 }

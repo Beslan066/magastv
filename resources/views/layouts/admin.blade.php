@@ -241,9 +241,16 @@
                     </li>
 
                     <li class="menu-item">
-                        <a href="{{route('radio-broadcast.index')}}" class="menu-link">
+                        <a href="{{route('radio-transfers')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-news"></i>
-                            <div class="text-truncate" data-i18n="Basic">Программы</div>
+                            <div class="text-truncate" data-i18n="Basic">Передачи</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="{{route('radio-broadcast.index')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-play"></i>
+                            <div class="text-truncate" data-i18n="Basic">Выпуски</div>
                         </a>
                     </li>
 

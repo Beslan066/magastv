@@ -109,8 +109,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="contacts__ads">
-                        <div class="ads-block">
+                    <div class="contacts__nav">
+                        <div class="nav-block">
                             <div class="navbar">
                                 <ul>
                                     <li>

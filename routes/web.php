@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\RadioBroadcastController;
 use App\Http\Controllers\Admin\RadioNewsController;
 use App\Http\Controllers\Admin\RadioProgramController;
 use App\Http\Controllers\Admin\RadioShowTypeController;
+use App\Http\Controllers\Admin\RadioTransferController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SupervisorController;
 use App\Http\Controllers\Admin\TransferController;
@@ -67,7 +68,7 @@ Route::post('/videos/{video}/view', function(VideoTransfer $video) {
 });
 
 Route::get('/radio', [HomeController::class, 'radio'])->name('radio');
-Route::get('/radio/transfers', [HomeController::class, 'radioTransfers'])->name('radio.transfers');
+Route::get('/radio/transfers', [HomeController::class, 'radioTransfersItem'])->name('radio.transfers');
 Route::get('/radio/books', [HomeController::class, 'radioBooks'])->name('radio.books');
 Route::get('/event/{event}', [HomeController::class, 'eventSingle'])->name('event.single');
 Route::get('/watch', [HomeController::class, 'watch'])->name('watch');
@@ -124,6 +125,21 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
                 'update' => 'tv-programs.update',
                 'destroy' => 'tv-programs.destroy',
             ]);
+
+        Route::resource('/radio-transfers', RadioTransferController::class)
+            ->names([
+                'index' => 'radio-transfers',
+                'create' => 'radio-transfers.create',
+                'store' => 'radio-transfers.store',
+                'edit' => 'radio-transfers.edit',
+                'update' => 'radio-transfers.update',
+                'destroy' => 'radio-transfers.destroy',
+            ])
+            ->parameters([
+                'radio-transfers' => 'transfer'
+            ]);
+
+
         Route::resource('radio-programs', RadioProgramController::class)
             ->names([
                 'index' => 'radio-programs.index',
