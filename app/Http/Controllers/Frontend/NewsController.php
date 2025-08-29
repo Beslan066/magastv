@@ -152,11 +152,13 @@ class NewsController extends Controller
         $popularItems = News::query()
             ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'views', 'category_id')
             ->where('status', 1)
+            ->where('published_at', '>=', now()->subDays(7))
             ->addSelect(DB::raw("'news' as type"))
             ->unionAll(
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
                     ->where('status', 1)
+                    ->where('published_at', '>=', now()->subDays(7))
                     ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
