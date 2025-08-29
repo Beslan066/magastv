@@ -305,13 +305,13 @@
                                                           class="popular-sidebar__item_time">
                                                         {{$item->formatted_published_at}}
                                                     </time>
-                                                    <div class="popular-sidebar__item_views">
-                                                        <div class="item-views__icon">
-                                                            <img src="{{asset('assets/img/views1.svg')}}"
-                                                                 alt="Eye icon">
-                                                        </div>
-                                                        <span>{{$item->views}}</span>
-                                                    </div>
+{{--                                                    <div class="popular-sidebar__item_views">--}}
+{{--                                                        <div class="item-views__icon">--}}
+{{--                                                            <img src="{{asset('assets/img/views1.svg')}}"--}}
+{{--                                                                 alt="Eye icon">--}}
+{{--                                                        </div>--}}
+{{--                                                        <span>{{$item->views}}</span>--}}
+{{--                                                    </div>--}}
                                                 </div>
                                             </li>
                                         @endforeach
