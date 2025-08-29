@@ -38,12 +38,8 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-4">
-                                    <textarea id="summernote" name="content"></textarea>
-                                </div>
-
                                 <div class="input-group mb-4">
-                                    <select class="form-select" id="inputGroupSelect02" name="radio_show_type_id">
+                                    <select class="form-select" id="inputGroupSelect02" name="radio_transfer_id">
                                         <option value="">Выберите категорию...</option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">
@@ -96,31 +92,6 @@
                                     </div>
                                 </div>
 
-                                {{--                        <div class="input-group mb-4">--}}
-                                {{--                            <select class="form-select" id="inputGroupSelect02" name="reportage_id">--}}
-                                {{--                                <option value="">Фоторепортаж...</option>--}}
-                                {{--                                @if(isset($photoreportages))--}}
-                                {{--                                    @foreach($photoreportages as $photoreportage)--}}
-                                {{--                                        <option value="{{ $photoreportage->id }}">--}}
-                                {{--                                            {{ $photoreportage->name }}--}}
-                                {{--                                        </option>--}}
-                                {{--                                    @endforeach--}}
-                                {{--                                @endif--}}
-                                {{--                            </select>--}}
-                                {{--                        </div>--}}
-
-                                {{--                        <div class="input-group mb-4">--}}
-                                {{--                            <select class="form-select" id="inputGroupSelect02" name="category_id">--}}
-                                {{--                                <option value="">Видео к новости...</option>--}}
-                                {{--                                @if(isset($videos))--}}
-                                {{--                                    @foreach($videos as $video)--}}
-                                {{--                                        <option value="{{ $video->id }}">--}}
-                                {{--                                            {{ $video->name }}--}}
-                                {{--                                        </option>--}}
-                                {{--                                    @endforeach--}}
-                                {{--                                @endif--}}
-                                {{--                            </select>--}}
-                                {{--                        </div>--}}
 
                                 <div class="mb-2">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
@@ -165,31 +136,3 @@
 
 @endsection
 
-@section('styles')
-    <!-- Summernote CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-@endsection
-
-@section('scripts')
-    <!-- jQuery (необходим для Summernote) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Summernote JS -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $('#summernote').summernote({
-                height: 300,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline', 'clear']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture', 'video']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
-            });
-        });
-    </script>
-@endsection

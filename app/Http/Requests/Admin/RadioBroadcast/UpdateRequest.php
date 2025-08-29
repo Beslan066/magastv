@@ -30,7 +30,7 @@ class UpdateRequest extends FormRequest
             'audio' => 'nullable|file|mimes:mp3',
             'status' => 'nullable',
             'user_id' => 'required|exists:users,id',
-            'radio_show_type_id' => 'required|exists:categories,id',
+            'radio_transfer_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
             'image_author' => 'nullable|string|max:255',
             'image_description' => 'nullable|string|max:255',
@@ -55,6 +55,7 @@ class UpdateRequest extends FormRequest
             'lead.string' => __('Лид должен быть строкой'),
             'lead.max' => __('Лид не должен превышать 255 символов'),
 
+            'radio_transfer_id.required' => __('Передача обязательна для заполнения'),
 
             // Image
             'image.string' => __('Изображение должно быть строкой'),

@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RadioBroadcast\StoreRequest;
 use App\Http\Requests\Admin\RadioBroadcast\UpdateRequest;
-use App\Models\RadioShowType;
 use App\Models\RadioBroadcast;
+use App\Models\RadioTransfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -25,7 +25,7 @@ class RadioBroadcastController extends Controller
      */
     public function create()
     {
-        $categories = RadioShowType::all();
+        $categories = RadioTransfer::all();
 
         return view('admin.radio-broadcast.create', compact('categories'));
     }
@@ -73,7 +73,7 @@ class RadioBroadcastController extends Controller
      */
     public function edit(RadioBroadcast $radioBroadcast)
     {
-        $categories = RadioShowType::all();
+        $categories = RadioTransfer::all();
 
         return view('admin.radio-broadcast.edit', compact('radioBroadcast', 'categories'));
     }

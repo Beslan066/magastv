@@ -89,11 +89,13 @@ class HomeController extends Controller
         $popularQuery = News::query()
             ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
+            ->where('published_at', '>=', now()->subDays(7))
             ->addSelect(DB::raw("'news' as type"))
             ->unionAll(
                 VideoReportage::query()
                     ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
                     ->where('status', 1)
+                    ->where('published_at', '>=', now()->subDays(7))
                     ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
@@ -457,7 +459,6 @@ HTML;
 
     public function watch()
     {
-
         return view('frontend.watch.index');
     }
 
@@ -474,8 +475,6 @@ HTML;
 
     public function about()
     {
-
-
         $about = About::query()->latest()->first();
         $supervisor = Supervisor::query()->latest()->first();
 

@@ -20,7 +20,7 @@ class RadioBroadcast extends Model
         'status',
         'audio',
         'user_id',
-        'radio_show_type_id',
+        'radio_transfer_id',
         'deleter_id',
         'published_at',
     ];
@@ -30,9 +30,9 @@ class RadioBroadcast extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function radioShowType()
+    public function transfer()
     {
-        return $this->belongsTo(RadioShowType::class, 'radio_show_type_id', 'id');
+        return $this->belongsTo(RadioTransfer::class, 'radio_transfer_id', 'id');
     }
 
     public function deleter()

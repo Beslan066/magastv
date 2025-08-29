@@ -47,22 +47,12 @@
                             <div class="mb-2 text-danger">{{$message}}</div>
                             @enderror
 
-                            <div class="mb-4">
-                                <textarea id="summernote" name="content">
-                                    {!! $radioBroadcast->content !!}
-                                </textarea>
-                            </div>
-                            @error('content')
-                            <div class="mb-2 text-danger">{{$message}}</div>
-                            @enderror
-
-
                             <div class="input-group mb-4">
-                                <select class="form-select" id="inputGroupSelect02" name="radio_show_type_id">
-                                    @if(isset($radioBroadcast->radioShowType))
-                                        <option value="{{$radioBroadcast->radioShowType->id}}">{{$radioBroadcast->radioShowType->title}}</option>
+                                <select class="form-select" id="inputGroupSelect02" name="radio_transfer_id">
+                                    @if(isset($radioBroadcast->transfer))
+                                        <option value="{{$radioBroadcast->transfer->id}}">{{$radioBroadcast->transfer->title}}</option>
                                     @else
-                                        <option value="">Выберите категорию...</option>
+                                        <option value="">Выберите передачу...</option>
                                         @foreach($categories as $category)
                                             <option value="{{ $category->id }}">
                                                 {{ $category->title }}
@@ -70,13 +60,10 @@
                                         @endforeach
                                     @endif
                                 </select>
-                                <label class="input-group-text" for="inputGroupSelect02">Категории</label>
                             </div>
                             @error('category_id')
                             <div class="mb-2 text-danger">{{$message}}</div>
                             @enderror
-
-
                         </div>
                     </div>
                 </div>
