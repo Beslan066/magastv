@@ -288,6 +288,13 @@
                             <div class="text-truncate" data-i18n="Basic">Книги</div>
                         </a>
                     </li>
+
+                    <li class="menu-item">
+                        <a href="{{route('bookFiles')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-file"></i>
+                            <div class="text-truncate" data-i18n="Basic">Файлы</div>
+                        </a>
+                    </li>
                 @endif
                 <!-- Forms -->
 

@@ -113,7 +113,7 @@
                         <div class="nav-block">
                             <div class="navbar">
                                 <ul>
-                                    <li>
+                                    <li class="active">
                                         <a href="{{route('contacts')}}">Контакты</a>
                                     </li>
                                     <li>

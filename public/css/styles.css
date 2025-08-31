@@ -2660,3 +2660,21 @@ body.active {
     align-items: center;
     justify-content: center;
 }
+
+.book-single .radio-item__nav {
+    width: 20% !important;
+    padding-left: 0;
+}
+
+.book-single .radio-item__progress {
+    justify-content: unset;
+    margin-left: 10px;
+}
+
+.radio-item__progress .radio-item__progress {
+    margin-bottom: 10px;
+
+}
+.book-single .radio-item__title a {
+    color: #14AB28 !important;
+}

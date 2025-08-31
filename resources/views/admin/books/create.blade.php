@@ -74,49 +74,7 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="input-group">
-                                        <input type="file" class="form-control" id="inputGroupFile02" name="audio" accept="audio/*">
-                                        <label class="input-group-text" for="inputGroupFile02">Аудио</label>
-                                    </div>
-
-                                    <!-- Блок для нового изображения -->
-                                    <div class="new-image-wrapper mt-3" style="display: none">
-                                        <div class="position-relative d-inline-block">
-                                            <img id="imagePreview" class="img-thumbnail" style="max-height: 200px">
-                                            <button type="button" class="btn btn-light btn-sm position-absolute top-0 end-0 m-1 rounded-circle"
-                                                    id="clearPreview" title="Удалить аудио">
-                                                <i class="bx bx-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
                                 </div>
-
-                                {{--                        <div class="input-group mb-4">--}}
-                                {{--                            <select class="form-select" id="inputGroupSelect02" name="reportage_id">--}}
-                                {{--                                <option value="">Фоторепортаж...</option>--}}
-                                {{--                                @if(isset($photoreportages))--}}
-                                {{--                                    @foreach($photoreportages as $photoreportage)--}}
-                                {{--                                        <option value="{{ $photoreportage->id }}">--}}
-                                {{--                                            {{ $photoreportage->name }}--}}
-                                {{--                                        </option>--}}
-                                {{--                                    @endforeach--}}
-                                {{--                                @endif--}}
-                                {{--                            </select>--}}
-                                {{--                        </div>--}}
-
-                                {{--                        <div class="input-group mb-4">--}}
-                                {{--                            <select class="form-select" id="inputGroupSelect02" name="category_id">--}}
-                                {{--                                <option value="">Видео к новости...</option>--}}
-                                {{--                                @if(isset($videos))--}}
-                                {{--                                    @foreach($videos as $video)--}}
-                                {{--                                        <option value="{{ $video->id }}">--}}
-                                {{--                                            {{ $video->name }}--}}
-                                {{--                                        </option>--}}
-                                {{--                                    @endforeach--}}
-                                {{--                                @endif--}}
-                                {{--                            </select>--}}
-                                {{--                        </div>--}}
 
                                 <div class="mb-2">
                                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
@@ -127,7 +85,7 @@
             </div>
 
                 <div class="ml-2 mb-2">
-                    <a href="{{route('radio-broadcast.index')}}" class="btn btn-secondary">Отмена</a>
+                    <a href="{{route('admin.radio.books')}}" class="btn btn-secondary">Отмена</a>
                     <button type="submit" class="btn btn-primary">Создать</button>
                 </div>
             </div>

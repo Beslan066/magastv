@@ -46,8 +46,6 @@
                             <span style="margin-bottom: 20px;"><b>Для оплаты введите сумму и нажмите на кнопку "Заплатить", далее следуйте инструкции.</b></span>
                         </div>
 
-                        <h3 style="margin-bottom: 20px;">Для оплаты используйте удобный вам способ: Отсканируйте QR-код или нажмите кнопку <b>Оплатить</b>"</h3>
-
                         <div class="payment-block">
                             <div>
                                 <img src="{{asset('assets/qr.jpeg')}}" alt="QR-код на оплату" height="200px" width="200px"/>

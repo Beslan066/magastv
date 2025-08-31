@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\About;
 use App\Models\Audiobook;
+use App\Models\AudiobookFile;
 use App\Models\Category;
 use App\Models\Contact;
 use App\Models\News;
@@ -12,6 +13,7 @@ use App\Models\RadioBroadcast;
 use App\Models\RadioNews;
 use App\Models\RadioShow;
 use App\Models\RadioShowType;
+use App\Models\RadioTransfer;
 use App\Models\Supervisor;
 use App\Models\Transfer;
 use App\Models\TvShow;
@@ -279,8 +281,7 @@ HTML;
             ->get();
 
         // Фильтрация программ по категории
-        $newsQuery = RadioBroadcast::query()
-            ->where('status', 1)
+        $newsQuery = RadioTransfer::query()
             ->with('radioShowType');
 
         // Если выбрана конкретная категория (не "Все")
@@ -447,6 +448,16 @@ HTML;
 
         return view('frontend.radio.books', [
             'books' => $books,
+        ]);
+    }
+
+    public function booksSingle(Audiobook $book)
+    {
+        // Загружаем книгу вместе с её файлами
+        $book->load('files');
+
+        return view('frontend.radio.book-single', [
+            'book' => $book,
         ]);
     }
 

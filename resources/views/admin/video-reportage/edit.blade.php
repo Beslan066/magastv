@@ -134,6 +134,11 @@
                                 <label class="form-check-label" for="statusSwitch">Опубликовано</label>
                             </div>
 
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" id="statusSwitch" name="ing_news" {{ old('status', $video_reportage->ing_news) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="statusSwitch">Ингушская новость</label>
+                            </div>
+
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <input type="hidden" name="uploaded_video_path" id="uploadedVideoPath" value="">
                         </div>

@@ -190,7 +190,6 @@ color: var(--bw-black);
 }
 
 .navbar {
-    background-color: #14ab28;
     width: 100%;
     border: unset;
 }
@@ -210,10 +209,18 @@ color: var(--bw-black);
     height: 60px;
     display: flex;
     align-items: center;
+    background-color: #f2f2f2;
+    color: #000;
 }
 
-.navbar li a {
+.navbar li.active {
+    background-color: #14ab28;
     color: #fff;
+}
+
+
+.navbar li a {
+    color: unset;
 }
 
 .contacts__page .nav-block {

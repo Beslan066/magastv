@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AboutController;
 use App\Http\Controllers\Admin\AgeRestrictionController;
 use App\Http\Controllers\Admin\AudiobookController;
+use App\Http\Controllers\Admin\AudiobookFileController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\ProfileController;
+use App\Models\AudiobookFile;
 use App\Models\News;
 use App\Models\VideoReportage;
 use App\Models\VideoTransfer;
@@ -70,6 +72,7 @@ Route::post('/videos/{video}/view', function(VideoTransfer $video) {
 Route::get('/radio', [HomeController::class, 'radio'])->name('radio');
 Route::get('/radio/transfers', [HomeController::class, 'radioTransfersItem'])->name('radio.transfers');
 Route::get('/radio/books', [HomeController::class, 'radioBooks'])->name('radio.books');
+Route::get('/radio/books/single/{book}', [HomeController::class, 'booksSingle'])->name('books.single');
 Route::get('/event/{event}', [HomeController::class, 'eventSingle'])->name('event.single');
 Route::get('/watch', [HomeController::class, 'watch'])->name('watch');
 Route::get('/realeses', [HomeController::class, 'realese'])->name('realeses');
@@ -157,6 +160,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
                 'edit' => 'admin.radio.books.edit',
                 'update' => 'admin.radio.books.update',
                 'destroy' => 'admin.radio.books.destroy',
+            ]);
+        Route::resource('audiobook-files', AudiobookFileController::class)
+            ->names([
+                'index' => 'bookFiles',
+                'create' => 'bookFiles.create',
+                'store' => 'bookFiles.store',
+                'edit' => 'bookFiles.edit',
+                'update' => 'bookFiles.update',
+                'destroy' => 'bookFiles.destroy',
             ]);
     });
 });

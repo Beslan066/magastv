@@ -24,13 +24,10 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'nullable|string|max:255',
+            'lead' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'audio' => 'nullable|file|mimes:mp3|max:102400', // 100MB в KB
             'user_id' => 'required|exists:users,id',
             'deleter_id' => 'nullable|exists:users,id',
-            'image_author' => 'nullable|string|max:255',
-            'image_description' => 'nullable|string|max:255',
             'author_id' => 'nullable'
         ];
     }

@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasMany; // Добавьте этот use
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Добавьте этот use
 
-class Audiobook extends Model
+class AudiobookFile extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'title',
         'slug',
-        'lead',
-        'image',
-        'author_id',
+        'audio',
+        'audiobook_id',
         'user_id',
         'deleter_id',
     ];
@@ -24,19 +24,14 @@ class Audiobook extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function author()
-    {
-        return $this->belongsTo(Author::class, 'author_id', 'id');
-    }
-
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleter_id', 'id');
     }
 
-    // Добавьте это отношение
-    public function files(): HasMany
+    // Добавьте обратное отношение к аудиокниге
+    public function audiobook(): BelongsTo
     {
-        return $this->hasMany(AudiobookFile::class, 'audiobook_id', 'id');
+        return $this->belongsTo(Audiobook::class, 'audiobook_id', 'id');
     }
 }

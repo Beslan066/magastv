@@ -211,6 +211,10 @@
     .popular-item.played .popular-item__video-navigation {
         opacity: 1;
     }
+
+    .contacts__nav {
+        width: 100%;
+    }
 }
 
 @media (max-width: 830px) {

@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="{{asset('css/media/media.css')}}">
 
 
-    <title>НТРК</title>
+    <title>НТРК "Магас"</title>
 </head>
 
 <!-- header menu,footer -->

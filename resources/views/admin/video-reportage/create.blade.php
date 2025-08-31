@@ -35,7 +35,7 @@
 
                             <div class="mb-4">
                                 <label class="form-label">Лид новости *</label>
-                                <textarea class="form-control" placeholder="Краткое описание" name="lead" rows="3" required></textarea>
+                                <textarea class="form-control" placeholder="Краткое описание" name="lead" rows="3"></textarea>
                             </div>
 
                             <div class="mb-4">

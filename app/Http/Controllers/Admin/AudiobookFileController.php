@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Audiobook\StoreRequest;
-use App\Http\Requests\Admin\Audiobook\UpdateRequest;
+use App\Http\Requests\Admin\AudiobookFile\StoreRequest;
+use App\Http\Requests\Admin\AudiobookFile\UpdateRequest;
 use App\Models\Audiobook;
-use App\Models\Author;
+use App\Models\AudiobookFile;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class AudiobookController extends Controller
+class AudiobookFileController extends Controller
 {
     public function index()
     {
-        $books = Audiobook::query()->orderBy('id', 'desc')->paginate(10);
+        $books = AudiobookFile::query()->orderBy('id', 'desc')->paginate(10);
 
-        return view('admin.books.index', compact('books'));
+        return view('admin.books-file.index', compact('books'));
     }
 
     /**
@@ -25,12 +26,9 @@ class AudiobookController extends Controller
      */
     public function create()
     {
+        $categories = Audiobook::query()->orderBy('id', 'desc')->get();
 
-        $authors = Author::all();
-
-        return view('admin.books.create', [
-            'authors' => $authors,
-        ]);
+        return view('admin.books-file.create', ['categories' => $categories]);
     }
 
     /**
@@ -46,11 +44,17 @@ class AudiobookController extends Controller
             $data['image'] = $path ?? null;
         }
 
+        if (isset($data['audio'])) {
+            $path = Storage::disk('public')->put('audios', $data['audio']);
+            // Сохранение пути к изображению в базе данных
+            $data['audio'] = $path ?? null;
+        }
+
         $data['slug'] = Str::slug($data['title']);
 
-        $book = Audiobook::create($data);
+        $book = AudiobookFile::create($data);
 
-        return redirect()->route('admin.radio.books');
+        return redirect()->route('bookFiles');
     }
 
     /**
@@ -64,18 +68,22 @@ class AudiobookController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Audiobook $audiobook)
+    public function edit(AudiobookFile $audiobookFile)
     {
 
-        $authors = Author::all();
+        $categories = Audiobook::query()->orderBy('id', 'desc')->get();
 
-        return view('admin.books.edit', compact('audiobook', 'authors'));
+
+        return view('admin.books-file.edit', [
+            'audiobookFile' => $audiobookFile,
+            'categories' => $categories
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateRequest $request, Audiobook $audiobook)
+    public function update(UpdateRequest $request, AudiobookFile $audiobookFile)
     {
         $data = $request->validated();
 
@@ -85,27 +93,33 @@ class AudiobookController extends Controller
             $data['image'] = $path ?? null;
         }
 
+        if (isset($data['audio'])) {
+            $path = Storage::disk('public')->put('audios', $data['audio']);
+            // Сохранение пути к изображению в базе данных
+            $data['audio'] = $path ?? null;
+        }
+
         $data['slug'] = Str::slug($data['title']);
 
-        $audiobook->update($data);
+        $audiobookFile->update($data);
 
-        return redirect()->route('admin.radio.books')->with('success', 'Radio item updated successfully');
+        return redirect()->route('bookFiles')->with('success', 'Radio item updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Audiobook $audiobook)
+    public function destroy(AudiobookFile $audiobookFile)
     {
         try {
             // Обновляем поле deleter_id перед удалением
-            $audiobook->update([
+            $audiobookFile->update([
                 'deleter_id' => auth()->id(),
             ]);
 
-            $audiobook->delete();
+            $audiobookFile->delete();
 
-            return redirect()->route('admin.radio.books')
+            return redirect()->route('bookFiles')
                 ->with('success', 'Категория успешно удалена');
 
         } catch (\Exception $e) {

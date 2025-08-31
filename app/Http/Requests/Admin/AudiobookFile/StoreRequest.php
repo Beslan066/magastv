@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\RadioTransfer;
+namespace App\Http\Requests\Admin\AudiobookFile;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRequest extends FormRequest
+class StoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,19 +19,17 @@ class UpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255',
-            'lead' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
+            'slug' => 'nullable|string|max:255|unique:news,slug',
+            'audio' => 'nullable|file|mimes:mp3|max:102400', // 100MB в KB
             'user_id' => 'required|exists:users,id',
-            'radio_show_type_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
+            'audiobook_id' => 'required'
         ];
     }
-
     public function messages()
     {
         return [
@@ -45,28 +43,22 @@ class UpdateRequest extends FormRequest
             'slug.max' => __('URL-адрес не должен превышать 255 символов'),
             'slug.unique' => __('Такой URL-адрес уже используется'),
 
-            // Lead
-            'lead.required' => __('Лид обязателен для заполнения'),
-            'lead.string' => __('Лид должен быть строкой'),
-            'lead.max' => __('Лид не должен превышать 255 символов'),
-
-
             // Image
-            'image.string' => __('Изображение должно быть строкой'),
-            'image.max' => __('Ссылка на изображение не должна превышать 255 символов'),
+            'audiobook_id.required' => __('Обязательно указать книгу'),
 
 
             // User ID
             'user_id.exists' => __('Указанный пользователь не найден'),
 
-            // Category ID
-            'category_id.exists' => __('Указанная категория не найдена'),
-
             // Deleter ID
             'deleter_id.exists' => __('Указанный удалитель не найден'),
-            'slider_video.file' => __('Видео должно быть файлом'),
-            'slider_video.mimes' => __('Видео должно быть в формате: mp4, avi, mov, wmv'),
-            'slider_video.max' => __('Размер видео не должен превышать 210MB'),
+
+            'published_at.required' => 'Укажите дату публикации.',
+            'published_at.date_format' => 'Некорректный формат даты, используйте формат ГГГГ-ММ-ДДTЧЧ:ММ.',
+
+            'audio.file' => 'Файл должен быть корректным аудиофайлом.',
+            'audio.mimes' => 'Поддерживается только формат MP3.',
+            'audio.max' => __('Размер аудиофайла не должен превышать 100MB'),
         ];
     }
 }

@@ -93,28 +93,9 @@
                             </div>
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
-                                <ul class="list-reset popular-sidebar__list">
-                                    @if($popularItems->count() > 0)
-                                        @foreach($popularItems as $item)
-                                            <li class="popular-sidebar__item">
-                                                <a href="{{ route('home.news.single', $item->slug) }}" class="popular-sidebar__item_text">
-                                                    {{ $item->title }}
-                                                </a>
-                                                <div class="popular-sidebar__item_info">
-                                                    <time datetime="{{ $item->published_at->format('Y-m-d H:i') }}" class="popular-sidebar__item_time">
-                                                        {{ $item->formatted_published_at }}
-                                                    </time>
-                                                    <div class="popular-sidebar__item_views">
-                                                        <div class="item-views__icon">
-                                                            <img src="{{ asset('assets/img/views1.svg') }}" alt="Eye icon">
-                                                        </div>
-                                                        <span>{{ $item->views }}</span>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    @else
-                                        <li class="no-items">Нет популярных видео</li>
+                                <ul class="list-reset news-block__list news-block__list--second" id="news-list">
+                                    @if($news)
+                                        @include('frontend.partials.news.news_items', ['items' => $news])
                                     @endif
                                 </ul>
                             </div>
