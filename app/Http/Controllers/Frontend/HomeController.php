@@ -439,6 +439,14 @@ HTML;
         ]);
     }
 
+    public function radioTransferSingle(RadioTransfer $transfer)
+    {
+
+        return view('frontend.radio.transfer-single', [
+            'transfer' => $transfer,
+        ]);
+    }
+
     public function radioBooks()
     {
 

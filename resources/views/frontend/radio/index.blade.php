@@ -120,13 +120,15 @@
                                     @foreach($news as $item)
                                         <div class="radio-item">
                                             <div class="radio-item__image">
-                                                <img src="{{asset('storage/public/' . $item->image)}}"
-                                                     alt="{{$item->title}}">
+                                                <a href="{{route('radio.transfer.single', $item->id)}}">
+                                                    <img src="{{asset('storage/public/' . $item->image)}}"
+                                                         alt="{{$item->title}}">
+                                                </a>
                                             </div>
                                             <div class="radio-item__bottom">
                                                 <div class="radio-item__info">
                                                     <h6 class="radio-item__title">
-                                                        <a>{{$item->title}}</a>
+                                                        <a href="{{route('radio.transfer.single', $item->id)}}">{{$item->title}}</a>
                                                     </h6>
                                                     <div class="radio-item__meta">
                                                         <time

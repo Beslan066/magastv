@@ -70,7 +70,8 @@ Route::post('/videos/{video}/view', function(VideoTransfer $video) {
 });
 
 Route::get('/radio', [HomeController::class, 'radio'])->name('radio');
-Route::get('/radio/transfers', [HomeController::class, 'radioTransfersItem'])->name('radio.transfers');
+Route::get('/radio/transfers', [HomeController::class, 'radioTransfers'])->name('radio.transfers');
+Route::get('/radio/transfers/{transfer}', [HomeController::class, 'radioTransferSingle'])->name('radio.transfer.single');
 Route::get('/radio/books', [HomeController::class, 'radioBooks'])->name('radio.books');
 Route::get('/radio/books/single/{book}', [HomeController::class, 'booksSingle'])->name('books.single');
 Route::get('/event/{event}', [HomeController::class, 'eventSingle'])->name('event.single');

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RadioTransfer extends Model
 {
@@ -32,5 +33,10 @@ class RadioTransfer extends Model
     public function deleter()
     {
         return $this->belongsTo(User::class, 'deleter_id', 'id');
+    }
+
+    public function programs(): HasMany
+    {
+        return $this->hasMany(RadioBroadcast::class, 'radio_transfer_id', 'id');
     }
 }

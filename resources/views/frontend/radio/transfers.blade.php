@@ -13,22 +13,6 @@
                         <h1 class="page-title">
                             Программы
                         </h1>
-                        {{--                        <div class="news-content__tabs_wrapper">--}}
-                        {{--                            <div class="tabs">--}}
-                        {{--                                <ul class="list-reset tabs__list">--}}
-                        {{--                                    <li class="tab active" data-tab="all">--}}
-                        {{--                                        <span>Все</span>--}}
-                        {{--                                    </li>--}}
-                        {{--                                    @if(isset($categories))--}}
-                        {{--                                        @foreach($categories as $category)--}}
-                        {{--                                            <li class="tab" >--}}
-                        {{--                                                <span>{{$category->title}}</span>--}}
-                        {{--                                            </li>--}}
-                        {{--                                        @endforeach--}}
-                        {{--                                    @endif--}}
-                        {{--                                </ul>--}}
-                        {{--                            </div>--}}
-                        {{--                        </div>--}}
                     </div>
                     <div class="transfers__bottom">
                         <ul class="list-reset transfers__list">
@@ -36,7 +20,9 @@
                                 @foreach($transfers as $transfer)
                                     <li class="transferItem active">
                                         <div class="transferItem_media" style="height: 158px !important;">
-                                            <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
+                                            <a href="{{route('transfer', $transfer->id)}}">
+                                                <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
+                                            </a>
                                         </div>
                                         <h6 class="transferItem_title">
                                             <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
