@@ -263,87 +263,90 @@ class NewsController extends Controller
     {
         $categories = Category::query()->orderBy('id', 'desc')->get();
 
-        if ($request->ajax()) {
-            try {
-                $page = $request->input('page', 1);
-                $perPage = 12;
-                $offset = ($page - 1) * $perPage;
+        $newsQuery = VideoReportage::query()
+            ->where('ing_news', 1)
+            ->where('status', 1);
 
-                // Получаем параметры фильтрации
-                $categoryId = $request->input('category');
-                $sort = $request->input('sort', 'published_at');
-                $period = $request->input('period');
+        // Фильтр по категории
+        if ($request->has('category_id') && $request->category_id) {
+            $newsQuery->where('category_id', $request->category_id);
+        }
 
-                // Валидация параметров
-                $categoryId = is_numeric($categoryId) ? (int)$categoryId : null;
-                $sort = in_array($sort, ['published_at', 'views']) ? $sort : 'published_at';
-                $period = in_array($period, ['week', 'month', 'year']) ? $period : null;
+        // Фильтр по периоду
+        if ($request->has('period') && $request->period !== 'all') {
+            $dateField = 'published_at';
+            $now = now();
 
-                // Базовый запрос
-                $query = VideoReportage::query()
-                    ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views', 'category_id')
-                    ->where('ing_news', 1)
-                    ->where('status', 1);
-
-                // Применяем фильтры
-                if ($categoryId) {
-                    $query->where('category_id', $categoryId);
-                }
-
-                if ($period) {
-                    $dateFilter = now();
-                    switch ($period) {
-                        case 'week': $dateFilter = now()->subWeek(); break;
-                        case 'month': $dateFilter = now()->subMonth(); break;
-                        case 'year': $dateFilter = now()->subYear(); break;
-                    }
-                    $query->where('published_at', '>=', $dateFilter);
-                }
-
-                // Сортировка
-                $sortDirection = 'desc';
-                $query->orderBy($sort, $sortDirection);
-
-                // Получаем элементы
-                $total = $query->count();
-                $items = $query->offset($offset)
-                    ->limit($perPage)
-                    ->get()
-                    ->map(function ($item) {
-                        $item->published_at = \Carbon\Carbon::parse($item->published_at);
-                        $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
-                        // Правильный путь к изображению
-                        $item->media = $item->media ? asset('storage/public/' . $item->media) : asset('assets/default-image.jpg');
-                        return $item;
-                    });
-
-                $hasMore = ($offset + $perPage) < $total;
-
-                return response()->json([
-                    'html' => view('frontend.partials.news.news_items', compact('items'))->render(),
-                    'hasMore' => $hasMore
-                ]);
-
-            } catch (\Exception $e) {
-                \Log::error('Ing news loading error: ' . $e->getMessage());
-                return response()->json([
-                    'html' => '',
-                    'hasMore' => false
-                ], 500);
+            switch ($request->period) {
+                case 'week':
+                    $newsQuery->where($dateField, '>=', $now->subWeek());
+                    break;
+                case 'month':
+                    $newsQuery->where($dateField, '>=', $now->subMonth());
+                    break;
+                case 'year':
+                    $newsQuery->where($dateField, '>=', $now->subYear());
+                    break;
             }
         }
 
+        // Сортировка
+        $sortBy = $request->get('sort_by', 'published_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+        $newsQuery->orderBy($sortBy, $sortOrder);
+
+        // Для AJAX запросов
+        if ($request->ajax()) {
+            $page = $request->get('page', 1);
+            $perPage = 12;
+
+            $news = $newsQuery->paginate($perPage, ['*'], 'page', $page)
+                ->getCollection()
+                ->map(function ($item) {
+                    $item->published_at = \Carbon\Carbon::parse($item->published_at);
+                    $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
+                    $item->media = $item->preview;
+                    return $item;
+                });
+
+            // Генерируем HTML напрямую
+            $newsHtml = '';
+            if ($news->count() > 0) {
+                foreach ($news as $item) {
+                    $newsHtml .= '
+                <li class="news-block__item">
+                    <a href="' . route('video-reportage.show', $item->slug) . '" class="news-block__item_link">
+                        <div class="news-block__item_img">
+                            <img src="' . $item->media . '" alt="' . $item->title . '">
+                            <div class="news-block__item_badge">Видео</div>
+                        </div>
+                        <div class="news-block__item_content">
+                            <h3 class="news-block__item_title">' . $item->title . '</h3>
+                            <div class="news-block__item_info">
+                                <span class="news-block__item_date">' . $item->formatted_published_at . '</span>
+                                <span class="news-block__item_views">' . $item->views . '</span>
+                            </div>
+                        </div>
+                    </a>
+                </li>';
+                }
+            } else {
+                $newsHtml = '<li class="no-items">Нет видеорепортажей</li>';
+            }
+
+            return response()->json([
+                'news_html' => $newsHtml,
+                'next_page' => $newsQuery->paginate($perPage, ['*'], 'page', $page)->hasMorePages()
+            ]);
+        }
+
         // Первоначальная загрузка
-        $news = VideoReportage::query()
-            ->where('ing_news', 1)
-            ->where('status', 1)
-            ->orderBy('published_at', 'desc')
-            ->take(12)
+        $news = $newsQuery->take(12)
             ->get()
             ->map(function ($item) {
                 $item->published_at = \Carbon\Carbon::parse($item->published_at);
                 $item->formatted_published_at = $item->published_at->format('d.m.Y H:i');
-                $item->media = $item->preview ? asset('storage/public/' . $item->preview) : asset('assets/default-image.jpg');
+                $item->media = $item->preview;
                 return $item;
             });
 
@@ -360,6 +363,14 @@ class NewsController extends Controller
                 return $item;
             });
 
-        return view('frontend.news.ing', compact('categories', 'news', 'popularItems'));
+        return view('frontend.news.ing', [
+            'categories' => $categories,
+            'news' => $news,
+            'popularItems' => $popularItems,
+            'currentCategory' => $request->category_id,
+            'currentSort' => $request->get('sort_by', 'published_at'),
+            'currentOrder' => $request->get('sort_order', 'desc'),
+            'currentPeriod' => $request->get('period', 'all')
+        ]);
     }
 }

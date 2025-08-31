@@ -16,13 +16,13 @@
                                 <button class="btn-reset news-content__filters_btn news-content__filters_btn--mobile">
                                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M3 6L13 6" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <path d="M17 14L7 14" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <circle cx="5" cy="14" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
-                                        <circle cx="15" cy="6" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
+                                        <path d="M3 6L13 6" stroke="#1A1A1A" stroke-width="1.5"/>
+                                        <path d="M17 14L7 14" stroke="#1A1A1A" stroke-width="1.5"/>
+                                        <circle cx="5" cy="14" r="2.25" stroke="#1A1A1A" stroke-width="1.5"/>
+                                        <circle cx="15" cy="6" r="2.25" stroke="#1A1A1A" stroke-width="1.5"/>
                                     </svg>
                                 </button>
-                                <ul class="list-reset tabs__list">
+                                <ul class="list-reset tabs__list" id="category-tabs">
                                     <li class="tab active" data-category-id="">
                                         <span>Все</span>
                                     </li>
@@ -33,42 +33,54 @@
                                     @endforeach
                                 </ul>
                             </div>
-                            <button class="btn-reset news-content__filters_btn">
+                            <button class="btn-reset news-content__filters_btn" id="toggle-filters">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M3 6L13 6" stroke="#1A1A1A" stroke-width="1.5" />
-                                    <path d="M17 14L7 14" stroke="#1A1A1A" stroke-width="1.5" />
-                                    <circle cx="5" cy="14" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
-                                    <circle cx="15" cy="6" r="2.25" stroke="#1A1A1A" stroke-width="1.5" />
+                                    <path d="M3 6L13 6" stroke="#1A1A1A" stroke-width="1.5"/>
+                                    <path d="M17 14L7 14" stroke="#1A1A1A" stroke-width="1.5"/>
+                                    <circle cx="5" cy="14" r="2.25" stroke="#1A1A1A" stroke-width="1.5"/>
+                                    <circle cx="15" cy="6" r="2.25" stroke="#1A1A1A" stroke-width="1.5"/>
                                 </svg>
                                 Фильтры
                             </button>
                         </div>
-                        <div class="filters">
+                        <div class="filters" id="filters-panel" style="display: none;">
                             <div class="filter-item filters--sort">
                                 <span class="filter-item__title">Сортировка</span>
                                 <div class="dropdown">
-                                    <button type="button" class="dropdown__button">По дате</button>
-                                    <ul class="dropdown__list">
-                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="published_at">По дате</li>
-                                        <li class="dropdown__list-item" data-value="views">По просмотрам</li>
+                                    <button type="button" class="dropdown__button" id="sort-button">По дате</button>
+                                    <ul class="dropdown__list" id="sort-list">
+                                        <li class="dropdown__list-item dropdown__list-item_active"
+                                            data-value="published_at" data-order="desc">По дате (новые)
+                                        </li>
+                                        <li class="dropdown__list-item" data-value="published_at" data-order="asc">По
+                                            дате (старые)
+                                        </li>
+                                        <li class="dropdown__list-item" data-value="views" data-order="desc">По
+                                            просмотрам
+                                        </li>
                                     </ul>
-                                    <input type="text" name="select-sort" value="published_at" class="dropdown__input_hidden">
+                                    <input type="hidden" name="sort_by" value="published_at" id="sort-input">
+                                    <input type="hidden" name="sort_order" value="desc" id="order-input">
                                 </div>
                             </div>
                             <div class="filter-item filters--time">
                                 <span class="filter-item__title">Период</span>
                                 <div class="dropdown">
-                                    <button type="button" class="dropdown__button">Весь период</button>
-                                    <ul class="dropdown__list">
-                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="all">Весь период</li>
+                                    <button type="button" class="dropdown__button" id="period-button">Весь период
+                                    </button>
+                                    <ul class="dropdown__list" id="period-list">
+                                        <li class="dropdown__list-item dropdown__list-item_active" data-value="all">Весь
+                                            период
+                                        </li>
                                         <li class="dropdown__list-item" data-value="week">Последняя неделя</li>
                                         <li class="dropdown__list-item" data-value="month">Последний месяц</li>
                                         <li class="dropdown__list-item" data-value="year">Последний год</li>
                                     </ul>
-                                    <input type="text" name="select-period" value="all" class="dropdown__input_hidden">
+                                    <input type="hidden" name="period" value="all" id="period-input">
                                 </div>
                             </div>
+                            <button class="btn-reset btn-primary" id="apply-filters">Применить</button>
                         </div>
                     </div>
                     <div class="news-content__bottom">
@@ -86,18 +98,18 @@
                                 <div class="spinner"></div>
                                 <p>Загрузка...</p>
                             </div>
-                        </div>
-                        <div class="news-content__right">
-                            <div class="ads-block">
-                                <img src="{{asset('assets/add.jpg')}}" alt="add">
-                            </div>
-                            <div class="content__popular popular-sidebar popular-sidebar--news">
-                                <h3 class="popular-sidebar__title">Популярное</h3>
-                                <ul class="list-reset news-block__list news-block__list--second" id="news-list">
-                                    @if($news)
-                                        @include('frontend.partials.news.news_items', ['items' => $news])
-                                    @endif
-                                </ul>
+                            <div class="news-content__right">
+                                <div class="ads-block">
+                                    <img src="{{asset('assets/add.jpg')}}" alt="add">
+                                </div>
+                                <div class="content__popular popular-sidebar popular-sidebar--news">
+                                    <h3 class="popular-sidebar__title">Популярное</h3>
+                                    <ul class="list-reset news-block__list news-block__list--second" id="news-list">
+                                        @if($news)
+                                            @include('frontend.partials.news.news_items', ['items' => $news])
+                                        @endif
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -109,220 +121,203 @@
 
 @push('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let isLoading = false;
-            let currentPage = 1;
-            let hasMorePages = true;
-            let currentFilters = {
-                category: null,
-                sort: 'published_at',
-                period: null
-            };
-            let isInitialLoad = true;
-            let scrollTimeout = null;
+        class NewsLoader {
+            constructor() {
+                this.currentPage = 1;
+                this.isLoading = false;
+                this.hasMore = true;
+                this.currentCategory = '';
+                this.currentSort = 'published_at';
+                this.currentOrder = 'desc';
+                this.currentPeriod = 'all';
 
-            // Сохраняем начальное состояние
-            const saveInitialState = () => {
-                const newsList = document.getElementById('news-list');
-                newsList.setAttribute('data-initial-html', newsList.innerHTML);
-            };
+                this.initEvents();
+            }
 
-            saveInitialState();
-
-            // Функция для сброса к начальному состоянию
-            const resetToInitialState = () => {
-                const newsList = document.getElementById('news-list');
-                const initialHtml = newsList.getAttribute('data-initial-html');
-                newsList.innerHTML = initialHtml || '';
-                currentPage = 1;
-                hasMorePages = true;
-                isLoading = false;
-                isInitialLoad = true;
-            };
-
-            // Функция для проверки, были ли изменены фильтры
-            const haveFiltersChanged = (newFilters) => {
-                return JSON.stringify(newFilters) !== JSON.stringify(currentFilters);
-            };
-
-            // Обработчики для табов категорий
-            document.querySelectorAll('.tabs__list .tab').forEach((tab) => {
-                tab.addEventListener('click', function() {
-                    // Удаляем active у всех табов
-                    document.querySelectorAll('.tabs__list .tab').forEach(t => t.classList.remove('active'));
-                    // Добавляем active текущему табу
-                    this.classList.add('active');
-
-                    // Устанавливаем фильтр категории
-                    const newCategory = this.dataset.categoryId || '';
-
-                    // Проверяем, изменились ли фильтры
-                    const newFilters = {
-                        ...currentFilters,
-                        category: newCategory
-                    };
-
-                    if (haveFiltersChanged(newFilters)) {
-                        currentFilters = newFilters;
-                        // Сбрасываем и загружаем заново только если фильтры изменились
-                        resetToInitialState();
-                        loadMoreNews();
-                    }
+            initEvents() {
+                // Табы категорий
+                document.querySelectorAll('#category-tabs .tab').forEach(tab => {
+                    tab.addEventListener('click', this.handleCategoryFilter.bind(this));
                 });
-            });
 
-            // Обработчики для dropdown фильтров
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                const button = dropdown.querySelector('.dropdown__button');
-                const items = dropdown.querySelectorAll('.dropdown__list-item');
-                const input = dropdown.querySelector('.dropdown__input_hidden');
+                // Кнопка фильтров
+                document.getElementById('toggle-filters').addEventListener('click', this.toggleFilters.bind(this));
 
-                items.forEach(item => {
-                    item.addEventListener('click', function() {
-                        // Удаляем active у всех items
-                        items.forEach(i => i.classList.remove('dropdown__list-item_active'));
-                        // Добавляем active текущему item
-                        this.classList.add('dropdown__list-item_active');
-                        // Обновляем текст кнопки
-                        button.textContent = this.textContent;
-                        // Обновляем скрытое поле
-                        input.value = this.dataset.value;
+                // Выбор сортировки
+                document.querySelectorAll('#sort-list .dropdown__list-item').forEach(item => {
+                    item.addEventListener('click', this.handleSortSelect.bind(this));
+                });
 
-                        // Определяем тип фильтра по имени input
-                        const inputName = input.getAttribute('name');
-                        let filterType = '';
+                // Выбор периода
+                document.querySelectorAll('#period-list .dropdown__list-item').forEach(item => {
+                    item.addEventListener('click', this.handlePeriodSelect.bind(this));
+                });
 
-                        if (inputName === 'select-sort') {
-                            filterType = 'sort';
-                        } else if (inputName === 'select-period') {
-                            filterType = 'period';
-                        }
+                // Применить фильтры
+                document.getElementById('apply-filters').addEventListener('click', this.applyFilters.bind(this));
 
-                        let newFilters = { ...currentFilters };
+                // Кнопка "Показать еще"
+                document.getElementById('load-more-btn').addEventListener('click', this.loadMore.bind(this));
 
-                        // Устанавливаем значение фильтра
-                        if (filterType === 'sort') {
-                            newFilters.sort = this.dataset.value;
-                        } else if (filterType === 'period') {
-                            newFilters.period = this.dataset.value === 'all' ? null : this.dataset.value;
-                        }
+                // Ленивая подгрузка при скролле
+                window.addEventListener('scroll', this.handleScroll.bind(this));
+            }
 
-                        // Проверяем, изменились ли фильтры
-                        if (haveFiltersChanged(newFilters)) {
-                            currentFilters = newFilters;
-                            // Сбрасываем и загружаем заново только если фильтры изменились
-                            resetToInitialState();
-                            loadMoreNews();
+            handleCategoryFilter(e) {
+                const categoryId = e.currentTarget.dataset.categoryId;
+
+                if (this.currentCategory === categoryId) return;
+
+                // Обновить активный таб
+                document.querySelectorAll('#category-tabs .tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                e.currentTarget.classList.add('active');
+
+                this.currentCategory = categoryId;
+                this.resetAndLoad();
+            }
+
+            handleSortSelect(e) {
+                const sortValue = e.currentTarget.dataset.value;
+                const sortOrder = e.currentTarget.dataset.order;
+
+                document.querySelectorAll('#sort-list .dropdown__list-item').forEach(item => {
+                    item.classList.remove('dropdown__list-item_active');
+                });
+                e.currentTarget.classList.add('dropdown__list-item_active');
+
+                document.getElementById('sort-button').textContent = e.currentTarget.textContent;
+                document.getElementById('sort-input').value = sortValue;
+                document.getElementById('order-input').value = sortOrder;
+            }
+
+            handlePeriodSelect(e) {
+                const periodValue = e.currentTarget.dataset.value;
+
+                document.querySelectorAll('#period-list .dropdown__list-item').forEach(item => {
+                    item.classList.remove('dropdown__list-item_active');
+                });
+                e.currentTarget.classList.add('dropdown__list-item_active');
+
+                document.getElementById('period-button').textContent = e.currentTarget.textContent;
+                document.getElementById('period-input').value = periodValue;
+            }
+
+            applyFilters() {
+                this.currentSort = document.getElementById('sort-input').value;
+                this.currentOrder = document.getElementById('order-input').value;
+                this.currentPeriod = document.getElementById('period-input').value;
+
+                this.toggleFilters();
+                this.resetAndLoad();
+            }
+
+            toggleFilters() {
+                const filtersPanel = document.getElementById('filters-panel');
+                filtersPanel.style.display = filtersPanel.style.display === 'none' ? 'block' : 'none';
+            }
+
+            resetAndLoad() {
+                this.currentPage = 1;
+                this.hasMore = true;
+                this.showLoader();
+                this.loadNews(true);
+            }
+
+            async loadMore() {
+                if (this.isLoading || !this.hasMore) return;
+
+                this.currentPage++;
+                await this.loadNews(false);
+            }
+
+            handleScroll() {
+                if (this.isLoading || !this.hasMore) return;
+
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+
+                if (scrollTop + windowHeight >= documentHeight - 500) {
+                    this.loadMore();
+                }
+            }
+
+            async loadNews(reset = false) {
+                this.isLoading = true;
+                this.showLoader();
+
+                try {
+                    const params = new URLSearchParams({
+                        page: this.currentPage,
+                        category_id: this.currentCategory,
+                        sort_by: this.currentSort,
+                        sort_order: this.currentOrder,
+                        period: this.currentPeriod
+                    });
+
+                    const response = await fetch(`/news-ing?${params}`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
                         }
                     });
-                });
-            });
 
-            // Улучшенная проверка скролла
-            const checkScroll = () => {
-                if (isLoading || !hasMorePages) return;
+                    const data = await response.json();
 
-                if (scrollTimeout) {
-                    clearTimeout(scrollTimeout);
-                }
-
-                scrollTimeout = setTimeout(() => {
-                    const scrollPosition = window.scrollY || window.pageYOffset;
-                    const windowHeight = window.innerHeight;
-                    const documentHeight = Math.max(
-                        document.body.scrollHeight,
-                        document.body.offsetHeight,
-                        document.documentElement.clientHeight,
-                        document.documentElement.scrollHeight,
-                        document.documentElement.offsetHeight
-                    );
-                    const threshold = 200;
-
-                    // Проверяем, достигли ли мы нижней части страницы
-                    if (scrollPosition + windowHeight >= documentHeight - threshold) {
-                        loadMoreNews();
+                    if (reset) {
+                        document.getElementById('news-list').innerHTML = data.news_html || '';
+                    } else {
+                        document.getElementById('news-list').insertAdjacentHTML('beforeend', data.news_html || '');
                     }
-                }, 100);
-            };
 
-            // Загрузка новостей
-            const loadMoreNews = () => {
-                if (isLoading || !hasMorePages) return;
+                    this.hasMore = data.next_page;
 
-                isLoading = true;
-                const loadingIndicator = document.getElementById('loading-indicator');
-                if (loadingIndicator) {
-                    loadingIndicator.style.display = 'block';
-                }
-
-                // Формируем параметры запроса
-                const params = new URLSearchParams({
-                    page: currentPage
-                });
-
-                // Добавляем фильтры
-                if (currentFilters.category) {
-                    params.append('category', currentFilters.category);
-                }
-                if (currentFilters.sort) {
-                    params.append('sort', currentFilters.sort);
-                }
-                if (currentFilters.period) {
-                    params.append('period', currentFilters.period);
-                }
-
-                fetch(`/news-ing?${params.toString()}`, {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
+                    // Обновить кнопку "Показать еще"
+                    const loadMoreBtn = document.getElementById('load-more-container');
+                    if (loadMoreBtn) {
+                        loadMoreBtn.style.display = this.hasMore ? 'block' : 'none';
                     }
-                })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Network response was not ok');
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.html) {
-                            const newsList = document.getElementById('news-list');
 
-                            if (isInitialLoad && currentPage === 1) {
-                                newsList.innerHTML = data.html;
-                                isInitialLoad = false;
-                            } else {
-                                newsList.insertAdjacentHTML('beforeend', data.html);
-                            }
-                        }
+                    this.updateUrl();
 
-                        hasMorePages = data.hasMore;
-                        if (currentPage === 1) saveInitialState();
-                        currentPage++;
-                    })
-                    .catch(error => {
-                        console.error('Error loading more news:', error);
-                        if (currentPage > 1) currentPage--;
-                    })
-                    .finally(() => {
-                        isLoading = false;
-                        const loadingIndicator = document.getElementById('loading-indicator');
-                        if (loadingIndicator) {
-                            loadingIndicator.style.display = 'none';
-                        }
-                    });
-            };
-
-            // Добавляем обработчик скролла
-            window.addEventListener('scroll', checkScroll);
-            window.addEventListener('touchmove', checkScroll);
-
-            // Инициализация
-            document.querySelectorAll('.tabs__list .tab').forEach((tab, index) => {
-                if (index === 0) {
-                    tab.classList.add('active');
+                } catch (error) {
+                    console.error('Error loading news:', error);
+                } finally {
+                    this.isLoading = false;
+                    this.hideLoader();
                 }
-            });
+            }
 
-            // Загружаем первую порцию контента
-            setTimeout(checkScroll, 500);
+            updateUrl() {
+                const params = new URLSearchParams();
+                if (this.currentCategory) params.set('category_id', this.currentCategory);
+                if (this.currentSort !== 'published_at') params.set('sort_by', this.currentSort);
+                if (this.currentOrder !== 'desc') params.set('sort_order', this.currentOrder);
+                if (this.currentPeriod !== 'all') params.set('period', this.currentPeriod);
+
+                const newUrl = `${window.location.pathname}?${params}`;
+                window.history.replaceState({}, '', newUrl);
+            }
+
+            showLoader() {
+                document.getElementById('loading-indicator').style.display = 'block';
+                if (document.getElementById('load-more-btn')) {
+                    document.getElementById('load-more-btn').disabled = true;
+                }
+            }
+
+            hideLoader() {
+                document.getElementById('loading-indicator').style.display = 'none';
+                if (document.getElementById('load-more-btn')) {
+                    document.getElementById('load-more-btn').disabled = false;
+                }
+            }
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            new NewsLoader();
         });
     </script>
 @endpush

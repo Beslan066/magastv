@@ -256,7 +256,7 @@
 .radio-slider-navigation {
     position: absolute;
     z-index: 10;
-    bottom: 8%;
+    bottom: 20%;
     left: 52px;
     display: flex;
     align-items: center;
