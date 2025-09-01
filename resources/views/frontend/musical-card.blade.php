@@ -43,7 +43,7 @@
 
                         <div style="display: flex; flex-direction: column;">
                             <span style="margin-bottom: 20px;"><b>Телефон для справок: 8 (963) – 172 – 65 – 59</b></span>
-                            <span style="margin-bottom: 20px;"><b>Для оплаты введите сумму и нажмите на кнопку "Заплатить", далее следуйте инструкции.</b></span>
+                            <span style="margin-bottom: 20px;"><b>Для оплаты сканируйте QR  код или нажмите на кнопку «Оплатить»</b></span>
                         </div>
 
                         <div class="payment-block">

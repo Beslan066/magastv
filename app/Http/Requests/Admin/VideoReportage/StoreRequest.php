@@ -32,7 +32,7 @@ class StoreRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'nullable|string',
+            'lead' => 'nullable',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
 //            'video' => 'required_without:uploaded_video_path|file|mimetypes:video/mp4,video/quicktime,video/ogg,video/x-qt|max:204800', // 200MB
@@ -62,9 +62,6 @@ class StoreRequest extends FormRequest
 
             // Lead
             'lead.required' => __('Лид обязателен для заполнения'),
-            'lead.string' => __('Лид должен быть строкой'),
-            'lead.max' => __('Лид не должен превышать 255 символов'),
-
 
             // Image
             'image.string' => __('Изображение должно быть строкой'),

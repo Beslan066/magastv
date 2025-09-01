@@ -328,11 +328,11 @@
                                 Новости
                             </a>
                         </li>
-{{--                        <li class="header__item">--}}
-{{--                            <a href="{{route('newsIng')}}">--}}
-{{--                                Хоамаш--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
+                        <li class="header__item">
+                            <a href="{{route('newsIng')}}">
+                                Хоамаш
+                            </a>
+                        </li>
                         <li class="header__item">
                             <a href="{{route('tvProgram')}}">
                                 Телепрограмма

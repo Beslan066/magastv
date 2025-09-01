@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Transfer;
+namespace App\Http\Requests\Admin\Tiding;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -19,23 +19,25 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
+    public function rules(): array
     {
+
+        $videoReportageId = $this->route('video_reportage');
+
+
         return [
             'title' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:news,slug',
-            'lead' => 'nullable|string|max:255',
-            'published' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'slider_image' => 'nullable|image|mimes:jpg,jpeg,webp,png',
-            'slider_video' => 'nullable|file|mimes:mp4,avi,mov,wmv|max:215040', // Максимум 210MB
+            'slug' => 'nullable|string|max:255',
+            'lead' => 'nullable|string',
+            'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
+            'video' => 'nullable',
+            'status' => 'nullable',
             'user_id' => 'required|exists:users,id',
-            'category_id' => 'required|exists:categories,id',
             'deleter_id' => 'nullable|exists:users,id',
-            'main_material' => 'nullable',
-            'age_restriction_id' => 'nullable'
+            'published_at' => 'nullable|date_format:Y-m-d\TH:i',
         ];
     }
+
     public function messages()
     {
         return [
@@ -54,29 +56,19 @@ class StoreRequest extends FormRequest
             'lead.string' => __('Лид должен быть строкой'),
             'lead.max' => __('Лид не должен превышать 255 символов'),
 
-            // published
-            'published.required' => __('По будням обязателен для заполнения'),
-            'published.string' => __('По будням должен быть строкой'),
-            'published.max' => __('По будням не должен превышать 255 символов'),
-
-
-            // Image
-            'image.string' => __('Изображение должно быть строкой'),
-            'image.max' => __('Ссылка на изображение не должна превышать 255 символов'),
-
 
             // User ID
             'user_id.exists' => __('Указанный пользователь не найден'),
 
-            // Category ID
-            'category_id.exists' => __('Указанная категория не найдена'),
-
             // Deleter ID
             'deleter_id.exists' => __('Указанный удалитель не найден'),
 
-            'slider_video.file' => __('Видео должно быть файлом'),
-            'slider_video.mimes' => __('Видео должно быть в формате: mp4, avi, mov, wmv'),
-            'slider_video.max' => __('Размер видео не должен превышать 210MB'),
+            'published_at.required' => 'Укажите дату публикации.',
+            'published_at.date_format' => 'Некорректный формат даты, используйте формат ГГГГ-ММ-ДДTЧЧ:ММ.',
+
+            'video.required' => 'Пожалуйста, загрузите видеофайл',
+//            'video.max' => 'Размер видео не должен превышать 200MB',
+//            'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
         ];
     }
 }

@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:255',
             'slug' => 'nullable|string|max:255',
-            'lead' => 'nullable|string',
+            'lead' => 'nullable',
             'content' => 'nullable|string',
             'preview' => 'nullable|image|mimes:jpg,jpeg,webp,png',
             'video' => 'nullable',
@@ -61,11 +61,7 @@ class UpdateRequest extends FormRequest
             'slug.string' => __('URL-адрес должен быть строкой'),
             'slug.max' => __('URL-адрес не должен превышать 255 символов'),
             'slug.unique' => __('Такой URL-адрес уже используется'),
-
-            // Lead
-            'lead.required' => __('Лид обязателен для заполнения'),
-            'lead.string' => __('Лид должен быть строкой'),
-            'lead.max' => __('Лид не должен превышать 255 символов'),
+            
 
 
             // Image

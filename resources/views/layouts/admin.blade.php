@@ -146,6 +146,13 @@
                     </li>
 
                     <li class="menu-item">
+                        <a href="{{route('tidings.index')}}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxl-firebase"></i>
+                            <div class="text-truncate" data-i18n="Basic">Хоамаш</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
                         <a href="{{route('tv-show-type.index')}}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-tag"></i>
                             <div class="text-truncate" data-i18n="Basic">Типы телепередач</div>

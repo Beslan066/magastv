@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\RadioShowTypeController;
 use App\Http\Controllers\Admin\RadioTransferController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SupervisorController;
+use App\Http\Controllers\Admin\TidingController;
 use App\Http\Controllers\Admin\TransferController;
 use App\Http\Controllers\Admin\TvProgramController;
 use App\Http\Controllers\Admin\TvShowTypeController;
@@ -129,6 +130,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'middleware' => 'auth
                 'update' => 'tv-programs.update',
                 'destroy' => 'tv-programs.destroy',
             ]);
+
+        Route::resource('/tidings', TidingController::class);
+
 
         Route::resource('/radio-transfers', RadioTransferController::class)
             ->names([
