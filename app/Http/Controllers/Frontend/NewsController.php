@@ -274,8 +274,16 @@ class NewsController extends Controller
         $contentType = $request->get('content', 'all');
         $page = $request->get('page', 1);
 
-        // Основной запрос для новостей
-        $query = Tiding::query()->where('status', 1);
+        // Получаем главный пост (самую последнюю новость)
+        $mainPost = Tiding::query()
+            ->where('status', 1)
+            ->orderBy('published_at', 'desc')
+            ->first();
+
+        // Основной запрос для tidings, исключая mainPost
+        $query = Tiding::query()
+            ->where('status', 1)
+            ->where('id', '!=', $mainPost->id); // Исключаем главный пост
 
         // Применяем фильтр по периоду
         if ($period !== 'all') {
@@ -317,45 +325,51 @@ class NewsController extends Controller
 
         // Если это AJAX-запрос для подгрузки
         if ($request->ajax()) {
-            $news = $query->paginate(6, ['*'], 'page', $page);
+            $tidings = $query->paginate(6, ['*'], 'page', $page);
 
             $html = '';
-            foreach ($news as $post) {
-                $html .= $this->generateNewsItemHtml($post);
+            foreach ($tidings as $tiding) {
+                $html .= $this->generateTidingItemHtml($tiding);
             }
 
             return response()->json([
                 'html' => $html,
-                'hasMore' => $news->hasMorePages()
+                'hasMore' => $tidings->hasMorePages()
             ]);
         }
 
         // Основной запрос для первой загрузки
-        $mainPost = Tiding::query()
-            ->where('status', 1)
-            ->orderBy('published_at', 'desc')
-            ->first();
+        $tidings = $query->paginate(6);
 
-        $news = $query->paginate(6);
+        // Популярные Хоамаш
+
+        $popularItems = Tiding::query()
+            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views')
+            ->where('status', 1)
+            ->where('published_at', '>=', now()->subDays(7))
+            ->orderBy('views', 'desc')
+            ->limit(15)
+            ->get();
 
         return view('frontend.news.ing', [
             'mainPost' => $mainPost,
-            'news' => $news,
+            'tidings' => $tidings,
             'currentSort' => $sort,
             'currentPeriod' => $period,
-            'currentContent' => $contentType
+            'currentContent' => $contentType,
+            'popularItems' => $popularItems,
         ]);
     }
 
-    private function generateNewsItemHtml($post)
+    private function generateTidingItemHtml($tiding)
     {
-        $isVideo = $post->type === 'video';
+        $isVideo = $tiding->type === 'video';
 
         return '
-    <li class="news-item news-item--second ' . ($isVideo ? 'news-item--media' : '') . '" data-category="' . ($post->category ?? 'general') . '">
-        <a href="' . route('news.show', $post->id) . '">
+    <li class="news-item news-item--second ' . ($isVideo ? 'news-item--media' : '') . '" data-category="' . ($tiding->category ?? 'general') . '">
+        <a href="' . route('news.show', $tiding->id) . '">
             <div class="news-item__media">
-                <img src="' . asset('storage/public/' . $post->preview) . '" alt="' . $post->title . '">
+                <img src="' . asset('storage/public/' . $tiding->preview) . '" alt="' . $tiding->title . '">
                 ' . ($isVideo ? '
                 <button class="btn-reset news-item--media__btn">
                     <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -366,14 +380,14 @@ class NewsController extends Controller
         </a>
         <div class="news-item__bottom">
             <h6 class="news-item__title">
-                <a href="' . route('news.show', $post->id) . '">' . $post->title . '</a>
+                <a href="' . route('news.show', $tiding->id) . '">' . $tiding->title . '</a>
             </h6>
             <div class="news-item__descr">
-                <p>' . $post->lead . '</p>
+                <p>' . $tiding->lead . '</p>
             </div>
             <div class="news-item__info">
-                <time datetime="' . $post->published_at->format('Y-m-d H:i') . '" class="news-item_time">
-                    ' . $post->published_at->format('d M, H:i') . '
+                <time datetime="' . $tiding->published_at . '" class="news-item_time">
+                    ' . $tiding->formated_published_at . '
                 </time>
                 <div class="news-item_views">
                     <div class="item-views__icon">
@@ -381,7 +395,7 @@ class NewsController extends Controller
                             <path d="M7 0.333496C11.6523 0.333496 13.9857 5.21553 14 5.24561C14 5.24561 11.6667 9.6665 7 9.6665C2.33333 9.6665 0 5.24561 0 5.24561C0.0143304 5.21553 2.34771 0.333496 7 0.333496ZM7 2.6665C5.71134 2.6665 4.66699 3.71182 4.66699 5.00049C4.66717 6.289 5.71144 7.3335 7 7.3335C8.28856 7.3335 9.33283 6.289 9.33301 5.00049C9.33301 3.71182 8.28866 2.6665 7 2.6665Z"/>
                         </svg>
                     </div>
-                    <span>' . ($post->views ?? 0) . '</span>
+                    <span>' . ($tiding->views ?? 0) . '</span>
                 </div>
             </div>
         </div>

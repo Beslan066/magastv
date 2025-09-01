@@ -61,7 +61,7 @@ class UpdateRequest extends FormRequest
             'slug.string' => __('URL-адрес должен быть строкой'),
             'slug.max' => __('URL-адрес не должен превышать 255 символов'),
             'slug.unique' => __('Такой URL-адрес уже используется'),
-            
+
 
 
             // Image
