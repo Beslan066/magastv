@@ -223,7 +223,7 @@
 
                                                 <button class="btn-reset player__controls_btn player__controls_btn--play" id="play-pause-btn">
                                                     <!-- Иконка PLAY (по умолчанию видима) -->
-                                                    <svg class="play-svg" width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <svg class="play-svg" width="14" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z" fill="white"/>
                                                     </svg>
 

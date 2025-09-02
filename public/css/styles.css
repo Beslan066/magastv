@@ -1225,7 +1225,7 @@ body.active {
 }
 
 .player__controls {
-    width: 100%;
+    width: 88%;
     display: flex;
     justify-content: space-between;
     align-items: center;
