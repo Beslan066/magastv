@@ -298,7 +298,6 @@
 @endsection
 
 @push('scripts')
-    <script defer src="{{asset('js/radio-slider.js')}}"></script>
     <script defer src="{{asset('js/radio-player.js')}}"></script>
     <script defer src="{{asset('js/radio.js')}}"></script>
 
