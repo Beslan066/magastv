@@ -1,4 +1,3 @@
-// radio-player.js
 document.addEventListener('DOMContentLoaded', function() {
     const audio = document.getElementById('radio-stream');
     const playPauseBtn = document.getElementById('play-pause-btn');
@@ -13,70 +12,80 @@ document.addEventListener('DOMContentLoaded', function() {
     const volumeBtn = document.querySelector('.player__mute');
     const volumeSlider = document.querySelector('.range-input');
 
-    console.log('Audio element initialized');
+    console.log('Audio player initialized');
 
-    // Устанавливаем CORS атрибут для аудио
-    audio.crossOrigin = "anonymous";
+    // Пробуем разные источники аудио
+    const audioSources = [
+        '/proxy/audio',
+        'http://77.87.97.62:8086/ingradio',
+        'http://77.87.97.62:8086/ingradio.mp3'
+    ];
+
+    let currentSourceIndex = 0;
+
+    // Функция для установки источника аудио
+    function setAudioSource(source) {
+        audio.src = source;
+        audio.crossOrigin = "anonymous";
+        audio.load();
+        console.log('Setting audio source to:', source);
+    }
+
+    // Инициализируем первый источник
+    setAudioSource(audioSources[0]);
 
     function togglePlayback() {
         if (audio.paused) {
             console.log('Attempting to play...');
-
-            // Показываем состояние загрузки
             playPauseBtn.classList.add('loading');
 
             audio.play()
                 .then(() => {
                     console.log('Playback started successfully');
-                    playSvg.style.display = 'none';
-                    pauseSvg.style.display = 'block';
+                    updatePlayButtonState(true);
                     playPauseBtn.classList.remove('loading');
-                    playPauseBtn.classList.add('playing');
                 })
                 .catch(error => {
                     console.error('Playback failed:', error);
                     playPauseBtn.classList.remove('loading');
 
-                    // Пробуем альтернативный источник
-                    tryAlternativeSource();
+                    // Пробуем следующий источник
+                    tryNextAudioSource();
                 });
         } else {
             audio.pause();
-            playSvg.style.display = 'block';
-            pauseSvg.style.display = 'none';
-            playPauseBtn.classList.remove('playing');
+            updatePlayButtonState(false);
             console.log('Playback paused');
         }
     }
 
-    function tryAlternativeSource() {
-        console.log('Trying alternative source...');
+    function tryNextAudioSource() {
+        currentSourceIndex++;
 
-        // Сохраняем текущий volume
-        const currentVolume = audio.volume;
-        const currentTime = audio.currentTime;
+        if (currentSourceIndex < audioSources.length) {
+            console.log('Trying next source:', audioSources[currentSourceIndex]);
+            setAudioSource(audioSources[currentSourceIndex]);
 
-        // Пробуем прямой URL
-        audio.src = 'http://77.87.97.62:8086/ingradio';
-        audio.load();
+            // Даем время на загрузку нового источника
+            setTimeout(() => {
+                togglePlayback();
+            }, 1000);
+        } else {
+            console.error('All audio sources failed');
+            alert('Не удалось воспроизвести радио. Все источники недоступны.');
+        }
+    }
 
-        setTimeout(() => {
-            audio.play()
-                .then(() => {
-                    console.log('Alternative source working!');
-                    playSvg.style.display = 'none';
-                    pauseSvg.style.display = 'block';
-                    playPauseBtn.classList.add('playing');
-
-                    // Восстанавливаем volume и время
-                    audio.volume = currentVolume;
-                    audio.currentTime = currentTime;
-                })
-                .catch(error => {
-                    console.error('Alternative source also failed:', error);
-                    alert('Не удалось воспроизвести радио. Возможно, проблема с подключением или радио поток временно недоступен.');
-                });
-        }, 1000);
+    function updatePlayButtonState(isPlaying) {
+        if (isPlaying) {
+            playSvg.style.display = 'none';
+            pauseSvg.style.display = 'block';
+            playPauseBtn.classList.add('playing');
+        } else {
+            playSvg.style.display = 'block';
+            pauseSvg.style.display = 'none';
+            playPauseBtn.classList.remove('playing');
+        }
     }
 
     // Обработчик клика
@@ -85,25 +94,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработчики событий аудио
     audio.addEventListener('play', () => {
         console.log('Audio play event fired');
-        playSvg.style.display = 'none';
-        pauseSvg.style.display = 'block';
-        playPauseBtn.classList.add('playing');
+        updatePlayButtonState(true);
     });
 
     audio.addEventListener('pause', () => {
         console.log('Audio pause event fired');
-        playSvg.style.display = 'block';
-        pauseSvg.style.display = 'none';
-        playPauseBtn.classList.remove('playing');
+        updatePlayButtonState(false);
     });
 
     audio.addEventListener('error', (e) => {
-        console.error('Audio error event:', e);
-        console.error('Error details:', audio.error);
-
-        playSvg.style.display = 'block';
-        pauseSvg.style.display = 'none';
-        playPauseBtn.classList.remove('playing', 'loading');
+        console.error('Audio error:', audio.error);
+        updatePlayButtonState(false);
+        playPauseBtn.classList.remove('loading');
     });
 
     // Управление громкостью
@@ -117,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
             audio.volume = e.target.value / 100;
         });
 
+        // Устанавливаем начальную громкость
         audio.volume = 0.7;
         volumeSlider.value = 70;
     }
