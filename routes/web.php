@@ -36,13 +36,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/proxy/live-stream', function() {
-    $streamUrl = 'https://public.mediacdn.ru/magas/';
-    return response()->streamDownload(function() use ($streamUrl) {
-        readfile($streamUrl);
-    }, 'stream.m3u8', [
-        'Content-Type' => 'application/x-mpegURL',
-        'Access-Control-Allow-Origin' => '*'
+Route::get('/proxy/audio', function() {
+    $streamUrl = 'http://77.87.97.62:8086/ingradio';
+
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\r\n",
+            'timeout' => 30
+        ]
+    ]);
+
+    return response()->stream(function() use ($streamUrl, $context) {
+        $stream = fopen($streamUrl, 'rb', false, $context);
+        if ($stream) {
+            while (!feof($stream)) {
+                echo fread($stream, 8192);
+                ob_flush();
+                flush();
+                if (connection_aborted()) break;
+            }
+            fclose($stream);
+        }
+    }, 200, [
+        'Content-Type' => 'audio/mpeg',
+        'Cache-Control' => 'no-cache, no-store',
+        'Pragma' => 'no-cache',
+        'Access-Control-Allow-Origin' => '*',
+        'Access-Control-Allow-Headers' => 'Content-Type'
     ]);
 });
 

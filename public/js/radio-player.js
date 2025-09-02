@@ -14,21 +14,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('Audio player initialized');
 
-    // Пробуем разные источники аудио
+    // Корректные источники аудио
     const audioSources = [
-        '/proxy/audio',
-        'http://77.87.97.62:8086/ingradio',
-        'http://77.87.97.62:8086/ingradio.mp3'
+        '/proxy/audio', // Прокси через ваш сервер
+        'http://77.87.97.62:8086/ingradio', // Прямая ссылка
+        'https://public.mediacdn.ru/magas/' // Альтернативный источник
     ];
 
     let currentSourceIndex = 0;
 
-    // Функция для установки источника аудио
     function setAudioSource(source) {
         audio.src = source;
         audio.crossOrigin = "anonymous";
         audio.load();
         console.log('Setting audio source to:', source);
+
+        // Сбрасываем состояние кнопки
+        updatePlayButtonState(false);
     }
 
     // Инициализируем первый источник
@@ -39,19 +41,23 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Attempting to play...');
             playPauseBtn.classList.add('loading');
 
-            audio.play()
-                .then(() => {
-                    console.log('Playback started successfully');
-                    updatePlayButtonState(true);
-                    playPauseBtn.classList.remove('loading');
-                })
-                .catch(error => {
-                    console.error('Playback failed:', error);
-                    playPauseBtn.classList.remove('loading');
+            const playPromise = audio.play();
 
-                    // Пробуем следующий источник
-                    tryNextAudioSource();
-                });
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        console.log('Playback started successfully');
+                        updatePlayButtonState(true);
+                        playPauseBtn.classList.remove('loading');
+                    })
+                    .catch(error => {
+                        console.error('Playback failed:', error);
+                        playPauseBtn.classList.remove('loading');
+
+                        // Пробуем следующий источник
+                        tryNextAudioSource();
+                    });
+            }
         } else {
             audio.pause();
             updatePlayButtonState(false);
@@ -68,11 +74,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Даем время на загрузку нового источника
             setTimeout(() => {
-                togglePlayback();
+                audio.play().catch(e => {
+                    console.error('Failed with new source:', e);
+                    if (currentSourceIndex < audioSources.length - 1) {
+                        tryNextAudioSource();
+                    }
+                });
             }, 1000);
         } else {
             console.error('All audio sources failed');
             alert('Не удалось воспроизвести радио. Все источники недоступны.');
+            playPauseBtn.classList.remove('loading');
         }
     }
 
@@ -106,6 +118,11 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Audio error:', audio.error);
         updatePlayButtonState(false);
         playPauseBtn.classList.remove('loading');
+
+        // Автоматически пробуем следующий источник при ошибке
+        if (currentSourceIndex < audioSources.length - 1) {
+            tryNextAudioSource();
+        }
     });
 
     // Управление громкостью
@@ -124,6 +141,17 @@ document.addEventListener('DOMContentLoaded', function() {
         volumeSlider.value = 70;
     }
 
-    // Предзагрузка
-    audio.preload = 'auto';
+    // Добавляем обработку сетевых событий
+    audio.addEventListener('loadstart', () => {
+        console.log('Audio loading started');
+    });
+
+    audio.addEventListener('canplay', () => {
+        console.log('Audio can play');
+    });
+
+    audio.addEventListener('stalled', () => {
+        console.log('Audio stalled, trying next source');
+        tryNextAudioSource();
+    });
 });
