@@ -1,76 +1,110 @@
-// radio.js
+// radio-player.js
 document.addEventListener('DOMContentLoaded', function() {
-    function formatTime(seconds) {
-        if (isNaN(seconds)) return '00:00';
-        const minutes = Math.floor(seconds / 60);
-        seconds = Math.floor(seconds % 60);
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const audio = document.getElementById('radio-stream');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const playSvg = playPauseBtn.querySelector('.play-svg');
+    const pauseSvg = playPauseBtn.querySelector('.pause-svg');
+    const volumeBtn = document.querySelector('.player__mute');
+    const volumeSlider = document.querySelector('.range-input');
+
+    console.log('Audio element found:', audio);
+    console.log('Play button found:', playPauseBtn);
+
+    // Проверяем, существуют ли элементы
+    if (!audio || !playPauseBtn) {
+        console.error('Audio or play button not found!');
+        return;
     }
 
-    const audioPlayers = document.querySelectorAll('.radio-item');
+    // Функция для переключения воспроизведения
+    function togglePlayback() {
+        if (audio.paused) {
+            audio.play()
+                .then(() => {
+                    console.log('Playback started');
+                    playSvg.style.display = 'none';
+                    pauseSvg.style.display = 'block';
+                    playPauseBtn.classList.add('playing');
+                })
+                .catch(error => {
+                    console.error('Playback failed:', error);
+                    // Показываем сообщение об ошибке пользователю
+                    alert('Не удалось воспроизвести радио. Пожалуйста, проверьте ваше интернет-соединение.');
+                });
+        } else {
+            audio.pause();
+            playSvg.style.display = 'block';
+            pauseSvg.style.display = 'none';
+            playPauseBtn.classList.remove('playing');
+            console.log('Playback paused');
+        }
+    }
 
-    audioPlayers.forEach(container => {
-        const audio = container.querySelector('.audio');
-        const playBtn = container.querySelector('.radio-item__play_btn');
-        const durationEl = container.querySelector('.duration');
-        const currentTimeEl = container.querySelector('.current-time');
+    // Обработчик клика на кнопку воспроизведения/паузы
+    playPauseBtn.addEventListener('click', togglePlayback);
 
-        console.log('Audio element found:', audio);
-        console.log('Audio src:', audio.src);
-
-        // Обработчик клика на кнопку воспроизведения
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playBtn.classList.add('playing');
-            } else {
-                audio.pause();
-                playBtn.classList.remove('playing');
-            }
-        });
-
-        // Обновление времени при загрузке метаданных
-        audio.addEventListener('loadedmetadata', () => {
-            console.log('loadedmetadata event fired');
-            console.log('Audio duration:', audio.duration);
-
-            if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                durationEl.textContent = formatTime(audio.duration);
-                console.log('Duration set to:', formatTime(audio.duration));
-            }
-        });
-
-        // Обновление текущего времени
-        audio.addEventListener('timeupdate', () => {
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        });
-
-        // Альтернативный способ получения длительности
-        audio.addEventListener('canplaythrough', () => {
-            console.log('canplaythrough event fired');
-            if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                durationEl.textContent = formatTime(audio.duration);
-            }
-        });
-
-        // Обработка ошибок
-        audio.addEventListener('error', (e) => {
-            console.error('Audio error:', e);
-            console.error('Error code:', audio.error ? audio.error.code : 'unknown');
-        });
-
-        // Проверка, если метаданные уже загружены
-        setTimeout(() => {
-            console.log('Checking audio readyState:', audio.readyState);
-            if (audio.readyState > 0) {
-                if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                    durationEl.textContent = formatTime(audio.duration);
-                    console.log('Duration set from readyState:', formatTime(audio.duration));
-                }
-            }
-        }, 1000);
-
-        // Принудительная загрузка метаданных
-        audio.load();
+    // Обработчик события окончания загрузки метаданных
+    audio.addEventListener('loadedmetadata', () => {
+        console.log('Audio metadata loaded');
+        console.log('Duration:', audio.duration);
+        console.log('Source:', audio.src);
     });
+
+    // Обработчик события начала воспроизведения
+    audio.addEventListener('play', () => {
+        console.log('Audio started playing');
+        playSvg.style.display = 'none';
+        pauseSvg.style.display = 'block';
+        playPauseBtn.classList.add('playing');
+    });
+
+    // Обработчик события паузы
+    audio.addEventListener('pause', () => {
+        console.log('Audio paused');
+        playSvg.style.display = 'block';
+        pauseSvg.style.display = 'none';
+        playPauseBtn.classList.remove('playing');
+    });
+
+    // Обработчик ошибок воспроизведения
+    audio.addEventListener('error', (e) => {
+        console.error('Audio error:', e);
+        console.error('Error code:', audio.error ? audio.error.code : 'unknown');
+
+        // Сброс состояния кнопки при ошибке
+        playSvg.style.display = 'block';
+        pauseSvg.style.display = 'none';
+        playPauseBtn.classList.remove('playing');
+
+        // Сообщение об ошибке
+        alert('Ошибка при воспроизведении радио потока. Пожалуйста, попробуйте позже.');
+    });
+
+    // Управление громкостью
+    if (volumeBtn && volumeSlider) {
+        volumeBtn.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            volumeBtn.classList.toggle('muted', audio.muted);
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            audio.volume = volumeSlider.value / 100;
+        });
+
+        // Установка начальной громкости
+        audio.volume = 0.7;
+        volumeSlider.value = 70;
+    }
+
+    // Попытка предзагрузки аудио
+    audio.preload = 'metadata';
+
+    // Дополнительная проверка через секунду
+    setTimeout(() => {
+        console.log('Audio readyState after timeout:', audio.readyState);
+        if (audio.readyState === 0) {
+            console.log('Trying to load audio manually...');
+            audio.load();
+        }
+    }, 1000);
 });
