@@ -1,76 +1,69 @@
-// radio.js
+// radio-slider-fixed.js
 document.addEventListener('DOMContentLoaded', function() {
-    function formatTime(seconds) {
-        if (isNaN(seconds)) return '00:00';
-        const minutes = Math.floor(seconds / 60);
-        seconds = Math.floor(seconds % 60);
-        return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    const radioSlider = document.querySelector('.radio-slider');
+
+    if (!radioSlider) return;
+
+    const wrapper = radioSlider.querySelector('.radio-slider__wrapper');
+    const slides = radioSlider.querySelectorAll('.radio-slide');
+    const prevBtn = radioSlider.querySelector('.radio-slider-btn--prev');
+    const nextBtn = radioSlider.querySelector('.radio-slider-btn--next');
+    const pagination = radioSlider.querySelector('.radio-slider-pagination');
+
+    if (!slides.length) return;
+
+    let currentSlide = 0;
+
+    function updateSlider() {
+        wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+        // Обновляем пагинацию
+        if (pagination) {
+            pagination.textContent = `${currentSlide + 1}/${slides.length}`;
+        }
+
+        // Обновляем состояние кнопок
+        if (prevBtn) {
+            prevBtn.disabled = currentSlide === 0;
+        }
+        if (nextBtn) {
+            nextBtn.disabled = currentSlide === slides.length - 1;
+        }
     }
 
-    const audioPlayers = document.querySelectorAll('.radio-item');
+    // Инициализация
+    wrapper.style.display = 'flex';
+    wrapper.style.transition = 'transform 0.3s ease';
 
-    audioPlayers.forEach(container => {
-        const audio = container.querySelector('.audio');
-        const playBtn = container.querySelector('.radio-item__play_btn');
-        const durationEl = container.querySelector('.duration');
-        const currentTimeEl = container.querySelector('.current-time');
-
-        console.log('Audio element found:', audio);
-        console.log('Audio src:', audio.src);
-
-        // Обработчик клика на кнопку воспроизведения
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playBtn.classList.add('playing');
-            } else {
-                audio.pause();
-                playBtn.classList.remove('playing');
-            }
-        });
-
-        // Обновление времени при загрузке метаданных
-        audio.addEventListener('loadedmetadata', () => {
-            console.log('loadedmetadata event fired');
-            console.log('Audio duration:', audio.duration);
-
-            if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                durationEl.textContent = formatTime(audio.duration);
-                console.log('Duration set to:', formatTime(audio.duration));
-            }
-        });
-
-        // Обновление текущего времени
-        audio.addEventListener('timeupdate', () => {
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        });
-
-        // Альтернативный способ получения длительности
-        audio.addEventListener('canplaythrough', () => {
-            console.log('canplaythrough event fired');
-            if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                durationEl.textContent = formatTime(audio.duration);
-            }
-        });
-
-        // Обработка ошибок
-        audio.addEventListener('error', (e) => {
-            console.error('Audio error:', e);
-            console.error('Error code:', audio.error ? audio.error.code : 'unknown');
-        });
-
-        // Проверка, если метаданные уже загружены
-        setTimeout(() => {
-            console.log('Checking audio readyState:', audio.readyState);
-            if (audio.readyState > 0) {
-                if (audio.duration !== Infinity && !isNaN(audio.duration)) {
-                    durationEl.textContent = formatTime(audio.duration);
-                    console.log('Duration set from readyState:', formatTime(audio.duration));
-                }
-            }
-        }, 1000);
-
-        // Принудительная загрузка метаданных
-        audio.load();
+    slides.forEach(slide => {
+        slide.style.flex = '0 0 100%';
+        slide.style.width = '100%';
     });
+
+    // Обработчики событий
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlider();
+            }
+        });
+    }
+
+    if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlider();
+            }
+        });
+    }
+
+    // Инициализируем пагинацию
+    if (pagination) {
+        pagination.textContent = `1/${slides.length}`;
+    }
+
+    // Обновляем состояние кнопок при инициализации
+    updateSlider();
 });
