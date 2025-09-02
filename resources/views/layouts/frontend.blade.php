@@ -313,7 +313,7 @@
             <div class="header__bottom_inner">
                 <div class="header__logo">
                     <a href="{{route('home')}}">
-                        <img src="{{asset('assets/img/logo.png')}}" alt="Logotype">
+                        <img src="{{asset('assets/img/logo.svg')}}" alt="Logotype">
                     </a>
                 </div>
                 <nav class="header__nav">
