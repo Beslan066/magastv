@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Корректные источники аудио
     const audioSources = [
-        '/proxy/audio', // Прокси через ваш сервер
-        'http://77.87.97.62:8086/ingradio', // Прямая ссылка
-        'https://public.mediacdn.ru/magas/' // Альтернативный источник
+        '/proxy/audio',
+        'http://77.87.97.62:8086/ingradio',
+        'https://public.mediacdn.ru/magas/'
     ];
 
     let currentSourceIndex = 0;
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.load();
         console.log('Setting audio source to:', source);
 
-        // Сбрасываем состояние кнопки
+        // Сбрасываем состояние кнопки (показываем play)
         updatePlayButtonState(false);
     }
 
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 playPromise
                     .then(() => {
                         console.log('Playback started successfully');
-                        updatePlayButtonState(true);
+                        updatePlayButtonState(true); // Меняем на pause
                         playPauseBtn.classList.remove('loading');
                     })
                     .catch(error => {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         } else {
             audio.pause();
-            updatePlayButtonState(false);
+            updatePlayButtonState(false); // Меняем на play
             console.log('Playback paused');
         }
     }
@@ -90,10 +90,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updatePlayButtonState(isPlaying) {
         if (isPlaying) {
+            // Когда играет - показываем PAUSE, скрываем PLAY
             playSvg.style.display = 'none';
             pauseSvg.style.display = 'block';
             playPauseBtn.classList.add('playing');
         } else {
+            // Когда пауза - показываем PLAY, скрываем PAUSE
             playSvg.style.display = 'block';
             pauseSvg.style.display = 'none';
             playPauseBtn.classList.remove('playing');
@@ -106,17 +108,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработчики событий аудио
     audio.addEventListener('play', () => {
         console.log('Audio play event fired');
-        updatePlayButtonState(true);
+        updatePlayButtonState(true); // Показываем pause
     });
 
     audio.addEventListener('pause', () => {
         console.log('Audio pause event fired');
-        updatePlayButtonState(false);
+        updatePlayButtonState(false); // Показываем play
     });
 
     audio.addEventListener('error', (e) => {
         console.error('Audio error:', audio.error);
-        updatePlayButtonState(false);
+        updatePlayButtonState(false); // Показываем play при ошибке
         playPauseBtn.classList.remove('loading');
 
         // Автоматически пробуем следующий источник при ошибке
@@ -154,4 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Audio stalled, trying next source');
         tryNextAudioSource();
     });
+
+    // Инициализируем правильное состояние кнопки
+    updatePlayButtonState(false); // Гарантируем, что показывается play
 });
