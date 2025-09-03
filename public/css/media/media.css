@@ -629,6 +629,21 @@
     .news-item__bottom {
         height: unset;
     }
+
+    .programs-slide__title {
+        margin-bottom: unset;
+    }
+
+    .programs-slide__text {
+        margin-bottom: unset;
+    }
+    .programs-slide__info {
+        gap: 6px;
+    }
+
+    .programs-slide__text {
+        gap: 8px;
+    }
 }
 
 @media (max-width: 320px) {
