@@ -17,7 +17,7 @@
                             <div class="news-content__news-block">
                                 <ul class="list-reset news-block__list news-block__list--second" id="newsList">
                                     @if(isset($mainPost))
-                                        <li class="news-item news-item--second main-news-item" data-category="society">
+                                        <li class="news-item news-item--second main-news-item" data-category="society" id="mainNewsItem">
                                             <a href="{{ route('news.show', $mainPost->id) }}">
                                                 <div class="news-item__media">
                                                     <img src="{{ asset('storage/public/' . $mainPost->preview) }}" alt="{{ $mainPost->title }}">
@@ -125,15 +125,22 @@
                 content: '{{ $currentContent }}'
             };
 
+            // Сохраняем исходный HTML главного поста
+            const mainNewsItem = document.querySelector('.main-news-item');
+            const mainNewsItemHtml = mainNewsItem ? mainNewsItem.outerHTML : '';
+
             // Вечная подгрузка при скролле
             window.addEventListener('scroll', function() {
                 if (isLoading || !hasMore) return;
 
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-                // Сброс при поднятии наверх
+                // Сброс при поднятии наверх (только если мы действительно вверху)
                 if (scrollTop < 100) {
-                    resetToFirstPage();
+                    // Не сбрасываем полностью, а просто позволяем загрузить с начала
+                    if (currentPage > 1) {
+                        resetToFirstPage();
+                    }
                     return;
                 }
 
@@ -152,7 +159,6 @@
 
                 document.getElementById('loadingIndicator').style.display = 'block';
 
-                // ИСПРАВЛЕННЫЙ URL - используем правильный роут news-inh
                 fetch(`/news-inh?page=${currentPage}&${new URLSearchParams(currentFilters)}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -175,12 +181,17 @@
                     });
             }
 
-            // Сброс к первой странице
+            // Сброс к первой странице (только обычные новости, главная остается)
             function resetToFirstPage() {
+                isLoading = true;
                 currentPage = 1;
                 hasMore = true;
 
-                // Обновляем список tidings
+                // Сохраняем главный пост
+                const newsList = document.getElementById('newsList');
+                const mainItem = newsList.querySelector('.main-news-item');
+
+                // Обновляем только обычные новости
                 fetch(`/news-inh?page=1&${new URLSearchParams(currentFilters)}`, {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest'
@@ -189,20 +200,21 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.html) {
-                            document.getElementById('newsList').innerHTML = data.html;
+                            // Удаляем все обычные новости, оставляя только главную
+                            const regularItems = newsList.querySelectorAll('.news-item:not(.main-news-item)');
+                            regularItems.forEach(item => item.remove());
+
+                            // Добавляем первую страницу обычных новостей
+                            newsList.insertAdjacentHTML('beforeend', data.html);
                         }
                         hasMore = data.hasMore;
+                        isLoading = false;
                     })
                     .catch(error => {
                         console.error('Error resetting tidings:', error);
+                        isLoading = false;
                     });
             }
-
-            // Переключение фильтров
-            document.getElementById('filtersToggle').addEventListener('click', function() {
-                const filtersPanel = document.getElementById('filtersPanel');
-                filtersPanel.style.display = filtersPanel.style.display === 'none' ? 'block' : 'none';
-            });
 
             // Обработка формы фильтров
             document.getElementById('newsFilterForm').addEventListener('submit', function(e) {
@@ -215,40 +227,46 @@
                     content: formData.get('content')
                 };
 
-                // Сбрасываем пагинацию и загружаем с новыми фильтрами
+                // Полный сброс с фильтрами
                 currentPage = 0;
                 hasMore = true;
-                loadMoreTidings();
+
+                // Полностью перезагружаем список
+                reloadAllTidings();
 
                 // Скрываем панель фильтров
                 document.getElementById('filtersPanel').style.display = 'none';
             });
 
-            // Инициализация dropdown
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                const button = dropdown.querySelector('.dropdown__button');
-                const list = dropdown.querySelector('.dropdown__list');
-                const input = dropdown.querySelector('.dropdown__input_hidden');
-                const items = dropdown.querySelectorAll('.dropdown__list-item');
+            // Полная перезагрузка всех tidings
+            function reloadAllTidings() {
+                isLoading = true;
+                document.getElementById('loadingIndicator').style.display = 'block';
 
-                button.addEventListener('click', function() {
-                    list.style.display = list.style.display === 'block' ? 'none' : 'block';
-                });
+                const newsList = document.getElementById('newsList');
 
-                items.forEach(item => {
-                    item.addEventListener('click', function() {
-                        input.value = this.getAttribute('data-value');
-                        button.textContent = this.textContent;
-                        list.style.display = 'none';
-                    });
-                });
-
-                document.addEventListener('click', function(e) {
-                    if (!dropdown.contains(e.target)) {
-                        list.style.display = 'none';
+                fetch(`/news-inh?page=1&${new URLSearchParams(currentFilters)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
                     }
-                });
-            });
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.html) {
+                            // Полностью заменяем содержимое, но сохраняем структуру
+                            newsList.innerHTML = mainNewsItemHtml + data.html;
+                        }
+                        hasMore = data.hasMore;
+                        isLoading = false;
+                        document.getElementById('loadingIndicator').style.display = 'none';
+                        currentPage = 1;
+                    })
+                    .catch(error => {
+                        console.error('Error reloading tidings:', error);
+                        isLoading = false;
+                        document.getElementById('loadingIndicator').style.display = 'none';
+                    });
+            }
         });
     </script>
 @endpush

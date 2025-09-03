@@ -280,10 +280,14 @@ class NewsController extends Controller
             ->orderBy('published_at', 'desc')
             ->first();
 
-        // Основной запрос для tidings, исключая mainPost
+        // Основной запрос для tidings
         $query = Tiding::query()
-            ->where('status', 1)
-            ->where('id', '!=', $mainPost->id); // Исключаем главный пост
+            ->where('status', 1);
+
+        // Исключаем главный пост только для подгрузки (page > 1)
+        if ($page > 1 && $mainPost) {
+            $query->where('id', '!=', $mainPost->id);
+        }
 
         // Применяем фильтр по периоду
         if ($period !== 'all') {
@@ -338,11 +342,10 @@ class NewsController extends Controller
             ]);
         }
 
-        // Основной запрос для первой загрузки
-        $tidings = $query->paginate(6);
+        // Основной запрос для первой загрузки (включаем главный пост)
+        $tidings = $query->where('id', '!=', $mainPost->id)->paginate(6);
 
         // Популярные Хоамаш
-
         $popularItems = Tiding::query()
             ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views')
             ->where('status', 1)
