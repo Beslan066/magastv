@@ -83,9 +83,9 @@
                         </div>
                         <div class="news-content__right">
                             <!-- Правая колонка (реклама и популярное) -->
-                            <div class="ads-block">
+{{--                            <div class="ads-block">--}}
 {{--                                <img src="{{ asset('assets/add.jpg') }}" alt="add">--}}
-                            </div>
+{{--                            </div>--}}
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
                                 <ul class="list-reset popular-sidebar__list">
