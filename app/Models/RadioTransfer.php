@@ -39,4 +39,10 @@ class RadioTransfer extends Model
     {
         return $this->hasMany(RadioBroadcast::class, 'radio_transfer_id', 'id');
     }
+
+    public function getFormattedPublishedAtAttribute()
+    {
+        return $this->created_at->format('d.m.Y');
+    }
+
 }

@@ -644,6 +644,14 @@
     .programs-slide__text {
         gap: 8px;
     }
+
+    .radio-slide .d-flex {
+        height: unset !important;
+    }
+
+    .radio-slide__btns {
+        padding-left: 10px !important;
+    }
 }
 
 @media (max-width: 320px) {

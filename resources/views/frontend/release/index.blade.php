@@ -611,7 +611,7 @@
                     <div class="release__main_right">
 
                         <div class="ads-block">
-                            <img src="./assets/add.jpg" alt="add">
+{{--                            <img src="./assets/add.jpg" alt="add">--}}
                         </div>
                     </div>
                 </div>

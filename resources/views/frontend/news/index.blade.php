@@ -147,7 +147,7 @@
                         </div>
                         <div class="news-content__right">
                             <div class="ads-block">
-                                <img src="{{asset('assets/add.jpg')}}" alt="add">
+{{--                                <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
                             </div>
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>

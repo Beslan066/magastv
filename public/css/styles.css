@@ -1235,7 +1235,6 @@ body.active {
     display: flex;
     align-items: center;
     gap: 15px;
-    width: 100px;
 }
 
 .player__mute svg {

@@ -24,10 +24,9 @@
 
                                                 <div class="radio-slide__mobile-image">
                                                     <img src="{{asset('storage/public/' . $event->image)}}"
-                                                         alt="{{$event->title}}">
+                                                         alt="{{$event->title}}" loading="lazy">
                                                 </div>
-                                                <div
-                                                    style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
+                                                <div class="d-flex" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
                                                     <div class="radio-slide__inner">
                                                         <div class="radio-slide__schedule">
                                                             <span>{{$event->formatted_published_at}}</span>
@@ -122,7 +121,7 @@
                                             <div class="radio-item__image">
                                                 <a href="{{route('radio.transfer.single', $item->id)}}">
                                                     <img src="{{asset('storage/public/' . $item->image)}}"
-                                                         alt="{{$item->title}}">
+                                                         alt="{{$item->title}}" loading="lazy">
                                                 </a>
                                             </div>
                                             <div class="radio-item__bottom">
@@ -160,7 +159,7 @@
                                             <a href="{{route('books.single', $item->id)}}">
                                                 <div class="radio-item__image">
                                                     <img src="{{asset('storage/public/' . $item->image)}}"
-                                                         alt="{{$item->title}}">
+                                                         alt="{{$item->title}}" loading="lazy">
                                                 </div>
                                             </a>
                                             <div class="radio-item__info">
@@ -219,6 +218,10 @@
                                                 </button>
 
                                                 <!-- Аудио элемент должен быть доступен для JS -->
+
+                                            </div>
+
+                                            <div>
                                                 <audio id="radio-stream" src="/proxy/audio"></audio>
 
                                                 <button class="btn-reset player__controls_btn player__controls_btn--play" id="play-pause-btn">

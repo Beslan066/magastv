@@ -87,7 +87,7 @@
                         </div>
                         <div class="live-content__right">
                             <div class="ads-block">
-                                <img src="{{asset('assets/add.jpg')}}" alt="add">
+{{--                                <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
                             </div>
                         </div>
                     </div>

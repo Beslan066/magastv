@@ -22,6 +22,7 @@ use App\Models\VideoReportage;
 use App\Models\VideoTransfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
@@ -271,36 +272,95 @@ HTML;
         ]);
     }
 
+
     public function radio(Request $request)
     {
-        $radioShowTypes = RadioShowType::all();
+        // Кэшируем типы программ на 1 час
+        $radioShowTypes = Cache::remember('radio_show_types', 3600, function () {
+            return RadioShowType::select('id', 'title')->get();
+        });
 
-        $events = RadioNews::query()
-            ->where('status', 1)
-            ->orderBy('id', 'desc')
-            ->get();
+        // Кэшируем события на 5 минут
+        $events = Cache::remember('radio_events_10', 300, function () {
+            return RadioNews::query()
+                ->select('id', 'title', 'lead', 'image', 'published_at')
+                ->where('published_at', '<=', now())
+                ->orderBy('published_at', 'desc')
+                ->take(10)
+                ->get()
+                ->each(function ($item) {
+                    $item->formatted_published_at = Carbon::parse($item->published_at)->format('d.m.Y');
+                });
+        });
 
-        // Фильтрация программ по категории
-        $newsQuery = RadioTransfer::query()
-            ->with('radioShowType');
+        // Фильтрация программ с кэшированием по категории
+        $categoryId = $request->category_id ?? 'all';
+        $cacheKey = 'radio_programs_' . $categoryId . '_6';
 
-        // Если выбрана конкретная категория (не "Все")
-        if ($request->has('category_id') && $request->category_id != 'all') {
-            $newsQuery->where('radio_show_type_id', $request->category_id);
-        }
+        $news = Cache::remember($cacheKey, 300, function () use ($categoryId) {
+            $query = RadioTransfer::query()
+                ->with(['radioShowType' => function($query) {
+                    $query->select('id', 'title');
+                }])
+                ->select('id', 'title', 'image', 'created_at', 'radio_show_type_id')
+                ->where('created_at', '<=', now())
+                ->orderBy('created_at', 'desc');
 
-        $news = $newsQuery->orderBy('id', 'desc')
-            ->limit(6)
-            ->get();
+            if ($categoryId != 'all') {
+                $query->where('radio_show_type_id', $categoryId);
+            }
 
+            return $query->limit(6)
+                ->get()
+                ->each(function ($item) {
+                    $item->formatted_published_at = Carbon::parse($item->created_at)->format('d.m.Y');
+                });
+        });
+
+        // Обработка даты и расписания
         $today = now();
         $selectedDate = $request->date ? Carbon::parse($request->date) : $today;
 
-        $radioShows = RadioShow::with('radioShowType')
-            ->whereDate('program_date', $selectedDate->format('Y-m-d'))
-            ->orderBy('time_range')
-            ->get();
+        // Кэшируем расписание на день
+        $cacheKeyShows = 'radio_shows_' . $selectedDate->format('Y-m-d');
+        $radioShows = Cache::remember($cacheKeyShows, 60, function () use ($selectedDate) {
+            return RadioShow::with(['radioShowType' => function($query) {
+                $query->select('id', 'title');
+            }])
+                ->select('id', 'title', 'time_range', 'program_date', 'radio_show_type_id')
+                ->whereDate('program_date', $selectedDate->format('Y-m-d'))
+                ->get()
+                ->sortBy(function ($show) {
+                    // Извлекаем время начала и преобразуем в сортируемый формат
+                    $startTime = trim(explode('-', $show->time_range)[0]);
+                    return Carbon::createFromFormat('H:i', $startTime)->format('Hi');
+                })
+                ->values()
+                ->each(function ($show) use ($selectedDate) {
+                    // Предварительно вычисляем активное шоу для сегодняшнего дня
+                    if ($selectedDate->isToday()) {
+                        [$startTime, $endTime] = explode('-', $show->time_range);
+                        $start = Carbon::createFromTimeString(trim($startTime));
+                        $end = Carbon::createFromTimeString(trim($endTime));
+                        $now = now();
 
+                        $show->is_active = $now->between($start, $end);
+                        $show->formatted_time = trim($startTime);
+                    } else {
+                        $show->is_active = false;
+                        $show->formatted_time = trim(explode('-', $show->time_range)[0]);
+                    }
+                });
+        });
+
+        // Определяем текущее активное шоу
+        $currentShowId = null;
+        if ($selectedDate->isToday()) {
+            $currentShow = $radioShows->firstWhere('is_active', true);
+            $currentShowId = $currentShow->id ?? null;
+        }
+
+        // Генерируем даты для календаря
         $dates = collect(range(-3, 3))->map(function ($day) use ($today, $selectedDate) {
             $date = $today->copy()->addDays($day);
             return [
@@ -312,16 +372,17 @@ HTML;
             ];
         });
 
-        $currentShowId = null;
-        if ($selectedDate->isToday()) {
-            $currentTime = $today->format('H:i');
-            $currentShow = $radioShows->last(function ($show) use ($currentTime) {
-                return Carbon::parse($show->time_range)->format('H:i') <= $currentTime;
-            });
-            $currentShowId = $currentShow->id ?? null;
-        }
-
-        $books = Audiobook::query()->with('author')->orderBy('id', 'desc')->take(6)->get();
+        // Кэшируем аудиокниги на 1 час
+        $books = Cache::remember('audio_books_6', 3600, function () {
+            return Audiobook::query()
+                ->with(['author' => function($query) {
+                    $query->select('id', 'name');
+                }])
+                ->select('id', 'title', 'image', 'author_id')
+                ->orderBy('id', 'desc')
+                ->take(6)
+                ->get();
+        });
 
         return view('frontend.radio.index', [
             'events' => $events,
@@ -332,8 +393,30 @@ HTML;
             'news' => $news,
             'radioShowTypes' => $radioShowTypes,
             'books' => $books,
-            'selectedCategory' => $request->category_id ?? 'all'
+            'selectedCategory' => $categoryId
         ]);
+    }
+
+    public function clearRadioCache()
+    {
+        Cache::forget('radio_show_types');
+        Cache::forget('radio_events_10');
+        Cache::forget('audio_books_6');
+
+        // Очищаем кэш программ по категориям
+        $categories = RadioShowType::pluck('id');
+        foreach ($categories as $categoryId) {
+            Cache::forget('radio_programs_' . $categoryId . '_6');
+        }
+        Cache::forget('radio_programs_all_6');
+
+        // Очищаем кэш расписания на ближайшие дни
+        for ($i = -3; $i <= 3; $i++) {
+            $date = now()->addDays($i)->format('Y-m-d');
+            Cache::forget('radio_shows_' . $date);
+        }
+
+        return response()->json(['success' => true]);
     }
 
     // Новый метод для AJAX фильтрации

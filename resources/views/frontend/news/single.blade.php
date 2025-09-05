@@ -162,7 +162,7 @@
 
                             <div class="single-news__right-block">
                                 <div class="ads-block">
-                                    <img src="{{asset('assets/add.jpg')}}" alt="add">
+{{--                                    <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
                                 </div>
                                 <div class="content__popular popular-sidebar popular-sidebar--news">
                                     <h3 class="popular-sidebar__title">Популярное</h3>
@@ -485,7 +485,7 @@
 
                         <div class="single-news__right-block video-news__right-block">
                             <div class="ads-block">
-                                <img src="{{asset('assets/add.jpg')}}" alt="add">
+{{--                                <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
                             </div>
                             <div class="content__popular popular-sidebar popular-sidebar--news">
                                 <h3 class="popular-sidebar__title">Популярное</h3>
