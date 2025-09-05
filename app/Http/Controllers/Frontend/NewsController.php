@@ -191,9 +191,17 @@ class NewsController extends Controller
             if ($item) {
                 $item->media = $item->preview;
             }
-        } else {
-            // Для новостей также добавляем поле media
-            $item->media = $item->image;
+        }
+
+        // Если не нашли, ищем в tidings
+        if (!$item) {
+            $item = Tiding::where('slug', $slug)->first();
+            $type = 'tiding';
+
+            // Добавляем поле media для tidings
+            if ($item) {
+                $item->media = $item->preview; // у Tiding поле называется preview
+            }
         }
 
         // Если ничего не найдено — 404
@@ -207,9 +215,9 @@ class NewsController extends Controller
         // Увеличиваем счетчик просмотров
         $item->incrementViews();
 
-        // Получаем похожие материалы (перемешанные новости и видео)
+        // Получаем похожие материалы (перемешанные новости, видео и tidings)
         $similarNews = News::query()
-            ->where('category_id', $item->category_id)
+            ->where('category_id', $item->category_id ?? null)
             ->where('id', '!=', $item->id ?? null)
             ->where('status', 1)
             ->select('id', 'title', 'slug', 'image as media', 'published_at', 'views', 'category_id')
@@ -217,7 +225,7 @@ class NewsController extends Controller
             ->limit(3);
 
         $similarVideos = VideoReportage::query()
-            ->where('category_id', $item->category_id)
+            ->where('category_id', $item->category_id ?? null)
             ->where('id', '!=', $item->id ?? null)
             ->where('status', 1)
             ->whereNot('ing_news', 1)
@@ -225,8 +233,18 @@ class NewsController extends Controller
             ->addSelect(DB::raw("'video' as type"))
             ->limit(3);
 
+        // Для Tiding убираем фильтр по category_id и добавляем NULL для соответствия структуре
+        $similarTidings = Tiding::query()
+            ->where('id', '!=', $item->id ?? null)
+            ->where('status', 1)
+            ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views')
+            ->addSelect(DB::raw("NULL as category_id")) // добавляем NULL для отсутствующего поля
+            ->addSelect(DB::raw("'tiding' as type"))
+            ->limit(3);
+
         // Объединяем и перемешиваем
         $similarItems = $similarNews->unionAll($similarVideos)
+            ->unionAll($similarTidings)
             ->orderBy('published_at', 'desc')
             ->get()
             ->map(function ($item) {
@@ -235,7 +253,7 @@ class NewsController extends Controller
             })
             ->shuffle();
 
-        // Популярные материалы (новости + видео)
+        // Популярные материалы (новости + видео + tidings)
         $popularQuery = News::query()
             ->select('id', 'title', 'slug', 'image as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
@@ -249,6 +267,14 @@ class NewsController extends Controller
                     ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
+            ->unionAll(
+                Tiding::query()
+                    ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views')
+                    ->addSelect(DB::raw("NULL as category_id")) // добавляем NULL для отсутствующего поля
+                    ->where('status', 1)
+                    ->where('published_at', '>=', now()->subDays(7))
+                    ->addSelect(DB::raw("'tiding' as type"))
+            )
             ->orderBy('views', 'desc')
             ->limit(7);
 
@@ -261,7 +287,7 @@ class NewsController extends Controller
         return view('frontend.news.single', [
             'news' => $item,
             'type' => $type,
-            'similarItems' => $similarItems, // переименовано для ясности
+            'similarItems' => $similarItems,
             'popularItems' => $popularItems,
         ]);
     }

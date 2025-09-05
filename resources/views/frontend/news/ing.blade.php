@@ -32,7 +32,7 @@
                                             </a>
                                             <div class="news-item__bottom">
                                                 <h6 class="news-item__title">
-                                                    <a href="{{ route('news.show', $mainPost->id) }}">{{ $mainPost->title }}</a>
+                                                    <a href="{{ route('home.news.single', $mainPost->slug) }}">{{ $mainPost->title }}</a>
                                                 </h6>
                                                 <div class="news-item__descr">
                                                     <p>{{ $mainPost->lead }}</p>
@@ -48,7 +48,7 @@
 
                                         @foreach($tidings as $tiding)
                                             <li class="news-item news-item--second @if($tiding->type === 'video') news-item--media @endif" data-category="{{ $tiding->category ?? 'general' }}">
-                                                <a href="{{ route('news.show', $tiding->id) }}">
+                                                <a href="{{ route('home.news.single', $mainPost->slug) }}">
                                                     <div class="news-item__media">
                                                         <img src="{{ asset('storage/public/' . $tiding->preview) }}" alt="{{ $tiding->title }}">
                                                         @if($tiding->type === 'video')
