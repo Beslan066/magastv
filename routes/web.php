@@ -28,6 +28,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\NewsController;
 use App\Http\Controllers\Frontend\SearchController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Frontend\SitemapController;
 use App\Models\AudiobookFile;
 use App\Models\News;
 use App\Models\VideoReportage;
@@ -113,6 +114,12 @@ Route::post('/radio/filter-programs', [HomeController::class, 'filterPrograms'])
 Route::get('/sort-news', [HomeController::class, 'sortNews']);
 Route::get('/pravila-ispolzovaniya-materialov', [HomeController::class, 'pravila'])->name('pravila');
 Route::get('/soglasie-na-obrabotku-personalnykh-dannykh', [HomeController::class, 'soglasie'])->name('soglasie');
+
+
+Route::get('yandex-news.xml', [HomeController::class, 'generateYandexNews'])->name('yandex_news');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+
+
 
 
 

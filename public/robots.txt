@@ -1,2 +1,14 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /search
+Disallow: /filter-news
+Disallow: /radio/filter
+Disallow: /sort-news
+Disallow: /*?page=
+Disallow: /*?sort=
+Disallow: /*?filter=
+
+Sitemap: https://magas.tv/sitemap.xml

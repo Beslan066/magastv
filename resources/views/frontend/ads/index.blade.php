@@ -58,7 +58,7 @@
                                         <li class="advertising__card_item" style="margin-top: 10px">
 
                                             <span>Контактное лицо</span>
-                                            <a>Саид Саправлиев (директор по рекламе)</a>
+                                            <a>Саид Сапралиев (директор по рекламе)</a>
                                             <span>Эл. почта:</span> <a href="mailto:said-ms@mail.ru">said-ms@mail.ru</a>
                                             <span>Телефон менеджера:</span>
                                             <a href="tel:79631740033">

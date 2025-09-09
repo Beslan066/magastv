@@ -24,6 +24,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
@@ -612,6 +613,116 @@ HTML;
     public function musicalCard()
     {
         return view('frontend.musical-card');
+    }
+
+    public function generateYandexNews()
+    {
+        // Получить данные новостей и видеорепортажей
+        $newsQuery = News::query()
+            ->select('id', 'title', 'slug', 'lead', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
+            ->addSelect(DB::raw("'news' as type"));
+
+        $videosQuery = VideoReportage::query()
+            ->select('id', 'title', 'slug', 'lead', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
+            ->whereNot('ing_news', 1)
+            ->addSelect(DB::raw("'video' as type"));
+
+        // Объединяем новости и видеорепортажи
+        $items = $newsQuery->unionAll($videosQuery)
+            ->orderBy('published_at', 'desc')
+            ->take(50)
+            ->get();
+
+        // Создать объект SimpleXMLElement для формирования XML
+        $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
+    <rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"></rss>');
+
+        $channel = $xml->addChild('channel');
+
+        // Добавляем общую информацию о канале
+        $channel->addChild('title', 'Magas.tv - Новости и видеорепортажи');
+        $channel->addChild('link', 'https://magas.tv');
+        $channel->addChild('lead', 'Последние новости и видеорепортажи');
+
+        foreach ($items as $item) {
+            // Создать элемент <item> для каждого материала
+            $itemNode = $channel->addChild('item');
+            $itemNode->addAttribute('turbo', 'true');
+
+            $publishedDate = strtotime($item->published_at);
+            $pubDate = date('D, d M Y H:i:s O', $publishedDate);
+
+            // Добавить поля title, description и другие элементы
+            $itemNode->addChild('title', htmlspecialchars($item->title, ENT_XML1));
+            $itemNode->addChild('lead', htmlspecialchars($item->lead, ENT_XML1));
+
+            // Полный текст (объединяем lead и description если есть)
+            $fullText = $item->lead;
+            if (!empty($item->lead)) {
+                $fullText .= ' ' . $item->lead;
+            }
+            $itemNode->addChild('yandex:full-text', htmlspecialchars(strip_tags($fullText), ENT_XML1), 'http://news.yandex.ru');
+            $itemNode->addChild('pubDate', $pubDate);
+
+            // Добавляем медиа-контент
+            if ($item->media) {
+                if ($item->type === 'video') {
+                    // Для видео добавляем медиа-группу
+                    $mediaGroup = $itemNode->addChild('media:group', '', 'http://search.yahoo.com/mrss/');
+                    $mediaContent = $mediaGroup->addChild('media:content');
+                    $mediaContent->addAttribute('url', asset('storage/' . $item->media));
+                    $mediaContent->addAttribute('type', 'video/mp4');
+
+                    $mediaThumbnail = $mediaGroup->addChild('media:thumbnail');
+                    $mediaThumbnail->addAttribute('url', asset('storage/' . $item->media));
+
+                    // Добавляем enclosure с превью
+                    $enclosure = $itemNode->addChild('enclosure');
+                    $enclosure->addAttribute('url', asset('storage/' . $item->media));
+                    $enclosure->addAttribute('type', 'image/jpeg');
+
+                } else {
+                    // Для новостей добавляем изображение
+                    $enclosure = $itemNode->addChild('enclosure');
+                    $enclosure->addAttribute('url', asset('storage/' . $item->media));
+                    $enclosure->addAttribute('type', 'image/jpeg');
+                }
+            }
+
+            // Создать ссылку в зависимости от типа материала
+            $link = 'https://magas.tv/';
+            if ($item->type === 'video') {
+                $link .= 'video/' . $item->slug;
+            } else {
+                $link .= 'news/' . $item->slug;
+            }
+            $itemNode->addChild('link', $link);
+
+            // Добавляем категорию если есть
+            if ($item->category_id) {
+                $category = Category::find($item->category_id);
+                if ($category) {
+                    $itemNode->addChild('category', htmlspecialchars($category->name, ENT_XML1));
+                }
+            }
+        }
+
+        // Преобразовать XML в строку
+        $xmlString = $xml->asXML();
+        $xmlString = str_replace('&nbsp;', '&#160;', $xmlString);
+
+        // Заменить двойные экранирования
+        $xmlString = preg_replace('/&amp;(#[0-9]+|[a-z]+);/i', '&$1;', $xmlString);
+
+        // Записать XML-строку в файл yandex-news.xml
+        Storage::disk('public')->put('yandex-news.xml', $xmlString);
+
+        // Вернуть ответ с XML-файлом
+        return response($xmlString, 200, [
+            'Content-Type' => 'application/xml',
+        ]);
     }
 
 
