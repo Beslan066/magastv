@@ -183,7 +183,7 @@
 
                                 <div class="single-news__subInner" style="margin-top: 10px">
                                     <div class="single-news__text"
-                                         style="font-family: 'Golos Text', sans-serif; font-size: 16px">
+                                         style="font-family: 'Golos Text', sans-serif; font-size: 18px">
                                         {!! $news->content !!}
                                     </div>
                                 </div>
@@ -487,7 +487,7 @@
                             @if($news->content)
                                 <div class="single-news__subInner" style="margin-top: 10px">
                                     <div class="video-news__text"
-                                         style="font-family: 'Golos Text', sans-serif; font-size: 16px">
+                                         style="font-family: 'Golos Text', sans-serif; font-size: 18px">
                                         {!! $news->content !!}
                                     </div>
                                 </div>
@@ -708,7 +708,7 @@
                                 @if($news->content)
                                     <div class="single-news__subInner" style="margin-top: 10px">
                                         <div class="single-news__text"
-                                             style="font-family: 'Golos Text', sans-serif; font-size: 16px">
+                                             style="font-family: 'Golos Text', sans-serif; font-size: 18px">
                                             {!! $news->content !!}
                                         </div>
                                     </div>

@@ -371,14 +371,14 @@ class NewsController extends Controller
         // Основной запрос для первой загрузки (включаем главный пост)
         $tidings = $query->where('id', '!=', $mainPost->id)->paginate(6);
 
-        // Популярные Хоамаш
-        $popularItems = Tiding::query()
-            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views')
-            ->where('status', 1)
-            ->where('published_at', '>=', now()->subDays(7))
-            ->orderBy('views', 'desc')
-            ->limit(15)
-            ->get();
+//        // Популярные Хоамаш
+//        $popularItems = Tiding::query()
+//            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'views')
+//            ->where('status', 1)
+//            ->where('published_at', '>=', now()->subDays(7))
+//            ->orderBy('views', 'desc')
+//            ->limit(15)
+//            ->get();
 
         return view('frontend.news.ing', [
             'mainPost' => $mainPost,
@@ -386,7 +386,7 @@ class NewsController extends Controller
             'currentSort' => $sort,
             'currentPeriod' => $period,
             'currentContent' => $contentType,
-            'popularItems' => $popularItems,
+//            'popularItems' => $popularItems,
         ]);
     }
 

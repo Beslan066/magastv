@@ -89,7 +89,7 @@
                             </div>
 
                             <div class="single-news__subInner" style="margin-top: 10px">
-                                <div class="single-news__text" style="font-family: 'Golos Text', sans-serif; font-size: 16px">
+                                <div class="single-news__text" style="font-family: 'Golos Text', sans-serif; font-size: 18px">
                                     {!! $event->content !!}
                                 </div>
                             </div>

@@ -86,25 +86,25 @@
 {{--                            <div class="ads-block">--}}
 {{--                                <img src="{{ asset('assets/add.jpg') }}" alt="add">--}}
 {{--                            </div>--}}
-                            <div class="content__popular popular-sidebar popular-sidebar--news">
-                                <h3 class="popular-sidebar__title">Популярное</h3>
-                                <ul class="list-reset popular-sidebar__list">
-                                    @if(isset($popularItems))
-                                        @foreach($popularItems as $item)
-                                            <li class="popular-sidebar__item">
-                                                <a href="{{route('home.news.single', $item->slug)}}" class="popular-sidebar__item_text">
-                                                    {{$item->title}}
-                                                </a>
-                                                <div class="popular-sidebar__item_info">
-                                                    <time datetime="{{$item->formated_published_at}}" class="popular-sidebar__item_time">
-                                                        {{$item->formated_published_at}}
-                                                    </time>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            </div>
+{{--                            <div class="content__popular popular-sidebar popular-sidebar--news">--}}
+{{--                                <h3 class="popular-sidebar__title">Популярное</h3>--}}
+{{--                                <ul class="list-reset popular-sidebar__list">--}}
+{{--                                    @if(isset($popularItems))--}}
+{{--                                        @foreach($popularItems as $item)--}}
+{{--                                            <li class="popular-sidebar__item">--}}
+{{--                                                <a href="{{route('home.news.single', $item->slug)}}" class="popular-sidebar__item_text">--}}
+{{--                                                    {{$item->title}}--}}
+{{--                                                </a>--}}
+{{--                                                <div class="popular-sidebar__item_info">--}}
+{{--                                                    <time datetime="{{$item->formated_published_at}}" class="popular-sidebar__item_time">--}}
+{{--                                                        {{$item->formated_published_at}}--}}
+{{--                                                    </time>--}}
+{{--                                                </div>--}}
+{{--                                            </li>--}}
+{{--                                        @endforeach--}}
+{{--                                    @endif--}}
+{{--                                </ul>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>

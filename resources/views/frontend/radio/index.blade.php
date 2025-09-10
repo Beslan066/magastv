@@ -26,7 +26,8 @@
                                                     <img src="{{asset('storage/public/' . $event->image)}}"
                                                          alt="{{$event->title}}" loading="lazy">
                                                 </div>
-                                                <div class="d-flex" style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
+                                                <div class="d-flex"
+                                                     style="display: flex; flex-direction: column; justify-content: space-between; height: 100%">
                                                     <div class="radio-slide__inner">
                                                         <div class="radio-slide__schedule">
                                                             <span>{{$event->formatted_published_at}}</span>
@@ -203,7 +204,7 @@
                                             </svg>
                                             <div class="player__info">
                                                 <span class="player__frequency">88.8 FM</span>
-                                                <span class="player__title">Радио Ингушетия</span>
+                                                <span class="player__title">Радио "Магас"</span>
                                             </div>
                                         </div>
                                         <div class="player__controls">
@@ -211,9 +212,13 @@
                                             {{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
                                             <div class="player__controls_controls">
                                                 <button class="btn-reset player__controls_btn player-prev">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="2" height="14" rx="1" transform="matrix(-1 0 0 1 6 5)" fill="white"/>
-                                                        <path d="M9.63516 11.1195L19.5259 5.79375C20.1921 5.43501 21 5.91754 21 6.67422V17.3258C21 18.0825 20.1921 18.565 19.5259 18.2063L9.63516 12.8805C8.93396 12.5029 8.93396 11.4971 9.63516 11.1195Z" fill="white"/>
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                         xmlns="http://www.w3.org/2000/svg">
+                                                        <rect width="2" height="14" rx="1"
+                                                              transform="matrix(-1 0 0 1 6 5)" fill="white"/>
+                                                        <path
+                                                            d="M9.63516 11.1195L19.5259 5.79375C20.1921 5.43501 21 5.91754 21 6.67422V17.3258C21 18.0825 20.1921 18.565 19.5259 18.2063L9.63516 12.8805C8.93396 12.5029 8.93396 11.4971 9.63516 11.1195Z"
+                                                            fill="white"/>
                                                     </svg>
                                                 </button>
 
@@ -224,14 +229,21 @@
                                             <div>
                                                 <audio id="radio-stream" src="/proxy/audio"></audio>
 
-                                                <button class="btn-reset player__controls_btn player__controls_btn--play" id="play-pause-btn">
+                                                <button
+                                                    class="btn-reset player__controls_btn player__controls_btn--play"
+                                                    id="play-pause-btn">
                                                     <!-- Иконка PLAY (по умолчанию видима) -->
-                                                    <svg class="play-svg" width="14" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z" fill="white"/>
+                                                    <svg class="play-svg" width="14" height="14" viewBox="0 0 12 14"
+                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path
+                                                            d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
+                                                            fill="white"/>
                                                     </svg>
 
                                                     <!-- Иконка PAUSE (по умолчанию скрыта) -->
-                                                    <svg class="pause-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                    <svg class="pause-svg" width="24" height="24" viewBox="0 0 24 24"
+                                                         fill="none" xmlns="http://www.w3.org/2000/svg"
+                                                         style="display: none;">
                                                         <rect x="6" y="4" width="4" height="16" rx="1" fill="white"/>
                                                         <rect x="14" y="4" width="4" height="16" rx="1" fill="white"/>
                                                     </svg>
@@ -248,6 +260,18 @@
                                                 </button>
                                                 <input type="range" class="range-input">
                                                 <div class="slider-styled" id="slider-round"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="player__main" style="margin-top: 10px">
+                                    <div class="player__main_top">
+                                        <div class="player__info_wrapper">
+                                            <div class="player__info">
+                                                <span class="player__title">Послушать эфир также можно на альтернативных
+                                                    цифровых площадках, через голосовых помощников Алису или Марусю,
+                                                    по запросу: «Включи радио «Магас»!</span>
+
                                             </div>
                                         </div>
                                     </div>

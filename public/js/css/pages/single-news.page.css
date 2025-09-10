@@ -65,7 +65,7 @@
 .single-news__text > p {
     font-family: "Golos Text", sans-serif;
     font-weight: 400;
-    font-size: 16px !important;
+    font-size: 18px !important;
     line-height: 150%;
     color: var(--bw-black);
 }
@@ -129,7 +129,7 @@
 
     font-family: "Golos Text", sans-serif;
     font-weight: 400;
-    font-size: 16px !important;
+    font-size: 18px !important;
     line-height: 150%;
     color: var(--bw-black);
 }

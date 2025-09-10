@@ -513,8 +513,7 @@ HTML;
     public function radioTransfers()
     {
 
-        $transfers = RadioBroadcast::query()
-            ->where('status', 1)
+        $transfers = RadioTransfer::query()
             ->orderBy('id', 'desc')
             ->paginate(12);
 
