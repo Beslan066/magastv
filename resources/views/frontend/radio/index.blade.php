@@ -210,21 +210,7 @@
                                         <div class="player__controls">
                                             <!-- На прод-->
                                             {{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
-                                            <div class="player__controls_controls">
-                                                <button class="btn-reset player__controls_btn player-prev">
-                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                         xmlns="http://www.w3.org/2000/svg">
-                                                        <rect width="2" height="14" rx="1"
-                                                              transform="matrix(-1 0 0 1 6 5)" fill="white"/>
-                                                        <path
-                                                            d="M9.63516 11.1195L19.5259 5.79375C20.1921 5.43501 21 5.91754 21 6.67422V17.3258C21 18.0825 20.1921 18.565 19.5259 18.2063L9.63516 12.8805C8.93396 12.5029 8.93396 11.4971 9.63516 11.1195Z"
-                                                            fill="white"/>
-                                                    </svg>
-                                                </button>
 
-                                                <!-- Аудио элемент должен быть доступен для JS -->
-
-                                            </div>
 
                                             <div>
                                                 <audio id="radio-stream" src="/proxy/audio"></audio>
@@ -270,7 +256,7 @@
                                             <div class="player__info">
                                                 <span class="player__title">Послушать эфир также можно на альтернативных
                                                     цифровых площадках, через голосовых помощников Алису или Марусю,
-                                                    по запросу: «Включи радио «Магас»!</span>
+                                                    по запросу: «Включи радио "Магас"!</span>
 
                                             </div>
                                         </div>
