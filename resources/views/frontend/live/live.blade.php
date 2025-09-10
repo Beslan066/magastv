@@ -57,7 +57,7 @@
                                     @if($tvProgramsToday)
                                         @foreach($tvProgramsToday as $program)
                                             <div class="programListItem @if($program->top_show === 1) programListItem--third @endif">
-                                                <time datetime="{{ $show->program_date->format('Y-m-d') }} {{ $show->time_range }}">{{ Carbon\Carbon::parse($show->time_range)->format('H:i') }}</time>
+                                                <time datetime="{{ $program->program_date->format('Y-m-d') }} {{ $program->time_range }}">{{ Carbon\Carbon::parse($show->time_range)->format('H:i') }}</time>
                                                 <div class="programListItem__info">
                                                     <h6 class="programListItem__title">
                                                         {{$program->title}}
