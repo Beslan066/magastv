@@ -10,11 +10,11 @@
             <div class="container">
                 <div class="advertising__inner">
                     <h1 class="advertising__title">
-                        Музыкальная открытка. "Шоана лаьрх1а илли"
+                        Музыкальная открытка "Шоана лаьрх1а илли"
                     </h1>
                     <div class="advertising__text">
                         <p>
-                            Шоана лаьрх1а илли – концерт по вашим заявкам, где вы можете поздравить с днем рождения,
+                            "Шоана лаьрх1а илли" – концерт по вашим заявкам, где вы можете поздравить с днем рождения,
                             выразить благодарность или просто передать привет и порадовать родных и близких своим
                             вниманием. Ведь оно никогда не бывает лишним. Для вашего удобства мы выходим в эфир
                             ежедневно в 16:30.
@@ -26,7 +26,7 @@
                         </p>
 
                         <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
-                            <span style="margin-bottom: 10px;">Видеопоздравление – 300 руб. (до 20 сек)</span>
+                            <span style="margin-bottom: 10px;">Видеопоздравление – 300 руб. (до 20 сек).</span>
                             <span style="margin-bottom: 10px;">Обязательно: совершить оплату заранее!</span>
                             <span style="margin-bottom: 10px;">Обязательно: прислать чек с датой оплаты!</span>
                             <span style="margin-bottom: 10px;">Прислать информацию: ФИО, откуда, от кого в ТЕКСТОВОМ ВИДЕ…</span>
@@ -42,8 +42,8 @@
                         </p>
 
                         <div style="display: flex; flex-direction: column;">
-                            <span style="margin-bottom: 20px;"><b>Телефон для справок: 8 (963) – 172 – 65 – 59</b></span>
-                            <span style="margin-bottom: 20px;"><b>Для оплаты сканируйте QR  код или нажмите на кнопку «Оплатить»</b></span>
+                            <span style="margin-bottom: 20px;"><b>Телефон для справок: 8 (963) – 172 – 65 – 59.</b></span>
+                            <span style="margin-bottom: 20px;"><b>Для оплаты сканируйте QR  код или нажмите на кнопку «Оплатить».</b></span>
                         </div>
 
                         <div class="payment-block">
