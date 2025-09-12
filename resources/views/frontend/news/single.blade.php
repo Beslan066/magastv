@@ -582,7 +582,7 @@
             </div>
         </section>
     @elseif($type === 'tiding')
-        <section class="single-news-content">
+        <section class="single-news-content" id="tidings">
             <div class="container">
                 <div class="single-news-content__inner">
                     <div class="single-news__top">

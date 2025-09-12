@@ -29,6 +29,33 @@
 
     @stack('styles')
 
+    <style>
+        @media (max-width: 768px) {
+            #tidings iframe {
+                height: 250px !important;
+                overflow: hidden; /* Убирает скролл на мобильных */
+            }
+        }
+
+        @media (max-width: 429px) {
+            #tidings iframe {
+                height: 230px !important;
+            }
+        }
+
+        @media (max-width: 404px) {
+            #tidings iframe {
+                height: 219px !important;
+            }
+        }
+
+        @media (max-width: 381px) {
+            #tidings iframe {
+                height: 204px !important;
+            }
+        }
+    </style>
+
     <link rel="stylesheet" href="{{asset('css/media/media.css')}}">
 
 
