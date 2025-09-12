@@ -30,10 +30,9 @@
     @stack('styles')
 
     <style>
-        @media (max-width: 768px) {
+        @media (max-width: 404px) {
             #tidings iframe {
-                height: 250px !important;
-                overflow: hidden; /* Убирает скролл на мобильных */
+                height: 219px !important;
             }
         }
 
@@ -42,16 +41,15 @@
                 height: 230px !important;
             }
         }
-
-        @media (max-width: 404px) {
+        @media (max-width: 768px) {
             #tidings iframe {
-                height: 219px !important;
+                height: 250px !important;
+                overflow: hidden;
             }
         }
-
-        @media (max-width: 381px) {
+        @media (max-width: 1080px) {
             #tidings iframe {
-                height: 204px !important;
+                width: 100%;
             }
         }
     </style>

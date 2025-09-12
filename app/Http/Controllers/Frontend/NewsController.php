@@ -267,14 +267,6 @@ class NewsController extends Controller
                     ->whereNot('ing_news', 1)
                     ->addSelect(DB::raw("'video' as type"))
             )
-            ->unionAll(
-                Tiding::query()
-                    ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views')
-                    ->addSelect(DB::raw("NULL as category_id")) // добавляем NULL для отсутствующего поля
-                    ->where('status', 1)
-                    ->where('published_at', '>=', now()->subDays(7))
-                    ->addSelect(DB::raw("'tiding' as type"))
-            )
             ->orderBy('views', 'desc')
             ->limit(7);
 
