@@ -233,15 +233,6 @@ class NewsController extends Controller
             ->addSelect(DB::raw("'video' as type"))
             ->limit(3);
 
-        // Для Tiding убираем фильтр по category_id и добавляем NULL для соответствия структуре
-        $similarTidings = Tiding::query()
-            ->where('id', '!=', $item->id ?? null)
-            ->where('status', 1)
-            ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views')
-            ->addSelect(DB::raw("NULL as category_id")) // добавляем NULL для отсутствующего поля
-            ->addSelect(DB::raw("'tiding' as type"))
-            ->limit(3);
-
         // Объединяем и перемешиваем
         $similarItems = $similarNews->unionAll($similarVideos)
             ->unionAll($similarTidings)
