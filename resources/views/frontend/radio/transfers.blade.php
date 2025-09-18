@@ -20,13 +20,21 @@
                                 @foreach($transfers as $transfer)
                                     <li class="transferItem active">
                                         <div class="transferItem_media" style="height: 158px !important;">
-                                            <a href="{{route('transfer', $transfer->id)}}">
+                                            <a href="{{route('radio.transfer.single', $transfer->id)}}">
                                                 <img src="{{asset('storage/public/' . $transfer->image)}}" alt="{{$transfer->title}}">
                                             </a>
                                         </div>
-                                        <h6 class="transferItem_title">
-                                            <a href="{{route('transfer', $transfer->id)}}">{{$transfer->title}}</a>
-                                        </h6>
+                                        <div class="radio-item__info">
+                                            <h6 class="transferItem_title">
+                                                <a href="{{route('radio.transfer.single', $transfer->id)}}">{{$transfer->title}}</a>
+                                                @if(isset($transfer->age_restriction))
+                                                    <span class="age-span">
+                                                            {{$transfer->age_restriction->title}}
+                                                        </span>
+                                                @endif
+                                            </h6>
+                                        </div>
+
                                     </li>
                                 @endforeach
                             @endif

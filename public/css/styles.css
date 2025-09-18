@@ -2321,15 +2321,7 @@ body.active {
     overflow: hidden;
 }
 
-.transferItem_title span {
-    position: absolute;
-    transform: translate(5px, -5px);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 133%;
-    color: var(--neutral-neutral-500);
-    font-family: var(--font-family);
-}
+
 
 .transferItem_count {
     font-family: var(--font-family);
@@ -2676,4 +2668,23 @@ body.active {
 }
 .book-single .radio-item__title a {
     color: #14AB28 !important;
+}
+
+.transferItem_title {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-family);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 156%;
+    display: -webkit-box;
+    overflow: hidden;
+    width: 100%;
+
+}
+
+
+.age-span {
+    color: #bdbdbd;
+    font-size: 14px;
 }

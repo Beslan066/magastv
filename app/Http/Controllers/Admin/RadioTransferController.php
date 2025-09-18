@@ -19,7 +19,8 @@ class RadioTransferController extends Controller
      */
     public function index()
     {
-        $transfers = RadioTransfer::query()->orderBy('id', 'asc')->paginate(10);
+        $transfers = RadioTransfer::query()->orderBy('id', 'desc')->paginate(10);
+
 
         return view('admin.radio-transfer.index', [
             'transfers' => $transfers,
@@ -32,9 +33,12 @@ class RadioTransferController extends Controller
     public function create()
     {
         $categories = RadioShowType::all();
+        $ages = AgeRestriction::all();
+
 
         return view('admin.radio-transfer.create', [
             'categories' => $categories,
+            'ages' => $ages,
         ]);
     }
 
@@ -74,10 +78,13 @@ class RadioTransferController extends Controller
     public function edit(RadioTransfer $transfer)
     {
         $categories = RadioShowType::all();
+        $ages = AgeRestriction::all();
+
 
         return view('admin.radio-transfer.edit', [
             'transfer' => $transfer,
             'categories' => $categories,
+            'ages' => $ages,
         ]);
     }
 

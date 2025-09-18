@@ -33,6 +33,11 @@
                                 <select class="form-select" id="inputGroupSelect02" name="category_id">
                                     @if(isset($tvProgram->tvShowType))
                                         <option value="{{$tvProgram->tvShowType->id}}">{{ $tvProgram->tvShowType->title }}</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">
+                                                {{ $category->title }}
+                                            </option>
+                                        @endforeach
                                     @else
                                         <option value="">Выберите категорию...</option>
                                         @foreach($categories as $category)

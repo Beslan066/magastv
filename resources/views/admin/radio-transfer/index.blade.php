@@ -15,6 +15,7 @@
                     <th class="fw-bold">id</th>
                     <th class="fw-bold">Заголовок</th>
                     <th class="fw-bold">Автор</th>
+                    <th class="fw-bold">Ограничение</th>
                     <th class="fw-bold">Создан</th>
                     <th class="fw-bold">Действие</th>
                 </tr>
@@ -33,6 +34,10 @@
                             @else
                                 <td>Нет автора</td>
                             @endif
+                            @if(isset($item->age_restriction))
+                                <td>{{$item->age_restriction->title}}</td>
+                            @endif
+
                             <td>{{$item->created_at}}</td>
 
                             <td>

@@ -129,6 +129,11 @@
                                                 <div class="radio-item__info">
                                                     <h6 class="radio-item__title">
                                                         <a href="{{route('radio.transfer.single', $item->id)}}">{{$item->title}}</a>
+                                                        @if(isset($item->age_restriction))
+                                                            <span class="age-span">
+                                                            {{$item->age_restriction->title}}
+                                                        </span>
+                                                        @endif
                                                     </h6>
                                                     <div class="radio-item__meta">
                                                         <time

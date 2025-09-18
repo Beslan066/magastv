@@ -163,6 +163,10 @@
     color: var(--bw-black);
 }
 
+.single-news__subInner span {
+    font-size: 18px !important;
+}
+
 .single-news__paragraph--first {
     font-family: var(--font-family);
     font-weight: 600;

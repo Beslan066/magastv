@@ -62,6 +62,18 @@
                                 <div class="mb-2 text-danger">{{$message}}</div>
                                 @enderror
 
+                                <div class="input-group mb-4">
+                                    <select class="form-select" id="inputGroupSelect02" name="age_restriction_id">
+                                        <option value="">Нет</option>
+                                        @foreach($ages as $age)
+                                            <option value="{{ $age->id }}">
+                                                {{ $age->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <label class="input-group-text" for="inputGroupSelect02">Возрастное ограничение</label>
+                                </div>
+
 
                             </div>
                         </div>

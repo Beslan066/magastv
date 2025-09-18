@@ -215,14 +215,13 @@ class NewsController extends Controller
         // Увеличиваем счетчик просмотров
         $item->incrementViews();
 
-        // Получаем похожие материалы (перемешанные новости, видео и tidings)
+        // Получаем похожие материалы (последние 6 записей из новостей и видео)
         $similarNews = News::query()
             ->where('category_id', $item->category_id ?? null)
             ->where('id', '!=', $item->id ?? null)
             ->where('status', 1)
             ->select('id', 'title', 'slug', 'image as media', 'published_at', 'views', 'category_id')
-            ->addSelect(DB::raw("'news' as type"))
-            ->limit(3);
+            ->addSelect(DB::raw("'news' as type"));
 
         $similarVideos = VideoReportage::query()
             ->where('category_id', $item->category_id ?? null)
@@ -230,13 +229,12 @@ class NewsController extends Controller
             ->where('status', 1)
             ->whereNot('ing_news', 1)
             ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views', 'category_id')
-            ->addSelect(DB::raw("'video' as type"))
-            ->limit(3);
+            ->addSelect(DB::raw("'video' as type"));
 
-        // Объединяем и перемешиваем
+        // Объединяем и берем 6 последних записей
         $similarItems = $similarNews->unionAll($similarVideos)
-            ->unionAll($similarTidings)
             ->orderBy('published_at', 'desc')
+            ->limit(6) // Берем только 6 последних записей
             ->get()
             ->map(function ($item) {
                 $item->formatted_published_at = \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i');

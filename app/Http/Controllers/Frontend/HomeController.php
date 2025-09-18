@@ -259,7 +259,7 @@ HTML;
 
         $transferVideos = VideoTransfer::query()
             ->where('transfer_id', $transfer->id)
-            ->limit(10)
+            ->limit(40)
             ->get();
 
 
@@ -294,29 +294,26 @@ HTML;
                 });
         });
 
-        // Фильтрация программ с кэшированием по категории
+        // Фильтрация программ БЕЗ кэширования
         $categoryId = $request->category_id ?? 'all';
-        $cacheKey = 'radio_programs_' . $categoryId . '_6';
 
-        $news = Cache::remember($cacheKey, 300, function () use ($categoryId) {
-            $query = RadioTransfer::query()
-                ->with(['radioShowType' => function($query) {
-                    $query->select('id', 'title');
-                }])
-                ->select('id', 'title', 'image', 'created_at', 'radio_show_type_id')
-                ->where('created_at', '<=', now())
-                ->orderBy('created_at', 'desc');
+        $news = RadioTransfer::query()
+            ->with(['radioShowType' => function($query) {
+                $query->select('id', 'title');
+            }, 'age_restriction'])
+            ->select('id', 'title', 'image', 'created_at', 'radio_show_type_id', 'age_restriction_id')
+            ->where('created_at', '<=', now())
+            ->orderBy('created_at', 'desc');
 
-            if ($categoryId != 'all') {
-                $query->where('radio_show_type_id', $categoryId);
-            }
+        if ($categoryId != 'all') {
+            $news->where('radio_show_type_id', $categoryId);
+        }
 
-            return $query->limit(6)
-                ->get()
-                ->each(function ($item) {
-                    $item->formatted_published_at = Carbon::parse($item->created_at)->format('d.m.Y');
-                });
-        });
+        $news = $news->limit(6)
+            ->get()
+            ->each(function ($item) {
+                $item->formatted_published_at = Carbon::parse($item->created_at)->format('d.m.Y');
+            });
 
         // Обработка даты и расписания
         $today = now();
@@ -353,6 +350,7 @@ HTML;
                     }
                 });
         });
+
 
         // Определяем текущее активное шоу
         $currentShowId = null;
@@ -512,10 +510,14 @@ HTML;
 
     public function radioTransfers()
     {
-
         $transfers = RadioTransfer::query()
+            ->with(['radioShowType' => function($query) {
+                $query->select('id', 'title');
+            }, 'age_restriction'])
+            ->select('id', 'title', 'image', 'created_at', 'radio_show_type_id', 'age_restriction_id')
             ->orderBy('id', 'desc')
-            ->paginate(12);
+            ->get();
+
 
         return view('frontend.radio.transfers', [
             'transfers' => $transfers,

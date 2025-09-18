@@ -29,6 +29,8 @@ class StoreRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'radio_show_type_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
+            'age_restriction_id' => 'nullable'
+
         ];
     }
     public function messages()

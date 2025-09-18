@@ -15,6 +15,7 @@ class RadioTransfer extends Model
         'user_id',
         'radio_show_type_id',
         'deleter_id',
+        'age_restriction_id'
     ];
 
     protected $dates = ['created_at', 'deleted_at'];
@@ -43,6 +44,10 @@ class RadioTransfer extends Model
     public function getFormattedPublishedAtAttribute()
     {
         return $this->created_at->format('d.m.Y');
+    }
+    public function age_restriction()
+    {
+        return $this->belongsTo(AgeRestriction::class, 'age_restriction_id', 'id');
     }
 
 }
