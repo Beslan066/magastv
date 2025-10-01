@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>{{$book->title}}</title>
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/single-news.page.css')}}">
     <link rel="stylesheet" href="{{asset('css/pages/radio.page.css')}}">

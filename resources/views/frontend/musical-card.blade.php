@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Шоана лаьрха илли</title>
+    <meta name="description" content="Национальная телерадиокомпания Республики Ингушетия">
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/advertising.page.css')}}">
 @endpush

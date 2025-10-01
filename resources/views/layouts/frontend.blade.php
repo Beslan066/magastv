@@ -57,7 +57,7 @@
     <link rel="stylesheet" href="{{asset('css/media/media.css')}}">
 
 
-    <title>НТРК "Магас"</title>
+    @stack('meta')
 </head>
 
 <!-- header menu,footer -->

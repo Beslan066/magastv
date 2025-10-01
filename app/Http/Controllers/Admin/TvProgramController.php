@@ -36,7 +36,27 @@ class TvProgramController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'time_range' => 'required|string|max:255',
+            'time_range' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    // Проверяем формат времени
+                    if (!preg_match('/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]\s*-\s*([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/', $value)) {
+                        $fail('Формат времени должен быть: 10:00-12:00 или 10:00 - 12:00');
+                    }
+
+                    // Дополнительная проверка: время начала должно быть раньше времени окончания
+                    $times = preg_split('/\s*-\s*/', $value);
+                    if (count($times) === 2) {
+                        $startTime = strtotime($times[0]);
+                        $endTime = strtotime($times[1]);
+
+                        if ($startTime >= $endTime) {
+                            $fail('Время начала должно быть раньше времени окончания');
+                        }
+                    }
+                }
+            ],
             'program_date' => 'required|date',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',

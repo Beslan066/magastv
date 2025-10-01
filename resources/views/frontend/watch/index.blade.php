@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Где смотреть - НТРК "Магас"</title>
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/watch.page.css')}}">
 @endpush

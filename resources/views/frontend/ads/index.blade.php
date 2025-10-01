@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Реклама НТРК "Магас"</title>
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/advertising.page.css')}}">
 @endpush

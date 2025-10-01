@@ -39,6 +39,12 @@
     </style>
 @endpush
 
+@push('meta')
+    <title>Телепроекты НТРК "Магас"</title>
+    <meta name="description" content="Основная информация Национальная телерадиокомпания Республики Ингушетия">
+@endpush
+
+
 @section('content')
     <main class="transfers__page" data-main>
         <section class="transfers-content">

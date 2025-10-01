@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>О компании НТРК "Магас"</title>
+    <meta name="description" content="Основная информация Национальная телерадиокомпания Республики Ингушетия">
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/about-us.page.css')}}">
 @endpush

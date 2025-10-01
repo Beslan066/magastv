@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Национальная телерадиокомпания "Магас"</title>
+    <meta name="description" content="Национальная телерадиокомпания Республики Ингушетия">
+@endpush
+
 @push('styles')
     <style>
         .programs-slide {

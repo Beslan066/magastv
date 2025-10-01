@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>{{$transfer->title}}</title>
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/transfer.page.css')}}">
     <style>

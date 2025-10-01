@@ -1,5 +1,11 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>{{$event->title}} НТРК "Магас"</title>
+    <meta name="description" content="Основная информация Национальная телерадиокомпания Республики Ингушетия">
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/single-news.page.css')}}">
 @endpush

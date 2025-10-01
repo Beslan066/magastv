@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>{{$news->title}}</title>
+    <meta name="description" content="{{$news->lead}}">
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/single-news.page.css')}}">
     @if($type === 'video')

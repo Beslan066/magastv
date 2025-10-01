@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Радио "Магас"</title>
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/radio.page.css')}}">
     <link rel="stylesheet" href="{{asset('css/components/radio-item.css')}}">

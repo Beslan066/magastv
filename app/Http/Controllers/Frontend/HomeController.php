@@ -259,6 +259,7 @@ HTML;
 
         $transferVideos = VideoTransfer::query()
             ->where('transfer_id', $transfer->id)
+            ->orderBy('id', 'desc')
             ->limit(40)
             ->get();
 

@@ -10,5 +10,6 @@ Disallow: /sort-news
 Disallow: /*?page=
 Disallow: /*?sort=
 Disallow: /*?filter=
+Disallow: /o-kompanii
 
 Sitemap: https://magas.tv/sitemap.xml

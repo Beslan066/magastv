@@ -1,5 +1,10 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Программа передач НТРК "Магас"</title>
+@endpush
+
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/tv-program.page.css')}}">
 @endpush

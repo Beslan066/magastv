@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Хоамаш - Национальная телерадиокомпания "Магас"</title>
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/news-page.css')}}">
 @endpush

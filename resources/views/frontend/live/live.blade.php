@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Прямой эфир Национальная телерадиокомпания "Магас"</title>
+@endpush
+
 @push('styles')
     <link rel="stylesheet" href="{{asset('css/pages/live.page.css')}}">
 

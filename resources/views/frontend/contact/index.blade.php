@@ -1,5 +1,9 @@
 @extends('layouts.frontend')
 
+@push('meta')
+    <title>Контакты НТРК "Магас"</title>
+@endpush
+
 @push('styles')
     <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&display=swap" rel="stylesheet">
 
