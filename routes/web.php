@@ -116,7 +116,7 @@ Route::get('/pravila-ispolzovaniya-materialov', [HomeController::class, 'pravila
 Route::get('/soglasie-na-obrabotku-personalnykh-dannykh', [HomeController::class, 'soglasie'])->name('soglasie');
 
 
-Route::get('yandex-news.xml', [HomeController::class, 'generateYandexNews'])->name('yandex_news');
+Route::get('dzen.xml', [HomeController::class, 'generateYandexNews'])->name('yandex_news');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 
