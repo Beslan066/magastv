@@ -639,14 +639,14 @@ HTML;
 
         // Создать объект SimpleXMLElement для формирования XML
         $xml = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?>
-    <rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"></rss>');
+<rss xmlns:yandex="http://news.yandex.ru" xmlns:media="http://search.yahoo.com/mrss/" version="2.0"></rss>');
 
         $channel = $xml->addChild('channel');
 
         // Добавляем общую информацию о канале
         $channel->addChild('title', 'Magas.tv - Новости и видеорепортажи');
         $channel->addChild('link', 'https://magas.tv');
-        $channel->addChild('lead', 'Последние новости и видеорепортажи');
+        $channel->addChild('description', 'Последние новости и видеорепортажи');
 
         foreach ($items as $item) {
             // Создать элемент <item> для каждого материала
@@ -656,16 +656,30 @@ HTML;
             $publishedDate = strtotime($item->published_at);
             $pubDate = date('D, d M Y H:i:s O', $publishedDate);
 
-            // Добавить поля title, description и другие элементы
-            $itemNode->addChild('title', htmlspecialchars($item->title, ENT_XML1));
-            $itemNode->addChild('lead', htmlspecialchars($item->lead, ENT_XML1));
+            // Функция для очистки текста от невалидных XML символов
+            $cleanXmlText = function($text) {
+                if (empty($text)) return '';
 
-            // Полный текст (объединяем lead и description если есть)
+                // Заменяем &nbsp; на валидный XML символ
+                $text = str_replace('&nbsp;', '&#160;', $text);
+
+                // Декодируем HTML сущности, затем экранируем для XML
+                $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $text = htmlspecialchars($text, ENT_XML1 | ENT_QUOTES, 'UTF-8');
+
+                return $text;
+            };
+
+            // Добавить поля title, description и другие элементы
+            $itemNode->addChild('title', $cleanXmlText($item->title));
+            $itemNode->addChild('description', $cleanXmlText($item->lead));
+
             $fullText = $item->content;
-            if (!empty($item->content)) {
-                $fullText .= ' ' . $item->content;
-            }
-            $itemNode->addChild('yandex:full-text', htmlspecialchars(strip_tags($fullText), ENT_XML1), 'http://news.yandex.ru');
+
+
+            $fullTextNode = $itemNode->addChild('yandex:full-text', '', 'http://news.yandex.ru');
+            $fullTextNode[0] = $cleanXmlText(strip_tags($fullText));
+
             $itemNode->addChild('pubDate', $pubDate);
 
             // Добавляем медиа-контент
@@ -706,17 +720,16 @@ HTML;
             if ($item->category_id) {
                 $category = Category::find($item->category_id);
                 if ($category) {
-                    $itemNode->addChild('category', htmlspecialchars($category->name, ENT_XML1));
+                    $itemNode->addChild('category', $cleanXmlText($category->name));
                 }
             }
         }
 
         // Преобразовать XML в строку
         $xmlString = $xml->asXML();
-        $xmlString = str_replace('&nbsp;', '&#160;', $xmlString);
 
-        // Заменить двойные экранирования
-        $xmlString = preg_replace('/&amp;(#[0-9]+|[a-z]+);/i', '&$1;', $xmlString);
+        // Дополнительная очистка на всякий случай
+        $xmlString = str_replace('&nbsp;', '&#160;', $xmlString);
 
         // Записать XML-строку в файл yandex-news.xml
         Storage::disk('public')->put('yandex-news.xml', $xmlString);
