@@ -52,7 +52,6 @@
                                         allow="autoplay"
                                         style="height: 500px">
                                 </iframe>
-
                             </div>
 
                             <div class="live-programs">
@@ -60,7 +59,7 @@
                                 <div class="live-programs__items">
                                     @if($tvProgramsToday)
                                         @foreach($tvProgramsToday as $program)
-                                            <div class="programListItem @if($program->top_show === 1) programListItem--third @endif">
+                                            <div class="programListItem @if($program->top_show === 1) programListItem--third @endif @if($currentTvProgram && $currentTvProgram->id === $program->id) active @endif">
                                                 <time datetime="{{ $program->program_date->format('Y-m-d') }} {{ $program->time_range }}">{{ Carbon\Carbon::parse($program->time_range)->format('H:i') }}</time>
                                                 <div class="programListItem__info">
                                                     <h6 class="programListItem__title">
@@ -75,9 +74,11 @@
                                                     <div class="programListItem__media programListItem__media--mobile">
                                                         <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
                                                     </div>
-                                                    <p class="programListItem__text">@if(isset($program->description))
+                                                    <p class="programListItem__text">
+                                                        @if(isset($program->description))
                                                             {{$program->description}}
-                                                    @endif</p>
+                                                        @endif
+                                                    </p>
                                                 </div>
                                                 <div class="programListItem__media">
                                                     <img src="{{asset('assets/poster.jpg')}}" alt="Program item image">
@@ -87,11 +88,10 @@
                                     @endif
                                 </div>
                             </div>
-
                         </div>
                         <div class="live-content__right">
                             <div class="ads-block">
-{{--                                <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
+                                {{--                                <img src="{{asset('assets/add.jpg')}}" alt="add">--}}
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('layouts.frontend', function ($view) {
+        View::composer(['layouts.frontend', 'frontend.live.live'], function ($view) {
             $timezone = 'Europe/Moscow';
             $today = Carbon::now($timezone)->toDateString();
             $now = Carbon::now($timezone);
