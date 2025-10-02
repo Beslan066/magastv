@@ -621,12 +621,12 @@ HTML;
     {
         // Получить данные новостей и видеорепортажей
         $newsQuery = News::query()
-            ->select('id', 'title', 'slug', 'lead', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+            ->select('id', 'title', 'slug', 'lead', 'content', 'image as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
             ->addSelect(DB::raw("'news' as type"));
 
         $videosQuery = VideoReportage::query()
-            ->select('id', 'title', 'slug', 'lead', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+            ->select('id', 'title', 'slug', 'lead', 'content', 'preview as media', 'published_at', 'category_id', 'views')
             ->where('status', 1)
             ->whereNot('ing_news', 1)
             ->addSelect(DB::raw("'video' as type"));
@@ -661,9 +661,9 @@ HTML;
             $itemNode->addChild('lead', htmlspecialchars($item->lead, ENT_XML1));
 
             // Полный текст (объединяем lead и description если есть)
-            $fullText = $item->lead;
-            if (!empty($item->lead)) {
-                $fullText .= ' ' . $item->lead;
+            $fullText = $item->content;
+            if (!empty($item->content)) {
+                $fullText .= ' ' . $item->content;
             }
             $itemNode->addChild('yandex:full-text', htmlspecialchars(strip_tags($fullText), ENT_XML1), 'http://news.yandex.ru');
             $itemNode->addChild('pubDate', $pubDate);
@@ -696,7 +696,7 @@ HTML;
             // Создать ссылку в зависимости от типа материала
             $link = 'https://magas.tv/';
             if ($item->type === 'video') {
-                $link .= 'video/' . $item->slug;
+                $link .= 'news/' . $item->slug;
             } else {
                 $link .= 'news/' . $item->slug;
             }
