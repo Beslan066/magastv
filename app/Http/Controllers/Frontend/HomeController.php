@@ -30,42 +30,42 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::query()->orderBy('id', 'desc')->get();
+        // Кэшируем категории, они редко меняются
+        $categories = Cache::remember('categories', 3600, function () {
+            return Category::query()->orderBy('id', 'desc')->get();
+        });
 
-        // Новость или видеорепортаж из главного банера
-        $newsQuery = News::query()
-            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
-            ->where('status', 1)
+        // Базовый запрос для новостей и видео
+        $baseNewsQuery = function () {
+            return News::query()
+                ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
+                ->where('status', 1)
+                ->addSelect(DB::raw("'news' as type"));
+        };
+
+        $baseVideosQuery = function () {
+            return VideoReportage::query()
+                ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
+                ->where('status', 1)
+                ->whereNot('ing_news', 1)
+                ->addSelect(DB::raw("'video' as type"));
+        };
+
+        // Главный материал
+        $mainPost = $baseNewsQuery()
             ->where('main_material', 1)
-            ->addSelect(DB::raw("'news' as type"));
-
-        $videosQuery = VideoReportage::query()
-            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
-            ->where('status', 1)
-            ->whereNot('ing_news', 1)
-            ->where('main_material', 1)
-            ->addSelect(DB::raw("'video' as type"));
-
-        $mainPost = $newsQuery->unionAll($videosQuery)
+            ->unionAll($baseVideosQuery()->where('main_material', 1))
             ->orderBy('published_at', 'desc')
             ->first();
 
-        // Базовые запросы
-        $newsQuery = News::query()
-            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
-            ->where('status', 1)
-            ->addSelect(DB::raw("'news' as type"));
+        // Основные материалы с фильтром по категории
+        $newsQuery = $baseNewsQuery();
+        $videosQuery = $baseVideosQuery();
 
-        $videosQuery = VideoReportage::query()
-            ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
-            ->where('status', 1)
-            ->whereNot('ing_news', 1)
-            ->addSelect(DB::raw("'video' as type"));
-
-        // Применяем фильтр по категории, если он есть
         if ($request->has('category_id') && $request->category_id != 'all') {
-            $newsQuery->where('category_id', $request->category_id);
-            $videosQuery->where('category_id', $request->category_id);
+            $categoryId = $request->category_id;
+            $newsQuery->where('category_id', $categoryId);
+            $videosQuery->where('category_id', $categoryId);
         }
 
         $items = $newsQuery->unionAll($videosQuery)
@@ -73,15 +73,20 @@ class HomeController extends Controller
             ->take(6)
             ->get();
 
+        // Трансферы с жадной загрузкой
         $transfers = Transfer::query()
-            ->orderBy('id', 'asc')
             ->select(['id', 'title', 'lead', 'published', 'slider_image', 'slider_video'])
             ->where('main_material', 1)
+            ->orderBy('id', 'asc')
             ->get();
 
-        $allTransfers = Transfer::query()->select('id', 'title', 'image', 'slider_video', 'age_restriction_id')
+        $allTransfers = Transfer::query()
+            ->select('id', 'title', 'image', 'slider_video', 'age_restriction_id')
             ->with('age_restriction')
-            ->orderBy('id', 'asc')->limit(16)->get();
+            ->withCount('videos')
+            ->orderBy('id', 'asc')
+            ->limit(16)
+            ->get();
 
         $popularVideos = VideoTransfer::query()
             ->select('id', 'title', 'preview', 'video', 'transfer_id')
@@ -89,24 +94,16 @@ class HomeController extends Controller
             ->limit(8)
             ->get();
 
-        // Популярные материалы (новости + видео)
-        $popularQuery = News::query()
-            ->select('id', 'title', 'slug', 'lead', 'image as media', 'published_at', 'category_id', 'views')
-            ->where('status', 1)
+        // Популярные материалы
+        $popularItems = $baseNewsQuery()
             ->where('published_at', '>=', now()->subDays(7))
-            ->addSelect(DB::raw("'news' as type"))
             ->unionAll(
-                VideoReportage::query()
-                    ->select('id', 'title', 'slug', 'lead', 'preview as media', 'published_at', 'category_id', 'views')
-                    ->where('status', 1)
+                $baseVideosQuery()
                     ->where('published_at', '>=', now()->subDays(7))
-                    ->whereNot('ing_news', 1)
-                    ->addSelect(DB::raw("'video' as type"))
             )
             ->orderBy('views', 'desc')
-            ->limit(7);
-
-        $popularItems = $popularQuery->get();
+            ->limit(7)
+            ->get();
 
         return view('frontend.index', [
             'categories' => $categories,
@@ -688,21 +685,21 @@ HTML;
                     // Для видео добавляем медиа-группу
                     $mediaGroup = $itemNode->addChild('media:group', '', 'http://search.yahoo.com/mrss/');
                     $mediaContent = $mediaGroup->addChild('media:content');
-                    $mediaContent->addAttribute('url', asset('storage/' . $item->media));
+                    $mediaContent->addAttribute('url', asset('storage/public/' . $item->video));
                     $mediaContent->addAttribute('type', 'video/mp4');
 
                     $mediaThumbnail = $mediaGroup->addChild('media:thumbnail');
-                    $mediaThumbnail->addAttribute('url', asset('storage/' . $item->media));
+                    $mediaThumbnail->addAttribute('url', asset('storage/public/' . $item->media));
 
                     // Добавляем enclosure с превью
                     $enclosure = $itemNode->addChild('enclosure');
-                    $enclosure->addAttribute('url', asset('storage/' . $item->media));
+                    $enclosure->addAttribute('url', asset('storage/public/' . $item->media));
                     $enclosure->addAttribute('type', 'image/jpeg');
 
                 } else {
                     // Для новостей добавляем изображение
                     $enclosure = $itemNode->addChild('enclosure');
-                    $enclosure->addAttribute('url', asset('storage/' . $item->media));
+                    $enclosure->addAttribute('url', asset('storage/public/' . $item->media));
                     $enclosure->addAttribute('type', 'image/jpeg');
                 }
             }
