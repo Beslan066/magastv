@@ -30,10 +30,12 @@
                             </div>
 
                             <div class="input-group mb-4">
-                                <select class="form-select" id="inputGroupSelect02" name="category_id">
+                                <select class="form-select" id="inputGroupSelect02" name="tv_show_type_id">
                                     @if(isset($tvProgram->tvShowType))
                                         <option value="{{$tvProgram->tvShowType->id}}">{{ $tvProgram->tvShowType->title }}</option>
-                                        @foreach($categories as $category)
+                                        <option value="">Выберите категорию...</option>
+
+                                    @foreach($categories as $category)
                                             <option value="{{ $category->id }}">
                                                 {{ $category->title }}
                                             </option>
