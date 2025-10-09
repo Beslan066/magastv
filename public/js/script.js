@@ -103,7 +103,6 @@ headerScheduleSliders.forEach((slider) => {
     });
   })
   }else {
-console.log("not fix  ed");
 
   headerScheduleSliders.forEach((slider) => {
     new Swiper(slider, {
