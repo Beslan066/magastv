@@ -11,16 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const pauseSvg = playPauseBtn.querySelector('.pause-svg--radio');
     const volumeBtn = document.querySelector('.player__mute');
     const volumeSlider = document.querySelector('.range-input');
-    // const statusIndicator = document.createElement('div'); // Для показа статуса
 
-    // Добавляем индикатор статуса в DOM
-    // statusIndicator.className = 'player-status';
-    // statusIndicator.style.cssText = 'font-size: 12px; color: #666; margin-top: 5px;';
-    // playPauseBtn.parentNode.appendChild(statusIndicator);
 
     console.log('Audio player initialized');
 
-    // Состояния плеера
+
     const PlayerState = {
         IDLE: 'idle',
         LOADING: 'loading',
@@ -33,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentSourceIndex = 0;
     let retryCount = 0;
     const MAX_RETRIES = 2;
-    const RETRY_DELAYS = [1000, 3000, 5000]; // Задержки для повторных попыток
+    const RETRY_DELAYS = [1000, 3000, 5000];
 
     // Корректные источники аудио
     const audioSources = [
@@ -42,13 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
         'https://public.mediacdn.ru/magas/'
     ];
 
-    // Обновление статуса UI
+
     function updateStatus(message) {
         console.log('Player status:', message);
-        // statusIndicator.textContent = message;
 
-        // Добавляем классы для разных состояний
-        // statusIndicator.className = 'player-status ' + currentState;
     }
 
     function setAudioSource(source) {
@@ -88,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.removeEventListener('playing', onAudioPlaying);
     }
 
-    // Обработчики событий аудио
+
     function onAudioPlay() {
         console.log('Audio play event fired');
         currentState = PlayerState.PLAYING;
@@ -112,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playPauseBtn.classList.remove('loading');
         updateStatus(`Ошибка: ${getErrorMessage(audio.error)}`);
 
-        // Автоматически пробуем следующий источник только если пользователь хотел играть
+
         if (playPauseBtn.classList.contains('user-requested-play')) {
             setTimeout(() => tryNextAudioSource(), 2000);
         }
@@ -133,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Audio stalled');
         updateStatus('Буферизация...');
 
-        // Если застревание длится долго, пробуем следующий источник
+
         setTimeout(() => {
             if (currentState === PlayerState.PLAYING && audio.paused) {
                 updateStatus('Проблема с соединением, пробуем другой источник...');
@@ -169,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function togglePlayback() {
-        // Помечаем, что воспроизведение инициировано пользователем
+
         playPauseBtn.classList.add('user-requested-play');
 
         if (audio.paused) {
@@ -187,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         currentState = PlayerState.PLAYING;
                         updatePlayButtonState(true);
                         playPauseBtn.classList.remove('loading');
-                        retryCount = 0; // Сбрасываем счетчик попыток при успехе
+                        retryCount = 0;
                         updateStatus('Воспроизведение');
                     })
                     .catch(error => {
@@ -196,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         playPauseBtn.classList.remove('loading');
                         updateStatus('Ошибка воспроизведения');
 
-                        // Пробуем следующий источник
+
                         tryNextAudioSource();
                     });
             }
@@ -221,7 +213,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         currentSourceIndex++;
         if (currentSourceIndex >= audioSources.length) {
-            currentSourceIndex = 0; // Циклически перебираем источники
+            currentSourceIndex = 0; 
             retryCount++;
         }
 

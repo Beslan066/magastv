@@ -2718,7 +2718,7 @@ body.active {
 }
 .header__media--video {
     width: 100%;
-    height: 100%;
+    height:auto;
 }
 .vjs-loading-spinner, .vjs-big-play-button, .vjs-modal-dialog, .vjs-text-track-display {
     display: none !important;
