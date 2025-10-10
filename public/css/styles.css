@@ -319,7 +319,7 @@ body.active {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 .header__media_content iframe{
     display: block;
@@ -506,25 +506,7 @@ body.active {
         left: 0;
         top: unset;
     }
-    .header__media_content.fullscreen {
-  width: 100vw;
-  height: 100vh;
-  max-width: calc(100vh * 16 / 9);
-  max-height: calc(100vw * 9 / 16);
-    }
-    /* Фолбэки для разных браузеров */
-.header__media_content:-webkit-full-screen.fullscreen {
-  width: 100vw;
-  height: 100vh;
-  max-width: calc(100vh * 16 / 9);
-  max-height: calc(100vw * 9 / 16);
-}
-.header__media_content:-moz-full-screen.fullscreen {
-  width: 100vw;
-  height: 100vh;
-  max-width: calc(100vh * 16 / 9);
-  max-height: calc(100vw * 9 / 16);
-}
+
 .overlay__inner {
     padding: 12px;
     display: flex;
@@ -2738,6 +2720,9 @@ body.active {
 .header__media--video {
     width: 100%;
     height:100%;
+}
+.header__media--video video{
+object-fit: contain;
 }
 .vjs-loading-spinner, .vjs-big-play-button, .vjs-modal-dialog, .vjs-text-track-display {
     display: none !important;
