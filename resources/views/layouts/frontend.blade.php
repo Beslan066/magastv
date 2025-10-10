@@ -971,7 +971,7 @@
     }
 </script>
 <script src="{{asset('js/video.min.js')}}"></script>
-<script src="{{asset('js/headerLive.js')}}"></script>
+<script src="{{asset('js/headerLive.js')}}" type="module"></script>
 @stack('scripts')
 
 <!-- Yandex.Metrika counter -->

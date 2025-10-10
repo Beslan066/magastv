@@ -223,13 +223,13 @@
 
 
                                             <div>
-                                                <audio id="radio-stream" src="/proxy/audio"></audio>
+                                               <audio src="http://77.87.97.62:8086/ingradio" id="radio-stream"></audio>
 
                                                 <button
                                                     class="btn-reset player__controls_btn player__controls_btn--play"
                                                     id="play-pause-btn">
                                                     <!-- Иконка PLAY (по умолчанию видима) -->
-                                                    <svg class="play-svg" width="14" height="14" viewBox="0 0 12 14"
+                                                    <svg class="play-svg--radio" width="14" height="14" viewBox="0 0 12 14"
                                                          fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path
                                                             d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z"
@@ -237,7 +237,7 @@
                                                     </svg>
 
                                                     <!-- Иконка PAUSE (по умолчанию скрыта) -->
-                                                    <svg class="pause-svg" width="24" height="24" viewBox="0 0 24 24"
+                                                    <svg class="pause-svg--radio" width="24" height="24" viewBox="0 0 24 24"
                                                          fill="none" xmlns="http://www.w3.org/2000/svg"
                                                          style="display: none;">
                                                         <rect x="6" y="4" width="4" height="16" rx="1" fill="white"/>
