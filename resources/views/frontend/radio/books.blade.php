@@ -42,10 +42,12 @@
                                 @foreach($books as $book)
                                     <li class="transferItem active">
                                         <div class="transferItem_media" style="height: 158px !important;">
-                                            <img src="{{asset('storage/public/' . $book->image)}}" alt="{{$book->title}}">
+                                            <a href="{{route('books.single', $book->id)}}">
+                                                <img src="{{asset('storage/public/' . $book->image)}}" alt="{{$book->title}}">
+                                            </a>
                                         </div>
                                         <h6 class="transferItem_title">
-                                            <a>{{$book->title}}</a>
+                                            <a href="{{route('books.single', $book->id)}}">{{$book->title}}</a>
                                         </h6>
                                         <span class="transferItem_count">Автор: {{$book->author->name}}</span>
                                     </li>
