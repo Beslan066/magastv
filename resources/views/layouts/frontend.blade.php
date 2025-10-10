@@ -161,7 +161,7 @@
                                 <div class="overlay__inner">
                                     <div class="video-custom-controls">
                                         <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute hidden"
+                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute"
                                             data-id="muteVideo">
                                             <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -171,7 +171,7 @@
 
                                         </button>
                                         <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute"
+                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute hidden"
                                             data-id="unmuteVideo">
 
                                             <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
