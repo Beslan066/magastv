@@ -51,7 +51,15 @@ import './lib/video.min.js';
             liveui: true,
             liveTracker: false,
             controlBar: false,
-            html5: [],
+            html5: {
+                // !ЭКСПЕРИМЕНТАЛЬНЫЕ НАСТРОЙКИ!
+                vhs:{
+                    overrideNative:true
+                },
+                nativeAudioTracks:false,
+                nativeVideoTracks:false,
+                nativeTextTracks:false
+            },
             plugins: {},
             sources: [{
                 src: "https://ingushetia.mediacdn.ru/cdn/ingushetia/playlist.m3u8",
