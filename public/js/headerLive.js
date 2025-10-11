@@ -6,7 +6,7 @@ import './lib/video.min.js';
   const pause = document.querySelector('.video-custom-controls__btn--pause');
   const mute = document.querySelector('[data-id="muteVideo"]');
   const unmute = document.querySelector('[data-id="unmuteVideo"]');
-  const vid = document.querySelector('#header__media--video');
+  const vid = document.querySelector('.header__media--video');
 const fullscreenButton = document.querySelector('[data-id="fullScreenVideo"]');
 const videoContainer = document.querySelector('.header__media_content--video');
 console.log('headerLive');
@@ -42,39 +42,9 @@ function toggleFullscreen(element) {
     }
   }
 }
-    const updateMuteState = () => {
-    const isMuted = vid.muted;
-    mute.classList.toggle('hidden', !isMuted);
-    unmute.classList.toggle('hidden',isMuted);
-  };
 
 
 
-  play.addEventListener('click',() => {
-
-    vid.play().then(() => {
-      play.classList.add("hidden");
-      pause.classList.remove("hidden");
-    })
-    .catch(error => {
-      console.error('Ошибка воспроизведения видео:', error);
-    });
-  });
-pause.addEventListener('click',()=> {
-  vid.pause();
-  play.classList.remove("hidden");
-  pause.classList.add("hidden");
-});
-mute.addEventListener('click',()=> {
-  console.log('mute')
-  vid.muted=false;
-updateMuteState()
-})
-unmute.addEventListener('click',()=> {
-  console.log('unmute')
-  vid.muted=true;
- updateMuteState()
-})
 function headerLive() {
   console.log('test');
   const player = videojs('header__media--video', {
@@ -106,6 +76,12 @@ function headerLive() {
   player.on('canplay', function() {
    videoContainer.classList.remove('loading');
 });
+
+   const updateMuteState = () => {
+    const isMuted = player.muted(); // Get current muted state from Video.js
+    mute.classList.toggle('hidden', !isMuted);
+    unmute.classList.toggle('hidden', isMuted);
+};
  player.ready(() => {
     // Check if the stream is live using LiveTracker
     console.log('livetrack')
@@ -118,6 +94,31 @@ function headerLive() {
     if (player.duration() === Infinity) {
       console.log('Live stream detected (via duration check).');
     }
+    play.addEventListener('click',() => {
+      player.play().then(() => {
+          play.classList.add("hidden");
+          pause.classList.remove("hidden");
+          console.log('play');
+    })
+    .catch(error => {
+      console.error('Ошибка воспроизведения видео:', error);
+    });
+  });
+pause.addEventListener('click',()=> {
+    player.pause();
+    console.log('pause');
+  play.classList.remove("hidden");
+  pause.classList.add("hidden");
+});
+mute.addEventListener('click', () => {
+    player.muted(false); // Unmute the player
+    updateMuteState();
+});
+
+unmute.addEventListener('click', () => {
+    player.muted(true); // Mute the player
+    updateMuteState();
+});
   });
 
   setInterval(function() {

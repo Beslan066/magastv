@@ -468,13 +468,15 @@ body.active {
     display: none;
 }
 
-.header__media_content--video:hover .overlay {
-    display: block;
-}
 
-.header__media_content--radio:hover .overlay {
-    display: block;
-}
+    .header__media_content--video:hover .overlay {
+        display: block;
+    }
+
+    .header__media_content--radio:hover .overlay {
+        display: block;
+    }
+
 
 .overlay__inner {
     padding: 12px;
@@ -508,7 +510,9 @@ body.active {
     align-items: center;
     gap: 25px;
 }
-
+.video-custom-controls__btn {
+    margin: 5px;
+}
 .video-custom-controls__btn svg {
     fill: #fff;
 }

@@ -484,8 +484,9 @@ body.active {
     pointer-events: none;
 }
 
-.header__media_content:hover .overlay{
-    display:block !important;
+
+    .header__media_content:hover .overlay{
+        display:block !important;
 }
 
 
@@ -499,7 +500,8 @@ body.active {
         display: block;
     }
 
-     .header__media_content.fullscreen .overlay{
+
+    .header__media_content.fullscreen .overlay{
         display: block;
         height: 50px;
         bottom:0;
@@ -542,7 +544,9 @@ body.active {
     align-items: center;
     gap: 25px;
 }
-
+.video-custom-controls__btn {
+    margin: 5px;
+}
 .video-custom-controls__btn svg {
     fill: #fff;
 }
