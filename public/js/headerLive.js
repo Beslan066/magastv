@@ -6,7 +6,6 @@ import './lib/video.min.js';
   const pause = document.querySelector('.video-custom-controls__btn--pause');
   const mute = document.querySelector('[data-id="muteVideo"]');
   const unmute = document.querySelector('[data-id="unmuteVideo"]');
-  const vid = document.querySelector('.header__media--video');
 const fullscreenButton = document.querySelector('[data-id="fullScreenVideo"]');
 const videoContainer = document.querySelector('.header__media_content--video');
 console.log('headerLive');
