@@ -697,8 +697,7 @@
     </div>
 </footer>
 
-<audio src="http://77.87.97.62:8086/ingradio" id="radio-stream" preload="none"></audio>
-
+<audio src="/proxy/audio" id="radio-stream" preload="none"></audio>
 <script src="{{asset('js/swiper.min.js')}}"></script>
 <script src="{{asset('js/nouislider.js')}}"></script>
 

@@ -38,19 +38,29 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/proxy/audio', function() {
-    $streamUrl = 'http://77.87.97.62:8086/ingradio';
+    $streamUrl = 'http://77.87.97.62:8086/ingradio'; // Используем HTTP, не HTTPS
 
     $context = stream_context_create([
         'http' => [
             'method' => 'GET',
             'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\r\n",
-            'timeout' => 30
+            'timeout' => 30,
+            'ignore_errors' => true // Игнорируем ошибки HTTP
+        ],
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false,
         ]
     ]);
 
-    return response()->stream(function() use ($streamUrl, $context) {
+    try {
         $stream = fopen($streamUrl, 'rb', false, $context);
-        if ($stream) {
+
+        if (!$stream) {
+            return response('Cannot open stream', 500);
+        }
+
+        return response()->stream(function() use ($stream) {
             while (!feof($stream)) {
                 echo fread($stream, 8192);
                 ob_flush();
@@ -58,13 +68,26 @@ Route::get('/proxy/audio', function() {
                 if (connection_aborted()) break;
             }
             fclose($stream);
-        }
-    }, 200, [
-        'Content-Type' => 'audio/mpeg',
-        'Cache-Control' => 'no-cache, no-store',
-        'Pragma' => 'no-cache',
+        }, 200, [
+            'Content-Type' => 'audio/mpeg',
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS'
+        ]);
+
+    } catch (\Exception $e) {
+        return response('Stream error: ' . $e->getMessage(), 500);
+    }
+});
+
+Route::options('/proxy/audio', function() {
+    return response()->json([], 200, [
         'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Headers' => 'Content-Type'
+        'Access-Control-Allow-Headers' => '*',
+        'Access-Control-Allow-Methods' => 'GET, OPTIONS'
     ]);
 });
 
