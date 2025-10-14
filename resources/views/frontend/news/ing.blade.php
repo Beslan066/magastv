@@ -66,7 +66,7 @@
                                                 </a>
                                                 <div class="news-item__bottom">
                                                     <h6 class="news-item__title">
-                                                        <a href="{{ route('home.news.single', $tiding->id) }}">{{ $tiding->title }}</a>
+                                                        <a href="{{ route('home.news.single', $tiding->slug) }}">{{ $tiding->title }}</a>
                                                     </h6>
                                                     <div class="news-item__descr">
                                                         <p>{{ $tiding->lead }}</p>
