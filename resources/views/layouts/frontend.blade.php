@@ -102,12 +102,12 @@
                     <div class="header__media_tabs">
                         <button class="btn-reset header__media_tab header-tab active" data-media-tab="tv">
                             <div class="header-tab__main_content">
-                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                     xmlns="http://www.w3.org/2000/svg">
-                                    <rect x="4" y="8" width="12" height="8" rx="2" stroke-width="1.5"></rect>
-                                    <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5"
-                                          stroke-linejoin="bevel"></path>
-                                </svg>
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <rect x="4" y="8" width="12" height="8" rx="2" stroke-width="1.5"></rect>
+                                        <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5"
+                                              stroke-linejoin="bevel"></path>
+                                    </svg>
                                 ТВ
                             </div>
                             <div class="header__media_info--mobile">
@@ -247,7 +247,6 @@
                                 </h6>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -698,6 +697,7 @@
     </div>
 </footer>
 
+<audio src="http://77.87.97.62:8086/ingradio" id="radio-stream" preload="none"></audio>
 
 <script src="{{asset('js/swiper.min.js')}}"></script>
 <script src="{{asset('js/nouislider.js')}}"></script>
