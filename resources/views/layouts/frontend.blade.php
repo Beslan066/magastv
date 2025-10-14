@@ -698,8 +698,8 @@
 </footer>
 
 <audio src="/proxy/audio" id="radio-stream" preload="none"></audio>
-<script src="{{asset('js/swiper.min.js')}}"></script>
-<script src="{{asset('js/nouislider.js')}}"></script>
+<script src="{{asset('js/swiper.min.js')}}"  defer></script>
+<script src="{{asset('js/nouislider.js')}}"  defer></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -920,8 +920,6 @@
         }
     }
 </script>
-<script src="{{asset('js/video.min.js')}}"></script>
-<script src="{{asset('js/headerLive.js')}}" type="module"></script>
 @stack('scripts')
 
 <!-- Yandex.Metrika counter -->
