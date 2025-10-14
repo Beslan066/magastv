@@ -202,7 +202,7 @@
                                             <a href="{{ $mainPost->type === 'news' ? route('home.news.single', $mainPost->slug) : route('home.news.single', $mainPost->slug) }}">
                                                 <div class="news-item__media">
                                                     <img src="{{ asset('storage/public/' . ($mainPost->type === 'news' ? $mainPost->media : $mainPost->media)) }}"
-                                                         alt="{{ $mainPost->title }}">
+                                                         alt="{{ $mainPost->title }}" fetchpriority="high">
                                                     @if($mainPost->type === 'video')
                                                         <button class="btn-reset news-item--media__btn">
                                                             <svg width="10" height="12" viewBox="0 0 10 12" fill="none"

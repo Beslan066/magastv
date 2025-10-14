@@ -1,3 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import '../../public/css/vendor/normalize.css';
+@import '../../public/css/vendor/swiper.min.css';
+@import '../../public/css/vendor/nouislider.css';
+@import '../../public/css/styles.css';
+@import '../../public/css/pages/index.page.css';
+
+
+
