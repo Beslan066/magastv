@@ -686,7 +686,9 @@
 </footer>
 
 <audio src="/proxy/audio" id="radio-stream" preload="none"></audio>
-
+<script src="{{asset('js/swiper.min.js')}}"  defer></script>
+<script src="{{asset('js/nouislider.js')}}"  defer></script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
         // Инициализация для всех слайдеров телепрограммы
         const scheduleSliders = document.querySelectorAll('[data-schedule]');
