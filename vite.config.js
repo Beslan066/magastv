@@ -8,13 +8,4 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-    build: {
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    vendor: ['swiper', 'nouislider'] // выносим библиотеки в отдельный чанк
-                }
-            }
-        }
-    }
 });
