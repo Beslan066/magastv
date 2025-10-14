@@ -223,7 +223,7 @@
 
 
                                             <div>
-                                               <audio src="http://77.87.97.62:8086/ingradio" id="radio-stream"></audio>
+                                               <audio src="https://77.87.97.62:8086/ingradio" id="radio-stream"></audio>
 
                                                 <button
                                                     class="btn-reset player__controls_btn player__controls_btn--play"
