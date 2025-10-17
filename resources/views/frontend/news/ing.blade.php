@@ -22,7 +22,7 @@
                                 <ul class="list-reset news-block__list news-block__list--second" id="newsList">
                                     @if(isset($mainPost))
                                         <li class="news-item news-item--second main-news-item" data-category="society" id="mainNewsItem">
-                                            <a href="{{ route('news.show', $mainPost->id) }}">
+                                            <a href="{{ route('home.news.single', $mainPost->slug) }}">
                                                 <div class="news-item__media">
                                                     <img src="{{ asset('storage/public/' . $mainPost->preview) }}" alt="{{ $mainPost->title }}">
                                                     @if($mainPost->type === 'video')

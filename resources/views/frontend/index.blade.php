@@ -156,6 +156,10 @@
         .transferItem:hover .transferItem__image {
             opacity: 0;
         }
+
+        .popular .news-block {
+            max-width: unset;
+        }
     </style>
 @endpush
 
@@ -457,27 +461,63 @@
             <div class="container">
                 <div class="popular__inner">
                     <h2 class="popular__title">
-                        Часто смотрят
+                        Последние передачи
                     </h2>
-                    <div class="releases__content">
-                        <div class="releases__items home-release-item">
-                            @if(isset($popularVideos))
-                                @foreach($popularVideos as $video)
-                                    <div class="releases__items">
-                                        {!! $video->video !!}
-                                        {{--                                        <div class="popular-item__info">--}}
-                                        {{--                                            <h6 class="popular-item__title">--}}
-                                        {{--                                                <a href="{{route('transfer', $video->transfer_id)}}">--}}
-                                        {{--                                                    {{$video->title}}--}}
-                                        {{--                                                </a>--}}
-                                        {{--                                            </h6>--}}
-                                        {{--                                            <time datetime="{{$video->formated_created_at}}" class="popular-item__time">--}}
-                                        {{--                                                {{$video->formated_created_at}}--}}
-                                        {{--                                            </time>--}}
-                                        {{--                                        </div>--}}
-                                    </div>
-                                @endforeach
-                            @endif
+                    <div class="news__main">
+                        <div class="news__grid">
+                            <div class="news-block">
+                                <ul class="list-reset news-block__list" id="news-items-container">
+                                    @if(isset($popularVideos))
+                                        @foreach($popularVideos as $item)
+                                            <li class="news-item  news-item--media">
+                                                <a href="{{route('transfer', $item->transfer_id)}}">
+                                                    <div class="news-item__media">
+                                                        @if(isset($item->preview))
+                                                            <img src="{{asset('storage/public/' . $item->preview)}}"
+                                                                 alt="{{$item->title}}">
+                                                        @else
+                                                            <img src="{{asset('storage/public/' . $item->transfer->image)}}"
+                                                                 alt="{{$item->title}}">
+                                                        @endif
+                                                        <button class="btn-reset news-item--media__btn">
+                                                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"
+                                                                 xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z"
+                                                                    fill="white"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </a>
+                                                <div class="news-item__bottom">
+                                                    <h6 class="news-item__title">
+                                                        <a href="{{route('transfer', $item->transfer_id)}}">{{$item->title}}</a>
+                                                    </h6>
+                                                    <div class="news-item__descr">
+                                                        <p>{{$item->lead}}</p>
+                                                    </div>
+                                                    {{--                                                    <div class="news-item__info">--}}
+                                                    {{--                                                        <time datetime="2025-04-1 18:35" class="news-item_time">--}}
+                                                    {{--                                                            {{$item->formatted_published_at}}--}}
+                                                    {{--                                                        </time>--}}
+                                                    {{--                                                        <div class="news-item_views">--}}
+                                                    {{--                                                            <div class="item-views__icon">--}}
+
+                                                    {{--                                                                <svg width="14" height="10" viewBox="0 0 14 10"--}}
+                                                    {{--                                                                     fill="none" xmlns="http://www.w3.org/2000/svg">--}}
+                                                    {{--                                                                    <path--}}
+                                                    {{--                                                                        d="M7 0.333496C11.6523 0.333496 13.9857 5.21553 14 5.24561C14 5.24561 11.6667 9.6665 7 9.6665C2.33333 9.6665 0 5.24561 0 5.24561C0.0143304 5.21553 2.34771 0.333496 7 0.333496ZM7 2.6665C5.71134 2.6665 4.66699 3.71182 4.66699 5.00049C4.66717 6.289 5.71144 7.3335 7 7.3335C8.28856 7.3335 9.33283 6.289 9.33301 5.00049C9.33301 3.71182 8.28866 2.6665 7 2.6665Z"></path>--}}
+                                                    {{--                                                                </svg>--}}
+                                                    {{--                                                            </div>--}}
+                                                    {{--                                                            <span>{{$item->views}}</span>--}}
+                                                    {{--                                                        </div>--}}
+                                                    {{--                                                    </div>--}}
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -487,7 +527,6 @@
 @endsection
 
 @push('scripts')
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const tabs = document.querySelectorAll('.tab');
@@ -581,7 +620,6 @@
                 });
             });
         });
-
     </script>
 
     <script>
@@ -624,10 +662,7 @@
                     }
                 });
             });
-
-
         });
-
     </script>
 
     <script>
