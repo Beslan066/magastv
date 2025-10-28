@@ -13,14 +13,20 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        $categories = Category::query()->orderBy('id', 'desc')->paginate(5);
+        $categories = Category::query()
+            ->with(['user']) // eager loading для автора
+            ->when($request->search, function($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(5)
+            ->withQueryString(); // сохраняем параметры в пагинации
 
         return view('admin.category.index', compact('categories'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

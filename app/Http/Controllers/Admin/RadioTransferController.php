@@ -17,14 +17,58 @@ class RadioTransferController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transfers = RadioTransfer::query()->orderBy('id', 'desc')->paginate(10);
+        $ageRestrictions = AgeRestriction::all(); // Получаем возрастные ограничения
+        $radioShowTypes = RadioShowType::all(); // Получаем типы радио-передач
 
+        $transfers = RadioTransfer::query()
+            ->with(['user', 'age_restriction', 'radioShowType', 'programs']) // eager loading
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('lead', 'like', "%{$search}%");
+            })
+            ->when($request->author, function($query, $author) {
+                $query->whereHas('user', function($q) use ($author) {
+                    $q->where('name', 'like', "%{$author}%");
+                });
+            })
+            ->when($request->age_restriction, function($query, $ageRestriction) {
+                $query->where('age_restriction_id', $ageRestriction);
+            })
+            ->when($request->radio_show_type, function($query, $radioShowType) {
+                $query->where('radio_show_type_id', $radioShowType);
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'programs_count_desc':
+                        $query->withCount('programs')->orderBy('programs_count', 'desc');
+                        break;
+                    case 'programs_count_asc':
+                        $query->withCount('programs')->orderBy('programs_count', 'asc');
+                        break;
+                    default:
+                        $query->orderBy('id', 'desc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'desc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
 
-        return view('admin.radio-transfer.index', [
-            'transfers' => $transfers,
-        ]);
+        return view('admin.radio-transfer.index', compact('transfers', 'ageRestrictions', 'radioShowTypes'));
     }
 
     /**

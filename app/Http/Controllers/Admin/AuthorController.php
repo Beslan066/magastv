@@ -13,14 +13,18 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-
-        $authors = Author::query()->orderBy('id', 'desc')->paginate(5);
+        $authors = Author::query()
+            ->when($request->search, function($query, $search) {
+                $query->where('name', 'like', "%{$search}%");
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(5)
+            ->withQueryString(); // сохраняем параметры в пагинации
 
         return view('admin.author.index', compact('authors'));
     }
-
     /**
      * Show the form for creating a new resource.
      */

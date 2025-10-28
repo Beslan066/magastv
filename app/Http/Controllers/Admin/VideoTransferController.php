@@ -9,16 +9,70 @@ use App\Models\Transfer;
 use App\Models\VideoTransfer;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+
 
 class VideoTransferController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $videos = VideoTransfer::query()->orderBy('id', 'desc')->paginate(10);
+        $transfers = Transfer::all(); // Получаем все передачи для фильтра
 
-        return view('admin.video-transfer.index', [
-            'videos' => $videos,
-        ]);
+        $videos = VideoTransfer::query()
+            ->with(['user', 'transfer']) // eager loading
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%");
+            })
+            ->when($request->author, function($query, $author) {
+                $query->whereHas('user', function($q) use ($author) {
+                    $q->where('name', 'like', "%{$author}%");
+                });
+            })
+            ->when($request->transfer, function($query, $transferId) {
+                $query->where('transfer_id', $transferId);
+            })
+            ->when($request->views_min, function($query, $viewsMin) {
+                $query->where('views', '>=', $viewsMin);
+            })
+            ->when($request->views_max, function($query, $viewsMax) {
+                $query->where('views', '<=', $viewsMax);
+            })
+            ->when($request->date_from, function($query, $dateFrom) {
+                $query->whereDate('created_at', '>=', $dateFrom);
+            })
+            ->when($request->date_to, function($query, $dateTo) {
+                $query->whereDate('created_at', '<=', $dateTo);
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'views_desc':
+                        $query->orderBy('views', 'desc');
+                        break;
+                    case 'views_asc':
+                        $query->orderBy('views', 'asc');
+                        break;
+                    default:
+                        $query->orderBy('id', 'desc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'desc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
+
+        return view('admin.video-transfer.index', compact('videos', 'transfers'));
     }
 
     /**

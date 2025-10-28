@@ -15,9 +15,48 @@ class RadioNewsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $news = RadioNews::query()->orderBy('id', 'desc')->paginate(10);
+        $news = RadioNews::query()
+            ->with(['user']) // eager loading для автора
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('lead', 'like', "%{$search}%")
+                    ->orWhere('content', 'like', "%{$search}%");
+            })
+            ->when($request->author, function($query, $author) {
+                $query->whereHas('user', function($q) use ($author) {
+                    $q->where('name', 'like', "%{$author}%");
+                });
+            })
+            ->when($request->status, function($query, $status) {
+                $query->where('status', $status);
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'published_desc':
+                        $query->orderBy('published_at', 'desc');
+                        break;
+                    default:
+                        $query->orderBy('id', 'desc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'desc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
 
         return view('admin.radio-news.index', compact('news'));
     }

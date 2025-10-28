@@ -14,11 +14,68 @@ use Illuminate\Support\Str;
 
 class AudiobookFileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = AudiobookFile::query()->orderBy('id', 'desc')->paginate(10);
+        $audiobooks = Audiobook::all(); // Получаем все аудиокниги для фильтра
 
-        return view('admin.books-file.index', compact('books'));
+        $books = AudiobookFile::query()
+            ->with(['user', 'audiobook', 'audiobook.author']) // eager loading
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhereHas('audiobook', function($q) use ($search) {
+                        $q->where('title', 'like', "%{$search}%")
+                            ->orWhereHas('author', function($q2) use ($search) {
+                                $q2->where('name', 'like', "%{$search}%");
+                            });
+                    });
+            })
+            ->when($request->audiobook, function($query, $audiobookId) {
+                $query->where('audiobook_id', $audiobookId);
+            })
+            ->when($request->user, function($query, $userId) {
+                $query->where('user_id', $userId);
+            })
+            ->when($request->has_audio, function($query, $hasAudio) {
+                if ($hasAudio == 'yes') {
+                    $query->whereNotNull('audio')->where('audio', '!=', '');
+                } elseif ($hasAudio == 'no') {
+                    $query->whereNull('audio')->orWhere('audio', '');
+                }
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'audiobook_asc':
+                        $query->join('audiobooks', 'audiobook_files.audiobook_id', '=', 'audiobooks.id')
+                            ->orderBy('audiobooks.title', 'asc')
+                            ->select('audiobook_files.*');
+                        break;
+                    case 'audiobook_desc':
+                        $query->join('audiobooks', 'audiobook_files.audiobook_id', '=', 'audiobooks.id')
+                            ->orderBy('audiobooks.title', 'desc')
+                            ->select('audiobook_files.*');
+                        break;
+                    default:
+                        $query->orderBy('id', 'desc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'desc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
+
+        return view('admin.books-file.index', compact('books', 'audiobooks'));
     }
 
     /**

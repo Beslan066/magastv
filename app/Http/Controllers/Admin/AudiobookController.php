@@ -13,11 +13,64 @@ use Illuminate\Support\Str;
 
 class AudiobookController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $books = Audiobook::query()->orderBy('id', 'desc')->paginate(10);
+        $authors = Author::all(); // Получаем всех авторов для фильтра
 
-        return view('admin.books.index', compact('books'));
+        $books = Audiobook::query()
+            ->with(['user', 'author', 'files']) // eager loading
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('lead', 'like', "%{$search}%")
+                    ->orWhereHas('author', function($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
+            })
+            ->when($request->author, function($query, $authorId) {
+                $query->where('author_id', $authorId);
+            })
+            ->when($request->user, function($query, $userId) {
+                $query->where('user_id', $userId);
+            })
+            ->when($request->has_files, function($query, $hasFiles) {
+                if ($hasFiles == 'yes') {
+                    $query->has('files');
+                } elseif ($hasFiles == 'no') {
+                    $query->doesntHave('files');
+                }
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'author_asc':
+                        $query->join('authors', 'audiobooks.author_id', '=', 'authors.id')
+                            ->orderBy('authors.name', 'asc')
+                            ->select('audiobooks.*');
+                        break;
+                    case 'files_count_desc':
+                        $query->withCount('files')->orderBy('files_count', 'desc');
+                        break;
+                    default:
+                        $query->orderBy('id', 'desc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'desc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
+
+        return view('admin.books.index', compact('books', 'authors'));
     }
 
     /**

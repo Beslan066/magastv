@@ -19,13 +19,64 @@ class TransferController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $transfers = Transfer::query()->orderBy('id', 'asc')->paginate(10);
+        $categories = TvShowType::all(); // Получаем типы передач для фильтра
+        $ageRestrictions = AgeRestriction::all(); // Получаем возрастные ограничения
 
-        return view('admin.transfer.index', [
-            'transfers' => $transfers,
-        ]);
+        $transfers = Transfer::query()
+            ->with(['user', 'category', 'age_restriction', 'videos']) // eager loading
+            ->when($request->search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('lead', 'like', "%{$search}%");
+            })
+            ->when($request->author, function($query, $author) {
+                $query->whereHas('user', function($q) use ($author) {
+                    $q->where('name', 'like', "%{$author}%");
+                });
+            })
+            ->when($request->category, function($query, $category) {
+                $query->where('category_id', $category);
+            })
+            ->when($request->age_restriction, function($query, $ageRestriction) {
+                $query->where('age_restriction_id', $ageRestriction);
+            })
+            ->when($request->main_material, function($query, $mainMaterial) {
+                $query->where('main_material', $mainMaterial);
+            })
+            ->when($request->published, function($query, $published) {
+                $query->where('published', $published);
+            })
+            ->when($request->sort, function($query, $sort) {
+                switch ($sort) {
+                    case 'title_asc':
+                        $query->orderBy('title', 'asc');
+                        break;
+                    case 'title_desc':
+                        $query->orderBy('title', 'desc');
+                        break;
+                    case 'newest':
+                        $query->orderBy('created_at', 'desc');
+                        break;
+                    case 'oldest':
+                        $query->orderBy('created_at', 'asc');
+                        break;
+                    case 'videos_count_desc':
+                        $query->withCount('videos')->orderBy('videos_count', 'desc');
+                        break;
+                    case 'videos_count_asc':
+                        $query->withCount('videos')->orderBy('videos_count', 'asc');
+                        break;
+                    default:
+                        $query->orderBy('id', 'asc');
+                }
+            }, function($query) {
+                $query->orderBy('id', 'asc'); // сортировка по умолчанию
+            })
+            ->paginate(10)
+            ->withQueryString(); // сохраняем параметры в пагинации
+
+        return view('admin.transfer.index', compact('transfers', 'categories', 'ageRestrictions'));
     }
 
     /**
