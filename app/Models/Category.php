@@ -27,4 +27,9 @@ class Category extends Model
     {
         return $this->belongsTo(User::class, 'deleter_id', 'id');
     }
+
+    public function videoReportages()
+    {
+        return $this->hasMany(VideoReportage::class);
+    }
 }
