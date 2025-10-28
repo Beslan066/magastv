@@ -267,29 +267,11 @@
                             <ul class="list-reset header__schedule_list schedule-list schedule-wrapper">
                                 @foreach($tvProgramsToday as $program)
                                     @php
-                                        // Используем тот же алгоритм, что и в провайдере
-                                        $timeParts = explode('-', $program->time_range);
-                                        $startTime = trim($timeParts[0]);
-                                        $endTime = trim($timeParts[1] ?? $startTime);
-
-                                        $start = \Carbon\Carbon::createFromFormat(
-                                            'Y-m-d H:i',
-                                            $program->program_date->format('Y-m-d') . ' ' . $startTime,
-                                            'Europe/Moscow'
-                                        );
-
-                                        $end = \Carbon\Carbon::createFromFormat(
-                                            'Y-m-d H:i',
-                                            $program->program_date->format('Y-m-d') . ' ' . $endTime,
-                                            'Europe/Moscow'
-                                        );
-
                                         $now = \Carbon\Carbon::now('Europe/Moscow');
-                                        $isActive = $now->between($start, $end);
+                                        $isActive = $currentTvProgram && $currentTvProgram->id === $program->id;
                                     @endphp
-
                                     <li class="schedule-list__item schedule-slide {{ $isActive ? 'active' : '' }}">
-                                        <time>{{ $program->time_range }}</time>
+                                        <time>{{ $program->start_time->format('H:i') }} - {{ $program->end_time->format('H:i') }}</time>
                                         <a>
                                             {{ $program->title ?? 'Без названия' }}
                                             @if($program->age_restriction)

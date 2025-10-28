@@ -46,20 +46,17 @@
                             </div>
 
                             <div class="programList">
-
                                 @forelse($tvShows as $show)
                                     @php
-                                        [$start, $end] = explode('-', $show->time_range);
                                         $now = \Carbon\Carbon::now('Europe/Moscow');
-                                        $startTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $show->program_date->format('Y-m-d') . ' ' . trim($start));
-                                        $endTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $show->program_date->format('Y-m-d') . ' ' . trim($end));
-                                        $isActive = $now->between($startTime, $endTime);
+                                        $isActive = $selectedDate->isToday() && $now->between($show->start_time, $show->end_time);
                                     @endphp
                                     <div class="programListItem @if($show->top_show) programListItem--third @endif {{ $isActive ? 'active' : '' }}" style="display: flex; justify-content: space-between">
-
                                         <div style="display: flex;" >
                                             <div style="margin-right: 10px">
-                                                <time datetime="{{ $show->program_date->format('Y-m-d') }} {{ $show->time_range }}">{{ Carbon\Carbon::parse($show->time_range)->format('H:i') }}</time>
+                                                <time datetime="{{ $show->program_date->format('Y-m-d') }} {{ $show->time_range }}">
+                                                    {{ $show->start_time->format('H:i') }}
+                                                </time>
                                             </div>
                                             <div class="programListItem__info">
                                                 <h6 class="programListItem__title">
@@ -69,10 +66,10 @@
                                                     @endif
                                                 </h6>
                                                 <span class="programListItem__type">
-                                                @if($show->tvShowType)
+                        @if($show->tvShowType)
                                                         {{$show->tvShowType->title}}
                                                     @endif
-                                            </span>
+                    </span>
                                                 <div class="programListItem__media programListItem__media--mobile">
                                                     <img src="{{asset('storage/public/' . $show->image)}}" alt="Program item image">
                                                 </div>

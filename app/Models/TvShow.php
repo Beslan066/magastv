@@ -58,7 +58,14 @@ class TvShow extends Model
     public function getEndTimeAttribute()
     {
         [$start, $end] = explode('-', $this->time_range);
-        return \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->program_date->format('Y-m-d') . ' ' . trim($end));
+        $endTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $this->program_date->format('Y-m-d') . ' ' . trim($end), 'Europe/Moscow');
+
+        // Если время окончания меньше времени начала, значит передача переходит на следующий день
+        if ($endTime->lt($this->start_time)) {
+            $endTime->addDay();
+        }
+
+        return $endTime;
     }
 
     public function getIsActiveAttribute()

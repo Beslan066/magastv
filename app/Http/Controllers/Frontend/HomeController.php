@@ -206,14 +206,16 @@ HTML;
 
     public function tvProgram(Request $request)
     {
-        $today = now();
-        $selectedDate = $request->date ? Carbon::parse($request->date) : $today;
+        $timezone = 'Europe/Moscow';
+        $today = now($timezone);
+        $selectedDate = $request->date ? Carbon::parse($request->date, $timezone) : $today;
+        $selectedDateFormatted = $selectedDate->format('Y-m-d');
 
-        // Оптимизированный запрос с eager loading
-        $tvShows = TvShow::with('tvShowType')
-            ->whereDate('program_date', $selectedDate->format('Y-m-d'))
-            ->orderBy('time_range')
-            ->get();
+        // Просто берем программы на выбранную дату
+        $tvShows = TvShow::with('tvShowType', 'age_restriction')
+            ->whereDate('program_date', $selectedDateFormatted)
+            ->get()
+            ->sortBy('start_time');
 
         // Быстрое формирование дат без лишних вычислений
         $dates = collect(range(-3, 3))->map(function ($day) use ($today, $selectedDate) {
@@ -227,11 +229,11 @@ HTML;
             ];
         });
 
+        // Определяем текущую передачу (только если выбрана сегодняшняя дата)
         $currentShowId = null;
         if ($selectedDate->isToday()) {
-            $currentTime = $today->format('H:i');
-            $currentShow = $tvShows->last(function ($show) use ($currentTime) {
-                return Carbon::parse($show->time_range)->format('H:i') <= $currentTime;
+            $currentShow = $tvShows->first(function ($show) use ($today) {
+                return $today->between($show->start_time, $show->end_time);
             });
             $currentShowId = $currentShow->id ?? null;
         }
