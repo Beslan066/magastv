@@ -116,7 +116,7 @@
                         <tr>
                             <td><span>{{ $item->id }}</span></td>
                             <td>
-                                <a href="{{ route('transfer', $item->id) }}" target="_blank">
+                                <a href="{{ route('transfer', $item->id) }}">
                                     {{ Str::limit($item->title, 50) }}
                                 </a>
                             </td>

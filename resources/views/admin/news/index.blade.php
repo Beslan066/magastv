@@ -97,7 +97,7 @@
                         <tr>
                             <td><span>{{ $item->id }}</span></td>
                             <td>
-                                <a href="{{ route('home.news.single', $item->slug) }}" target="_blank">
+                                <a href="{{ route('home.news.single', $item->slug) }}">
                                     {{ Str::limit($item->title, 60) }}
                                 </a>
                             </td>
