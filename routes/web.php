@@ -121,7 +121,7 @@ Route::get('/radio/transfers/{transfer}', [HomeController::class, 'radioTransfer
 Route::get('/radio/books', [HomeController::class, 'radioBooks'])->name('radio.books');
 Route::get('/radio/books/single/{book}', [HomeController::class, 'booksSingle'])->name('books.single');
 Route::get('/event/{event}', [HomeController::class, 'eventSingle'])->name('event.single');
-Route::get('/watch', [HomeController::class, 'watch'])->name('watch');
+Route::get('/watch', [HomeController::class, 'watching'])->name('watching');
 Route::get('/realeses', [HomeController::class, 'realese'])->name('realeses');
 Route::get('/ads', [HomeController::class, 'ads'])->name('ads');
 Route::get('/about', [HomeController::class, 'about'])->name('about');

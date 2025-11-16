@@ -1,0 +1,96 @@
+server {
+    if ($host = www.ingushetia.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = ingushetia.site) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    server_name ingushetia.site www.ingushetia.site;
+    listen 80;
+    
+    # Let Certbot handle the redirects
+    return 301 https://ingushetia.site$request_uri;
+
+
+
+
+}
+
+server {
+    server_name ingushetia.site www.ingushetia.site;
+
+    root /var/www/ingushetia/public;
+    index index.php index.html index.htm;
+
+    # Обработка ошибок
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /50x.html;
+
+    # Логирование
+    access_log /var/log/nginx/ingushetia_access.log;
+    error_log /var/log/nginx/ingushetia_error.log;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Обработка PHP файлов через FPM
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+
+        fastcgi_read_timeout 600;
+        fastcgi_send_timeout 600;
+        fastcgi_connect_timeout 600;
+    }
+
+    # Запрещаем доступ к скрытым файлам и директориям
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+
+    # Оптимизированное сжатие
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types text/plain text/css text/xml application/json application/javascript application/xml+rss application/atom+xml image/svg+xml;
+    gzip_min_length 1000;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+
+    # Кэширование статических файлов
+    location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc|woff2|woff)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    location ~* \.(?:css|js)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
+    # Редирект с www на non-www
+    if ($host = www.ingushetia.site) {
+        return 301 https://ingushetia.site$request_uri;
+    }
+
+    # Редирект с / в конце на страницы без /
+    rewrite ^/(.+)/$ /$1 permanent;
+
+    listen 443 ssl http2;
+    ssl_certificate /etc/letsencrypt/live/ingushetia.site/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/ingushetia.site/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+
+}

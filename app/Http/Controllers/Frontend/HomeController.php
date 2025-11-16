@@ -562,7 +562,7 @@ HTML;
         ]);
     }
 
-    public function watch()
+    public function watching()
     {
         return view('frontend.watching.index');
     }
