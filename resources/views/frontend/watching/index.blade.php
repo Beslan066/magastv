@@ -83,6 +83,29 @@
 
                                 </div>
                             </li>
+                            <li class="watch__item" style="">
+                                <div class="watch__item_top">
+                                    <div class="watch__item_image">
+                                        <img src="{{asset('assets/img/watch/rostelekom.png')}}" alt="Цифровой видеосервис Wink">
+                                    </div>
+                                    <h6 class="watch__item_title">Ростелеком</h6>
+                                </div>
+                                <div class="watch__item_bottom">
+                                    <a>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="20" y="4" width="16" height="16" rx="2" transform="rotate(90 20 4)"
+                                                  stroke="#1A1A1A" stroke-width="1.5" />
+                                            <path
+                                                d="M15.2111 11.1056L10.4472 8.72361C9.78231 8.39116 9 8.87465 9 9.61803V14.382C9 15.1253 9.78231 15.6088 10.4472 15.2764L15.2111 12.8944C15.9482 12.5259 15.9482 11.4741 15.2111 11.1056Z"
+                                                stroke="#1A1A1A" stroke-width="1.5" />
+                                        </svg>
+                                        21канал
+                                        </a>
+
+
+                                </div>
+                            </li>
                             <li class="watch__item">
                                 <div class="watch__item_top">
                                     <div class="watch__item_image">
@@ -102,7 +125,7 @@
                                         </svg>
                                         Смотреть онлайн</a>
 
-                                        
+
                                 </div>
                             </li>
                             <li class="watch__item">

@@ -124,7 +124,7 @@
                                         <a href="{{route('about')}}">О нас</a>
                                     </li>
                                     <li>
-                                        <a href="{{route('watch')}}">Где смотреть</a>
+                                        <a href="{{route('watching')}}">Где смотреть</a>
                                     </li>
                                 </ul>
                             </div>

@@ -501,7 +501,7 @@
                                 </a>
                             </li>
                             <li class="header__item">
-                                <a href="{{route('watch')}}">
+                                <a href="{{route('watching')}}">
                                     Где смотреть
                                 </a>
                             </li>
@@ -556,7 +556,7 @@
                         </li>
 
                         <li class="footer__nav_item">
-                            <a href="{{route('watch')}}">Где смотреть</a>
+                            <a href="{{route('watching')}}">Где смотреть</a>
                         </li>
                         <li class="footer__nav_item">
                             <a href="{{route('about')}}">О нас</a>

@@ -1,15 +1,15 @@
 <?php return array (
+  0 => 'concurrency',
   1 => 'broadcasting',
-  3 => 'view',
-  4 => 'concurrency',
-  6 => 'hashing',
-  11 => 'cors',
+  12 => 'view',
+  13 => 'cors',
+  14 => 'hashing',
   'app' => 
   array (
     'name' => 'Laravel',
-    'env' => 'prod',
+    'env' => 'local',
     'debug' => true,
-    'url' => 'https://magas.tv',
+    'url' => 'http://localhost',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'Europe/Moscow',
@@ -17,7 +17,7 @@
     'fallback_locale' => 'ru',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => 'base64:YL6vGPrxD5lTuPWeGVqvcWXdohFclLZZ4idoArq6yMU=',
+    'key' => 'base64:IbNjLE3YOi8ibEXT3HrYCSwp4FALuNVSlkxy4BTSEBM=',
     'previous_keys' => 
     array (
     ),
@@ -158,8 +158,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/var/www/magastv/storage/framework/cache/data',
-        'lock_path' => '/var/www/magastv/storage/framework/cache/data',
+        'path' => '/home/ibragim/ntrkri/storage/framework/cache/data',
+        'lock_path' => '/home/ibragim/ntrkri/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -229,7 +229,7 @@
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -249,7 +249,7 @@
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -269,7 +269,7 @@
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -284,7 +284,7 @@
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -326,18 +326,18 @@
   ),
   'filesystems' => 
   array (
-    'default' => 'public',
+    'default' => 'local',
     'disks' => 
     array (
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/storage/app',
+        'root' => '/home/ibragim/ntrkri/storage/app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/storage/app/public',
+        'root' => '/home/ibragim/ntrkri/storage/app/public',
         'url' => '/storage',
         'visibility' => 'public',
       ),
@@ -356,12 +356,12 @@
       'my_files' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/public/',
+        'root' => '/home/ibragim/ntrkri/public/',
       ),
     ),
     'links' => 
     array (
-      '/var/www/magastv/public/storage' => '/var/www/magastv/storage/app',
+      '/home/ibragim/ntrkri/public/storage' => '/home/ibragim/ntrkri/storage/app',
     ),
   ),
   'logging' => 
@@ -386,14 +386,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -458,7 +458,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -477,7 +477,7 @@
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
-        'local_domain' => 'magas.tv',
+        'local_domain' => 'localhost',
       ),
       'ses' => 
       array (
@@ -534,7 +534,7 @@
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/var/www/magastv/resources/views/vendor/mail',
+        0 => '/home/ibragim/ntrkri/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -629,7 +629,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/var/www/magastv/storage/framework/sessions',
+    'files' => '/home/ibragim/ntrkri/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -645,6 +645,10 @@
     'http_only' => true,
     'same_site' => 'lax',
     'partitioned' => false,
+  ),
+  'concurrency' => 
+  array (
+    'default' => 'process',
   ),
   'broadcasting' => 
   array (
@@ -706,31 +710,9 @@
   array (
     'paths' => 
     array (
-      0 => '/var/www/magastv/resources/views',
+      0 => '/home/ibragim/ntrkri/resources/views',
     ),
-    'compiled' => '/var/www/magastv/storage/framework/views',
-  ),
-  'concurrency' => 
-  array (
-    'default' => 'process',
-  ),
-  'hashing' => 
-  array (
-    'driver' => 'bcrypt',
-    'bcrypt' => 
-    array (
-      'rounds' => '12',
-      'verify' => true,
-      'limit' => NULL,
-    ),
-    'argon' => 
-    array (
-      'memory' => 65536,
-      'threads' => 1,
-      'time' => 4,
-      'verify' => true,
-    ),
-    'rehash_on_login' => true,
+    'compiled' => '/home/ibragim/ntrkri/storage/framework/views',
   ),
   'cors' => 
   array (
@@ -759,6 +741,24 @@
     ),
     'max_age' => 0,
     'supports_credentials' => false,
+  ),
+  'hashing' => 
+  array (
+    'driver' => 'bcrypt',
+    'bcrypt' => 
+    array (
+      'rounds' => '12',
+      'verify' => true,
+      'limit' => NULL,
+    ),
+    'argon' => 
+    array (
+      'memory' => 65536,
+      'threads' => 1,
+      'time' => 4,
+      'verify' => true,
+    ),
+    'rehash_on_login' => true,
   ),
   'tinker' => 
   array (
