@@ -564,7 +564,7 @@ HTML;
 
     public function watch()
     {
-        return view('frontend.watch');
+        return view('frontend.watching.index');
     }
 
     public function realese()
