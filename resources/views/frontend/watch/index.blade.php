@@ -70,7 +70,7 @@
                                                 stroke="#1A1A1A" stroke-width="1.5" />
                                         </svg>
                                         813 канал</a>
-                                    <a href="#">
+                                    <a href="https://kino.tricolor.ru/channels/watch/magas/">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <rect x="20" y="4" width="16" height="16" rx="2" transform="rotate(90 20 4)"
@@ -123,7 +123,7 @@
                                     <h6 class="watch__item_title">Цифровой видеосервис Wink</h6>
                                 </div>
                                 <div class="watch__item_bottom">
-                                    <a href="#">
+                                    <a href="https://wink.ru/tv/magas/player">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <rect x="20" y="4" width="16" height="16" rx="2" transform="rotate(90 20 4)"
@@ -298,7 +298,7 @@
                                 </div>
                                 <div class="watch__item_bottom">
 
-                                    <a>
+                                    <a href="https://pervyi-tv.online/ingushetia">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                                              xmlns="http://www.w3.org/2000/svg">
                                             <rect x="20" y="4" width="16" height="16" rx="2" transform="rotate(90 20 4)"
