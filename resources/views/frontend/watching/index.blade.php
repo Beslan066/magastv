@@ -47,7 +47,7 @@
                                     <div class="watch__item_image">
                                         <img src="{{asset('assets/img/watch/mts.png')}}" alt="Триколор">
                                     </div>
-                                    <h6 class="watch__item_title">Спутниковое ТВ МТС</h6>
+                                    <h6 class="watch__item_title">Спутниковое ТВ МТ</h6>
                                 </div>
                                 <div class="watch__item_bottom">
                                     <a href="https://mob-systems.ru/spisok-kanalov/sputnik/">
