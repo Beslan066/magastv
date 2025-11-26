@@ -12,4 +12,21 @@ Disallow: /*?sort=
 Disallow: /*?filter=
 Disallow: /o-kompanii
 
+# Укажите конкретный User-agent для Яндекса
+User-agent: Yandex
+Allow: /
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /search
+Disallow: /filter-news
+Disallow: /radio/filter
+Disallow: /sort-news
+Disallow: /*?page=
+Disallow: /*?sort=
+Disallow: /*?filter=
+Disallow: /o-kompanii
+
+Crawl-delay: 1
+
 Sitemap: https://magas.tv/sitemap.xml
