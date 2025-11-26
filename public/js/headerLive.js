@@ -2,16 +2,22 @@ import './lib/video.min.js';
 
 (function () {
     console.log('headerLive initialized');
-
-    // Элементы управления из видео-плеера
+    //video
     const play = document.querySelector('.video-custom-controls__btn--play');
     const pause = document.querySelector('.video-custom-controls__btn--pause');
     const mute = document.querySelector('[data-id="muteVideo"]');
     const unmute = document.querySelector('[data-id="unmuteVideo"]');
     const fullscreenButton = document.querySelector('[data-id="fullScreenVideo"]');
 
+    // radio
+    const playRadio = document.querySelector('.radio-custom-controls__btn--play');
+    const pauseRadio = document.querySelector('.radio-custom-controls__btn--pause');
+    const muteRadio = document.querySelector('[data-id="muteRadio"]');
+    const unmuteRadio = document.querySelector('[data-id="unmuteRadio"]');
+    const fullscreenButtonRadio = document.querySelector('[data-id="fullScreenRadio"]');
+
     // Плееры
-    const radioStream = document.getElementById('radio-stream');
+    const radioStream = document.getElementById('radio-stream-header');
     let videojsPlayer = null;
     let currentPlayer = 'video';
 
@@ -25,14 +31,19 @@ import './lib/video.min.js';
     function playMedia() {
         console.log('Play clicked for:', currentPlayer);
         if (currentPlayer === 'video' && videojsPlayer) {
-            videojsPlayer.play();
-            updatePlayPauseState(true);
+            videojsPlayer.play().then(() => {
+                updatePlayPauseState(true);
+            }).catch(error => {
+                console.error('Video play error:', error);
+                updatePlayPauseState(false);
+            });
         } else if (currentPlayer === 'radio') {
             radioStream.play().then(() => {
                 updatePlayPauseState(true);
                 console.log('Radio started');
             }).catch(error => {
                 console.error('Radio play error:', error);
+                updatePlayPauseState(false);
             });
         }
     }
@@ -51,7 +62,8 @@ import './lib/video.min.js';
     function toggleMute() {
         console.log('Mute toggle for:', currentPlayer);
         if (currentPlayer === 'video' && videojsPlayer) {
-            videojsPlayer.muted(!videojsPlayer.muted());
+            const newMutedState = !videojsPlayer.muted();
+            videojsPlayer.muted(newMutedState);
             updateMuteState();
         } else if (currentPlayer === 'radio') {
             radioStream.muted = !radioStream.muted;
@@ -60,34 +72,73 @@ import './lib/video.min.js';
     }
 
     function updatePlayPauseState(isPlaying) {
+
         if (play && pause) {
             play.classList.toggle('hidden', isPlaying);
             pause.classList.toggle('hidden', !isPlaying);
-            console.log('Play/Pause state:', isPlaying ? 'playing' : 'paused');
         }
+
+        if (playRadio && pauseRadio) {
+            playRadio.classList.toggle('hidden', isPlaying);
+            pauseRadio.classList.toggle('hidden', !isPlaying);
+        }
+
+        console.log('Play/Pause state:', isPlaying ? 'playing' : 'paused');
     }
 
     function updateMuteState() {
-        if (!mute || !unmute) return;
-
         let isMuted = false;
+
         if (currentPlayer === 'video' && videojsPlayer) {
             isMuted = videojsPlayer.muted();
         } else if (currentPlayer === 'radio') {
             isMuted = radioStream.muted;
         }
 
-        mute.classList.toggle('hidden', !isMuted);
-        unmute.classList.toggle('hidden', isMuted);
+        // video state
+        if (mute && unmute) {
+            mute.classList.toggle('hidden', !isMuted);
+            unmute.classList.toggle('hidden', isMuted);
+        }
+
+// radio state
+        if (muteRadio && unmuteRadio) {
+            muteRadio.classList.toggle('hidden', !isMuted);
+            unmuteRadio.classList.toggle('hidden', isMuted);
+        }
+
         console.log('Mute state:', isMuted ? 'muted' : 'unmuted');
     }
 
-    // Инициализация Video.js
+    function toggleFullscreen() {
+        const mediaContainer = currentPlayer === 'video'
+            ? document.querySelector('.header__media_content--video')
+            : document.querySelector('.header__media_content--radio');
+
+        if (mediaContainer) {
+            if (!document.fullscreenElement) {
+                mediaContainer.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+                mediaContainer.classList.add("fullscreen");
+            } else {
+                document.exitFullscreen();
+                mediaContainer.classList.remove("fullscreen");
+            }
+        }
+    }
+
     function initVideoPlayer() {
+        const videoElement = document.getElementById('header__media--video');
+        if (!videoElement) {
+            console.error('Video element not found!');
+            return;
+        }
+
         videojsPlayer = videojs('header__media--video', {
             controls: false,
             muted: true,
-            preload: true,
+            preload: 'auto',
             autoplay: true,
             language: 'ru',
             liveui: false,
@@ -107,46 +158,80 @@ import './lib/video.min.js';
             }]
         });
 
-        // Обновляем состояние кнопок
+
         videojsPlayer.ready(() => {
+            console.log('Video.js player ready');
             updatePlayPauseState(true);
             updateMuteState();
         });
+
+        videojsPlayer.on('play', () => {
+            if (currentPlayer === 'video') {
+                updatePlayPauseState(true);
+            }
+        });
+
+        videojsPlayer.on('pause', () => {
+            if (currentPlayer === 'video') {
+                updatePlayPauseState(false);
+            }
+        });
+
+        videojsPlayer.on('volumechange', () => {
+            if (currentPlayer === 'video') {
+                updateMuteState();
+            }
+        });
+
+        videojsPlayer.on('error', (error) => {
+            console.error('Video.js error:', error);
+        });
     }
 
-    // Обработчики кнопок
+
     function initControls() {
+
         if (play) {
             play.addEventListener('click', playMedia);
-            console.log('Play button found');
+            console.log('Video Play button found');
         }
 
         if (pause) {
             pause.addEventListener('click', pauseMedia);
-            console.log('Pause button found');
+            console.log('Video Pause button found');
         }
 
         if (mute && unmute) {
             mute.addEventListener('click', toggleMute);
             unmute.addEventListener('click', toggleMute);
-            console.log('Mute buttons found');
+            console.log('Video Mute buttons found');
+        }
+
+        if (playRadio) {
+            playRadio.addEventListener('click', playMedia);
+            console.log('Radio Play button found');
+        }
+
+        if (pauseRadio) {
+            pauseRadio.addEventListener('click', pauseMedia);
+            console.log('Radio Pause button found');
+        }
+
+        if (muteRadio && unmuteRadio) {
+            muteRadio.addEventListener('click', toggleMute);
+            unmuteRadio.addEventListener('click', toggleMute);
+            console.log('Radio Mute buttons found');
         }
 
         if (fullscreenButton) {
-            fullscreenButton.addEventListener("click", function () {
-                const videoContainer = document.querySelector('.header__media_content--video');
-                if (videoContainer) {
-                    if (!document.fullscreenElement) {
-                        videoContainer.requestFullscreen();
-                    } else {
-                        document.exitFullscreen();
-                    }
-                }
-            });
+            fullscreenButton.addEventListener("click", toggleFullscreen);
+        }
+
+        if (fullscreenButtonRadio) {
+            fullscreenButtonRadio.addEventListener("click", toggleFullscreen);
         }
     }
 
-    // Переключение табов
     function initTabHandlers() {
         const tvTab = document.querySelector('[data-media-tab="tv"]');
         const radioTab = document.querySelector('[data-media-tab="radio"]');
@@ -155,12 +240,15 @@ import './lib/video.min.js';
             tvTab.addEventListener('click', function() {
                 currentPlayer = 'video';
                 console.log('Switched to TV');
-                // Паузим радио
+
                 if (!radioStream.paused) {
                     radioStream.pause();
                 }
-                updatePlayPauseState(!videojsPlayer.paused());
-                updateMuteState();
+
+                if (videojsPlayer) {
+                    updatePlayPauseState(!videojsPlayer.paused());
+                    updateMuteState();
+                }
             });
         }
 
@@ -168,7 +256,11 @@ import './lib/video.min.js';
             radioTab.addEventListener('click', function() {
                 currentPlayer = 'radio';
                 console.log('Switched to Radio');
-                // Запускаем радио
+
+                if (videojsPlayer && !videojsPlayer.paused()) {
+                    videojsPlayer.pause();
+                }
+
                 if (radioStream.paused) {
                     radioStream.play().then(() => {
                         updatePlayPauseState(true);
@@ -184,6 +276,31 @@ import './lib/video.min.js';
         }
     }
 
+    // Обработчики для радио
+    function initRadioEvents() {
+        radioStream.addEventListener('play', () => {
+            if (currentPlayer === 'radio') {
+                updatePlayPauseState(true);
+            }
+        });
+
+        radioStream.addEventListener('pause', () => {
+            if (currentPlayer === 'radio') {
+                updatePlayPauseState(false);
+            }
+        });
+
+        radioStream.addEventListener('volumechange', () => {
+            if (currentPlayer === 'radio') {
+                updateMuteState();
+            }
+        });
+
+        radioStream.addEventListener('error', (error) => {
+            console.error('Radio stream error:', error);
+        });
+    }
+
     // Инициализация
     function init() {
         console.log('Initializing players...');
@@ -195,11 +312,15 @@ import './lib/video.min.js';
 
         initControls();
         initTabHandlers();
+        initRadioEvents();
 
         console.log('Initialization complete');
     }
 
-    // Запускаем
-    init();
-
+    // ждем пока загрузится DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();
