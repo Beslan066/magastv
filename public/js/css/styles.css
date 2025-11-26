@@ -473,9 +473,6 @@ body.active {
         display: block;
     }
 
-    .header__media_content--radio:hover .overlay {
-        display: block;
-    }
 
 
 .overlay__inner {

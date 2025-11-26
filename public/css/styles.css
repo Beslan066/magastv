@@ -490,16 +490,10 @@ body.active {
 }
 
 
-    .header__media_content--radio:hover .overlay {
-        display: block;
-    }
-
-
 
     .header__media_content--video:hover .overlay {
         display: block;
     }
-
 
     .header__media_content.fullscreen .overlay{
         display: block;
@@ -567,7 +561,18 @@ body.active {
     position: relative;
     background-color: var(--primary-primary-500);
 }
-
+.radio-custom-controls {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+.radio-custom-controls__btn svg {
+    pointer-events: none;
+    fill:#fff;
+}
+.fullScreenRadio svg {
+    fill:#fff;
+}
 .radio__inner {
     height: 100%;
     display: flex;
@@ -1273,7 +1278,18 @@ body.active {
 .player__mute svg {
     fill: #fff;
 }
-
+.player__mute.muted .player__mute-muteSvg {
+    display: none;
+}
+.player__mute.muted .player__mute-unmuteSvg {
+    display: block;
+}
+.player__mute .player__mute-muteSvg {
+    display: block;
+}
+.player__mute .player__mute-unmuteSvg {
+    display: none;
+}
 .player__item_title {
     font-family: var(--font-family);
     font-weight: 600;
