@@ -53,12 +53,12 @@ import './lib/video.min.js';
             controlBar: false,
             html5: {
                 // !ЭКСПЕРИМЕНТАЛЬНЫЕ НАСТРОЙКИ!
-                vhs:{
-                    overrideNative:true
+                vhs: {
+                    overrideNative: true
                 },
-                nativeAudioTracks:false,
-                nativeVideoTracks:false,
-                nativeTextTracks:false
+                nativeAudioTracks: false,
+                nativeVideoTracks: false,
+                nativeTextTracks: false
             },
             plugins: {},
             sources: [{
@@ -84,15 +84,15 @@ import './lib/video.min.js';
                         console.error('Ошибка воспроизведения видео:', error);
                     });
 
-                mute.addEventListener('click', () => {
-                    if (player.muted()) {
-                        player.muted(false);
-                        mute.classList.remove('muted');
-                    } else {
-                        player.muted(true);
-                        mute.classList.add('muted');
-                    }
-                })
+            })
+            mute.addEventListener('click', () => {
+                if (player.muted()) {
+                    player.muted(false);
+                    mute.classList.remove('muted');
+                } else {
+                    player.muted(true);
+                    mute.classList.add('muted');
+                }
             })
             setInterval(function () {
                 gtag('event', 'heartbeat', { 'non_interaction': true });
@@ -102,19 +102,19 @@ import './lib/video.min.js';
 
         })
     }
-      Live();
-        if (!play || !pause || !mute || !fullscreenButton) {
-            return 'error';
-        }
-        fullscreenButton.addEventListener("click", function () {
-            toggleFullscreen(liveVideoWrapper);
-        });
+    Live();
+    if (!play || !pause || !mute || !fullscreenButton) {
+        return 'error';
+    }
+    fullscreenButton.addEventListener("click", function () {
+        toggleFullscreen(liveVideoWrapper);
+    });
 
-        if (isLive) {
-            liveIndicator.classList.add('online');
-        } else {
-            liveIndicator.classList.remove('online');
-        }
-    }) ()
+    if (isLive) {
+        liveIndicator.classList.add('online');
+    } else {
+        liveIndicator.classList.remove('online');
+    }
+})()
 // main-media__mute
 // muted
