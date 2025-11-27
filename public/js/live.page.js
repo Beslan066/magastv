@@ -41,7 +41,6 @@ import './lib/video.min.js';
         }
     }
     function Live() {
-        console.log('test')
         const player = videojs('live__main-media--video', {
             controls: false,
             muted: true,
@@ -70,7 +69,7 @@ import './lib/video.min.js';
         player.ready(() => {
             pause.addEventListener('click', () => {
                 player.pause();
-                console.log('pause');
+
                 play.classList.remove("hidden");
                 pause.classList.add("hidden");
             });
@@ -78,7 +77,7 @@ import './lib/video.min.js';
                 player.play().then(() => {
                     play.classList.add("hidden");
                     pause.classList.remove("hidden");
-                    console.log('play');
+
                 })
                     .catch(error => {
                         console.error('Ошибка воспроизведения видео:', error);
@@ -96,7 +95,7 @@ import './lib/video.min.js';
             })
             setInterval(function () {
                 gtag('event', 'heartbeat', { 'non_interaction': true });
-                // console.log('send heartbeat');
+
                 // HB once in 5 min
             }, 5 * 60 * 1000);
 
@@ -116,5 +115,4 @@ import './lib/video.min.js';
         liveIndicator.classList.remove('online');
     }
 })()
-// main-media__mute
-// muted
+
