@@ -41,7 +41,6 @@ import './lib/video.min.js';
         }
     }
     function Live() {
-        console.log('test')
         const player = videojs('live__main-media--video', {
             controls: false,
             muted: true,
@@ -53,12 +52,12 @@ import './lib/video.min.js';
             controlBar: false,
             html5: {
                 // !ЭКСПЕРИМЕНТАЛЬНЫЕ НАСТРОЙКИ!
-                vhs:{
-                    overrideNative:true
+                vhs: {
+                    overrideNative: true
                 },
-                nativeAudioTracks:false,
-                nativeVideoTracks:false,
-                nativeTextTracks:false
+                nativeAudioTracks: false,
+                nativeVideoTracks: false,
+                nativeTextTracks: false
             },
             plugins: {},
             sources: [{
@@ -70,7 +69,7 @@ import './lib/video.min.js';
         player.ready(() => {
             pause.addEventListener('click', () => {
                 player.pause();
-                console.log('pause');
+
                 play.classList.remove("hidden");
                 pause.classList.add("hidden");
             });
@@ -78,43 +77,42 @@ import './lib/video.min.js';
                 player.play().then(() => {
                     play.classList.add("hidden");
                     pause.classList.remove("hidden");
-                    console.log('play');
+
                 })
                     .catch(error => {
                         console.error('Ошибка воспроизведения видео:', error);
                     });
 
-                mute.addEventListener('click', () => {
-                    if (player.muted()) {
-                        player.muted(false);
-                        mute.classList.remove('muted');
-                    } else {
-                        player.muted(true);
-                        mute.classList.add('muted');
-                    }
-                })
+            })
+            mute.addEventListener('click', () => {
+                if (player.muted()) {
+                    player.muted(false);
+                    mute.classList.remove('muted');
+                } else {
+                    player.muted(true);
+                    mute.classList.add('muted');
+                }
             })
             setInterval(function () {
                 gtag('event', 'heartbeat', { 'non_interaction': true });
-                // console.log('send heartbeat');
+
                 // HB once in 5 min
             }, 5 * 60 * 1000);
 
         })
     }
-      Live();
-        if (!play || !pause || !mute || !fullscreenButton) {
-            return 'error';
-        }
-        fullscreenButton.addEventListener("click", function () {
-            toggleFullscreen(liveVideoWrapper);
-        });
+    Live();
+    if (!play || !pause || !mute || !fullscreenButton) {
+        return 'error';
+    }
+    fullscreenButton.addEventListener("click", function () {
+        toggleFullscreen(liveVideoWrapper);
+    });
 
-        if (isLive) {
-            liveIndicator.classList.add('online');
-        } else {
-            liveIndicator.classList.remove('online');
-        }
-    }) ()
-// main-media__mute
-// muted
+    if (isLive) {
+        liveIndicator.classList.add('online');
+    } else {
+        liveIndicator.classList.remove('online');
+    }
+})()
+
