@@ -811,7 +811,7 @@
             </div>
             <div class="menu-news__info">
                 <h6 class="menu-news__title">
-                    <a href="/${isVideo ? 'video' : 'news'}/${item.slug}">${highlightTerm(item.title, term)}</a>
+                    <a href="/${isVideo ? 'news' : 'news'}/${item.slug}">${highlightTerm(item.title, term)}</a>
                 </h6>
                 <div class="menu-news__text">
                     <p>${highlightTerm(item.lead, term)}</p>
