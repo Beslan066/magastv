@@ -39,56 +39,72 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/proxy/audio', function() {
     $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
-
-    // Увеличиваем таймауты и добавляем заголовки
+    
+    // СНАЧАЛА ПРОВЕРИМ ПОДКЛЮЧЕНИЕ
+    \Log::info('Trying to connect to radio server...');
+    
+    $socket = @fsockopen('media.zaoitt.ru', 8086, $errno, $errstr, 10);
+    if (!$socket) {
+        \Log::error("Radio server connection failed: $errstr ($errno)");
+        return response("Radio server is unreachable: $errstr", 502);
+    }
+    fclose($socket);
+    
+    \Log::info('Radio server is reachable, opening stream...');
+    
+    // УБИРАЕМ SSL контекст для HTTP соединения
     $context = stream_context_create([
         'http' => [
             'method' => 'GET',
             'header' => "User-Agent: Mozilla/5.0\r\n" .
-                       "Connection: close\r\n", // Явное закрытие соединения
-            'timeout' => 10,       // Таймаут на подключение
-            'read_timeout' => 60,  // Таймаут на чтение данных
+                       "Accept: */*\r\n" .
+                       "Connection: close\r\n",
+            'timeout' => 30,
             'ignore_errors' => true
-        ],
-        'ssl' => [
-            'verify_peer' => false,
-            'verify_peer_name' => false,
         ]
+        // НЕ используем ssl контекст для HTTP!
     ]);
-
+    
+    // Используем file_get_contents с контекстом для проверки
     try {
-        // Проверяем доступность сервера перед открытием потока
-        if (!@fsockopen('media.zaoitt.ru', 8086, $errno, $errstr, 5)) {
-            return response('Radio server is unreachable', 502);
+        $headers = get_headers($streamUrl, 1, $context);
+        \Log::info('Radio server headers:', $headers);
+        
+        if (!$headers || strpos($headers[0], '200') === false) {
+            return response('Radio server returned error: ' . ($headers[0] ?? 'No response'), 502);
         }
-
-        $stream = @fopen($streamUrl, 'rb', false, $context);
-
+        
+        // Если сервер отвечает, открываем поток
+        $stream = fopen($streamUrl, 'rb', false, $context);
+        
         if (!$stream) {
             return response('Cannot open stream', 502);
         }
-
-        // Устанавливаем правильный Content-Type для аудиопотока
+        
         return response()->stream(function() use ($stream) {
-            set_time_limit(0); // Отключаем лимит времени для скрипта
-            while (!feof($stream) && connection_status() == 0) {
+            set_time_limit(0);
+            @ini_set('output_buffering', 0);
+            @ini_set('zlib.output_compression', 0);
+            
+            while (!feof($stream)) {
                 echo fread($stream, 8192);
-                ob_flush();
+                if (ob_get_level()) ob_flush();
                 flush();
+                if (connection_aborted()) break;
             }
-            @fclose($stream);
+            fclose($stream);
         }, 200, [
-            'Content-Type' => 'audio/mpeg', // Или audio/aac для некоторых потоков
+            'Content-Type' => 'audio/mpeg',
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
             'Pragma' => 'no-cache',
-            'Expires' => '0',
             'Access-Control-Allow-Origin' => '*',
-            'X-Content-Type-Options' => 'nosniff'
+            'Access-Control-Allow-Headers' => '*',
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS'
         ]);
-
+        
     } catch (\Exception $e) {
-        \Log::error('Proxy error: ' . $e->getMessage());
-        return response('Stream error', 500);
+        \Log::error('Stream error: ' . $e->getMessage());
+        return response('Stream error: ' . $e->getMessage(), 500);
     }
 });
 
