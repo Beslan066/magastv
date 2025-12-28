@@ -38,7 +38,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/proxy/audio', function() {
-    $streamUrl = 'http://77.87.97.62:8086/ingradio'; // Используем HTTP, не HTTPS
+    $streamUrl = 'http://media.zaoitt.ru:8086/ingradio'; // Используем HTTP, не HTTPS
 
     $context = stream_context_create([
         'http' => [
