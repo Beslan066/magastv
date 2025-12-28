@@ -4868,7 +4868,7 @@ app('router')->setCompiledRoutes(
           0 => 'web',
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:1471:"function() {
-    $streamUrl = \'http://77.87.97.62:8086/ingradio\'; // Используем HTTP, не HTTPS
+    $streamUrl = \'http://media.zaoitt.ru:8086/ingradio\'; // Используем HTTP, не HTTPS
 
     $context = \\stream_context_create([
         \'http\' => [

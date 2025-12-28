@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Корректные источники аудио
     const audioSources = [
         '/proxy/audio',
-        'http://77.87.97.62:8086/ingradio',
+        'http://media.zaoitt.ru:8086/ingradio',
         'https://public.mediacdn.ru/magas/'
     ];
 

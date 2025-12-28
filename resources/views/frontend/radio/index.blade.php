@@ -219,7 +219,7 @@
                                         </div>
                                         <div class="player__controls">
                                             <!-- На прод-->
-                                            {{--                                            На локальном <audio src="http://77.87.97.62:8086/ingradio"></audio>--}}
+                                            {{--                                            На локальном <audio src="http://media.zaoitt.ru:8086/ingradio"></audio>--}}
 
 
                                             <div>
