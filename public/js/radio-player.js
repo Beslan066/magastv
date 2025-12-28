@@ -203,38 +203,36 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function tryNextAudioSource() {
+    // Остановите текущее воспроизведение и очистите состояние
+    audio.pause();
+    cleanupAudioListeners();
+    
+    // Дайте время на завершение предыдущих запросов
+    setTimeout(() => {
         if (retryCount >= MAX_RETRIES) {
-            console.error('Max retries exceeded');
-            updateStatus('Все источники недоступны');
-            showErrorMessage('Не удалось подключиться к радио. Попробуйте позже.');
-            playPauseBtn.classList.remove('loading', 'user-requested-play');
+            showErrorMessage('Все источники недоступны');
             return;
         }
-
-        currentSourceIndex++;
-        if (currentSourceIndex >= audioSources.length) {
-            currentSourceIndex = 0; 
-            retryCount++;
+        
+        const source = audioSources[currentSourceIndex];
+        console.log('Пытаемся источник:', source);
+        
+        // Устанавливаем источник и пробуем воспроизвести
+        audio.src = source;
+        audio.load();
+        
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(e => {
+                console.log('Ошибка воспроизведения:', e.message);
+                // Переключаемся на следующий источник только после явной ошибки
+                currentSourceIndex = (currentSourceIndex + 1) % audioSources.length;
+                retryCount++;
+                setTimeout(tryNextAudioSource, 2000);
+            });
         }
-
-        currentState = PlayerState.RETRYING;
-        const delay = RETRY_DELAYS[retryCount] || 3000;
-
-        updateStatus(`Попытка подключения ${retryCount + 1}/${MAX_RETRIES + 1}...`);
-
-        setTimeout(() => {
-            console.log('Trying next source:', audioSources[currentSourceIndex]);
-            setAudioSource(audioSources[currentSourceIndex]);
-
-            // Пытаемся воспроизвести только если пользователь хотел играть
-            if (playPauseBtn.classList.contains('user-requested-play')) {
-                audio.play().catch(e => {
-                    console.error('Failed with new source:', e);
-                    tryNextAudioSource();
-                });
-            }
-        }, delay);
-    }
+    }, 500); // Задержка перед переключением
+}
 
     function updatePlayButtonState(isPlaying) {
         if (isPlaying) {
