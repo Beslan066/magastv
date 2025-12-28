@@ -34,7 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const audioSources = [
         '/proxy/audio',
         'http://media.zaoitt.ru:8086/ingradio',
-        'https://public.mediacdn.ru/magas/'
     ];
 
 
