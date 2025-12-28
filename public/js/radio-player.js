@@ -169,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
             playPauseBtn.classList.add('loading');
             updateStatus('Подключение...');
 
+            
             const playPromise = audio.play();
 
             if (playPromise !== undefined) {
