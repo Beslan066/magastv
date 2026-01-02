@@ -214,7 +214,7 @@
                                             </svg>
                                             <div class="player__info">
                                                 <span class="player__frequency">88.8 FM</span>
-                                                <span class="player__title">Ради "Магас"</span>
+                                                <span class="player__title">Радио "Магас"</span>
                                             </div>
                                         </div>
                                         <div class="player__controls">
