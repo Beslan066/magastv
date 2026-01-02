@@ -1,7 +1,43 @@
 import './lib/video.min.js';
 
+
+// Функция для инициализации радио в хедере
+function initHeaderRadio() {
+    const radioStream = document.getElementById('radio-stream-header');
+    if (!radioStream) {
+        console.log('Header radio stream not found');
+        return;
+    }
+
+    console.log('Header radio initialized');
+
+    // Уникальный URL для хедера
+    const uniqueId = 'header-' + Date.now();
+    radioStream.src = '/proxy/audio?player=' + uniqueId;
+    radioStream.preload = 'none';
+    radioStream.crossOrigin = 'anonymous';
+    radioStream.volume = 0.7;
+
+    // Простые обработчики ошибок
+    radioStream.addEventListener('error', function(e) {
+        console.error('Header radio error:', radioStream.error, e);
+    });
+
+    radioStream.addEventListener('stalled', function() {
+        console.log('Header radio stalled, reloading...');
+        setTimeout(() => {
+            radioStream.src = '/proxy/audio?player=' + Date.now();
+        }, 1000);
+    });
+
+    return radioStream;
+}
+
 (function () {
     console.log('headerLive initialized');
+
+
+
     //video
     const play = document.querySelector('.video-custom-controls__btn--play');
     const pause = document.querySelector('.video-custom-controls__btn--pause');
@@ -303,19 +339,22 @@ import './lib/video.min.js';
 
     // Инициализация
     function init() {
-        console.log('Initializing players...');
+    console.log('Initializing players...');
 
-        // Инициализируем видео
-        if (document.getElementById('header__media--video')) {
-            initVideoPlayer();
-        }
+    // Инициализируем радио в хедере
+    initHeaderRadio();
 
-        initControls();
-        initTabHandlers();
-        initRadioEvents();
-
-        console.log('Initialization complete');
+    // Остальной код...
+    if (document.getElementById('header__media--video')) {
+        initVideoPlayer();
     }
+
+    initControls();
+    initTabHandlers();
+    initRadioEvents();
+
+    console.log('Initialization complete');
+}
 
     // ждем пока загрузится DOM
     if (document.readyState === 'loading') {
