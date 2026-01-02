@@ -37,83 +37,125 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
+// routes/web.php
+
 Route::get('/proxy/audio', function() {
     $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
     
-    // СНАЧАЛА ПРОВЕРИМ ПОДКЛЮЧЕНИЕ
-    \Log::info('Trying to connect to radio server...');
+    // Логируем начало запроса
+    \Log::info('Radio proxy requested from IP: ' . request()->ip());
     
-    $socket = @fsockopen('media.zaoitt.ru', 8086, $errno, $errstr, 10);
-    if (!$socket) {
-        \Log::error("Radio server connection failed: $errstr ($errno)");
-        return response("Radio server is unreachable: $errstr", 502);
-    }
-    fclose($socket);
+    // Устанавливаем длительное время выполнения для стрима
+    set_time_limit(0);
+    ignore_user_abort(true);
     
-    \Log::info('Radio server is reachable, opening stream...');
-    
-    // УБИРАЕМ SSL контекст для HTTP соединения
+    // Контекст для потока
     $context = stream_context_create([
         'http' => [
             'method' => 'GET',
-            'header' => "User-Agent: Mozilla/5.0\r\n" .
-                       "Accept: */*\r\n" .
-                       "Connection: close\r\n",
+            'header' => implode("\r\n", [
+                'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                'Accept: audio/webm,audio/ogg,audio/wav,audio/*;q=0.9,application/ogg;q=0.7,video/*;q=0.6,*/*;q=0.5',
+                'Accept-Language: en-US,en;q=0.5',
+                'Accept-Encoding: identity',
+                'Range: bytes=0-',
+                'Connection: keep-alive',
+                'Icy-MetaData: 1'
+            ]),
             'timeout' => 30,
             'ignore_errors' => true
+        ],
+        'ssl' => [
+            'verify_peer' => false,
+            'verify_peer_name' => false
         ]
-        // НЕ используем ssl контекст для HTTP!
     ]);
     
-    // Используем file_get_contents с контекстом для проверки
     try {
-        $headers = get_headers($streamUrl, 1, $context);
-        \Log::info('Radio server headers:', $headers);
-        
-        if (!$headers || strpos($headers[0], '200') === false) {
-            return response('Radio server returned error: ' . ($headers[0] ?? 'No response'), 502);
-        }
-        
-        // Если сервер отвечает, открываем поток
-        $stream = fopen($streamUrl, 'rb', false, $context);
+        // Открываем поток
+        $stream = @fopen($streamUrl, 'rb', false, $context);
         
         if (!$stream) {
-            return response('Cannot open stream', 502);
+            \Log::error('Failed to open radio stream');
+            return response('Cannot connect to radio server', 502, [
+                'Content-Type' => 'text/plain',
+                'Access-Control-Allow-Origin' => '*'
+            ]);
         }
         
-        return response()->stream(function() use ($stream) {
-            set_time_limit(0);
-            @ini_set('output_buffering', 0);
-            @ini_set('zlib.output_compression', 0);
-            
-            while (!feof($stream)) {
-                echo fread($stream, 8192);
-                if (ob_get_level()) ob_flush();
-                flush();
-                if (connection_aborted()) break;
+        // Получаем метаданные потока
+        $meta = stream_get_meta_data($stream);
+        
+        // Ищем Content-Type в заголовках
+        $contentType = 'audio/mpeg'; // значение по умолчанию
+        
+        foreach ($meta['wrapper_data'] as $header) {
+            if (stripos($header, 'Content-Type:') === 0) {
+                $contentType = trim(substr($header, 13));
+                break;
             }
-            fclose($stream);
+            if (stripos($header, 'icy-genre:') === 0) {
+                \Log::info('Radio genre: ' . $header);
+            }
+        }
+        
+        \Log::info('Stream opened successfully, Content-Type: ' . $contentType);
+        
+        // Возвращаем стрим
+        return response()->stream(function() use ($stream) {
+            try {
+                // Отключаем буферизацию
+                if (ob_get_level()) {
+                    ob_end_clean();
+                }
+                
+                // Читаем и отправляем данные
+                while (!feof($stream) && connection_status() == CONNECTION_NORMAL) {
+                    $chunk = fread($stream, 8192);
+                    if ($chunk !== false && strlen($chunk) > 0) {
+                        echo $chunk;
+                        flush();
+                    } else {
+                        // Небольшая пауза если нет данных
+                        usleep(100000);
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error('Stream error: ' . $e->getMessage());
+            } finally {
+                if (is_resource($stream)) {
+                    fclose($stream);
+                    \Log::info('Stream closed');
+                }
+            }
         }, 200, [
-            'Content-Type' => 'audio/mpeg',
+            'Content-Type' => $contentType,
             'Cache-Control' => 'no-cache, no-store, must-revalidate',
             'Pragma' => 'no-cache',
+            'Expires' => '0',
             'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Headers' => '*',
-            'Access-Control-Allow-Methods' => 'GET, OPTIONS'
+            'Access-Control-Allow-Methods' => 'GET, OPTIONS',
+            'Access-Control-Allow-Headers' => 'Range',
+            'Accept-Ranges' => 'bytes',
+            'X-Accel-Buffering' => 'no',
+            'X-Content-Type-Options' => 'nosniff'
         ]);
         
     } catch (\Exception $e) {
-        \Log::error('Stream error: ' . $e->getMessage());
-        return response('Stream error: ' . $e->getMessage(), 500);
+        \Log::error('Radio proxy exception: ' . $e->getMessage());
+        return response('Radio server error: ' . $e->getMessage(), 500, [
+            'Content-Type' => 'text/plain',
+            'Access-Control-Allow-Origin' => '*'
+        ]);
     }
 });
 
 Route::options('/proxy/audio', function() {
-    return response()->json([], 200, [
-        'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Headers' => '*',
-        'Access-Control-Allow-Methods' => 'GET, OPTIONS'
-    ]);
+    return response('', 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Range, Content-Type')
+        ->header('Access-Control-Max-Age', '86400');
 });
 
 Route::get('/', [HomeController::class, 'index'])->name('home');

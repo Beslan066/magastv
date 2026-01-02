@@ -1,3 +1,4 @@
+// radio-player-fixed.js
 document.addEventListener('DOMContentLoaded', function() {
     const audio = document.getElementById('radio-stream');
     const playPauseBtn = document.getElementById('play-pause-btn');
@@ -26,12 +27,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentState = PlayerState.IDLE;
     let currentSourceIndex = 0;
     let retryCount = 0;
-    const MAX_RETRIES = 2;
+    let isManualPause = false;
+    const MAX_RETRIES = 3;
     const RETRY_DELAYS = [1000, 3000, 5000];
 
-    // Источники аудио - используем ТОЛЬКО прокси из-за Mixed Content
+    // Источники аудио - используем ТОЛЬКО прокси с разными URL для ретраев
     const audioSources = [
-        '/proxy/audio'  // Основной источник через прокси
+        '/proxy/audio',
+        '/proxy/audio?retry=1',  // Разные URL для обхода кэша
+        '/proxy/audio?retry=2'
     ];
 
     function updateStatus(message) {
@@ -43,22 +47,33 @@ document.addEventListener('DOMContentLoaded', function() {
     function setAudioSource(source) {
         cleanupAudioListeners();
         
-        // Сначала пауза и сброс
+        // Пауза перед сменой источника
         audio.pause();
+        
+        // Очищаем текущий источник
         audio.src = '';
         
-        // Устанавливаем новый источник
-        audio.src = source;
-        audio.crossOrigin = "anonymous";
+        // Добавляем timestamp для обхода кэша
+        const timestamp = Date.now();
+        const sourceWithCacheBust = source.includes('?') 
+            ? `${source}&_=${timestamp}`
+            : `${source}?_=${timestamp}`;
         
-        console.log('Setting audio source to:', source);
+        // Устанавливаем новый источник
+        audio.src = sourceWithCacheBust;
+        audio.crossOrigin = "anonymous";
+        audio.preload = "none";
+        
+        console.log('Setting audio source to:', sourceWithCacheBust);
         updateStatus(`Подключение к источнику...`);
         
         setupAudioListeners();
         updatePlayButtonState(false);
         
-        // Загружаем аудио
-        audio.load();
+        // Загружаем аудио асинхронно
+        setTimeout(() => {
+            audio.load();
+        }, 100);
     }
 
     // Настройка обработчиков событий аудио
@@ -68,11 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.addEventListener('error', onAudioError);
         audio.addEventListener('loadstart', onAudioLoadStart);
         audio.addEventListener('canplay', onAudioCanPlay);
+        audio.addEventListener('canplaythrough', onAudioCanPlayThrough);
         audio.addEventListener('stalled', onAudioStalled);
         audio.addEventListener('waiting', onAudioWaiting);
         audio.addEventListener('playing', onAudioPlaying);
         audio.addEventListener('ended', onAudioEnded);
         audio.addEventListener('volumechange', onVolumeChange);
+        audio.addEventListener('abort', onAudioAbort);
     }
 
     // Очистка обработчиков событий
@@ -82,11 +99,13 @@ document.addEventListener('DOMContentLoaded', function() {
         audio.removeEventListener('error', onAudioError);
         audio.removeEventListener('loadstart', onAudioLoadStart);
         audio.removeEventListener('canplay', onAudioCanPlay);
+        audio.removeEventListener('canplaythrough', onAudioCanPlayThrough);
         audio.removeEventListener('stalled', onAudioStalled);
         audio.removeEventListener('waiting', onAudioWaiting);
         audio.removeEventListener('playing', onAudioPlaying);
         audio.removeEventListener('ended', onAudioEnded);
         audio.removeEventListener('volumechange', onVolumeChange);
+        audio.removeEventListener('abort', onAudioAbort);
     }
 
     // Обработчики событий аудио
@@ -95,10 +114,23 @@ document.addEventListener('DOMContentLoaded', function() {
         currentState = PlayerState.PLAYING;
         updatePlayButtonState(true);
         updateStatus('Воспроизведение');
+        isManualPause = false;
+        retryCount = 0; // Сбрасываем счетчик при успешном воспроизведении
     }
 
     function onAudioPause() {
         console.log('Audio pause event fired');
+        
+        // Если это не ручная пауза и мы не в процессе ретрая
+        if (!isManualPause && currentState !== PlayerState.RETRYING) {
+            // Проверяем, не произошла ли ошибка
+            if (audio.error && audio.error.code === MediaError.MEDIA_ERR_NETWORK) {
+                console.log('Network error detected, attempting retry...');
+                setTimeout(() => tryNextAudioSource(), 1000);
+                return;
+            }
+        }
+        
         if (currentState !== PlayerState.RETRYING) {
             currentState = PlayerState.IDLE;
         }
@@ -114,8 +146,9 @@ document.addEventListener('DOMContentLoaded', function() {
         updateStatus(`Ошибка: ${getErrorMessage(audio.error)}`);
         
         // Только если пользователь хотел воспроизвести, пробуем другой источник
-        if (playPauseBtn.classList.contains('user-requested-play')) {
-            setTimeout(() => tryNextAudioSource(), 2000);
+        if (playPauseBtn.classList.contains('user-requested-play') && !isManualPause) {
+            console.log('User wanted to play, attempting retry...');
+            setTimeout(() => tryNextAudioSource(), 1000);
         }
     }
 
@@ -129,18 +162,24 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Audio can play');
         updateStatus('Готов к воспроизведению');
     }
+    
+    function onAudioCanPlayThrough() {
+        console.log('Audio can play through');
+        updateStatus('Буферизация завершена');
+    }
 
     function onAudioStalled() {
         console.log('Audio stalled');
         updateStatus('Буферизация...');
         
-        // Ждем 5 секунд, если все еще пауза - пробуем переподключиться
+        // Ждем 3 секунды, если все еще пауза - пробуем переподключиться
         setTimeout(() => {
-            if (currentState === PlayerState.PLAYING && audio.paused) {
+            if (currentState === PlayerState.PLAYING && audio.paused && !isManualPause) {
+                console.log('Stream stalled, attempting recovery...');
                 updateStatus('Проблема с соединением...');
                 tryNextAudioSource();
             }
-        }, 5000);
+        }, 3000);
     }
 
     function onAudioWaiting() {
@@ -159,6 +198,11 @@ document.addEventListener('DOMContentLoaded', function() {
         currentState = PlayerState.IDLE;
         updatePlayButtonState(false);
         updateStatus('Воспроизведение завершено');
+    }
+    
+    function onAudioAbort() {
+        console.log('Audio abort');
+        updateStatus('Воспроизведение прервано');
     }
     
     function onVolumeChange() {
@@ -192,10 +236,14 @@ document.addEventListener('DOMContentLoaded', function() {
             currentState = PlayerState.LOADING;
             playPauseBtn.classList.add('loading');
             updateStatus('Подключение...');
+            isManualPause = false;
             
             // Проверяем, есть ли источник
-            if (!audio.src) {
+            if (!audio.src || audio.error) {
+                console.log('Setting initial audio source');
                 setAudioSource(audioSources[0]);
+                currentSourceIndex = 0;
+                retryCount = 0;
             }
             
             // Пытаемся воспроизвести
@@ -208,36 +256,42 @@ document.addEventListener('DOMContentLoaded', function() {
                         currentState = PlayerState.PLAYING;
                         updatePlayButtonState(true);
                         playPauseBtn.classList.remove('loading');
-                        retryCount = 0;
+                        retryCount = 0; // Сбрасываем счетчик при успехе
                         updateStatus('Воспроизведение');
                     })
                     .catch(error => {
-                        console.error('Playback failed:', error);
+                        console.error('Playback failed:', error.name, error.message);
                         currentState = PlayerState.ERROR;
                         playPauseBtn.classList.remove('loading');
                         updateStatus('Ошибка воспроизведения');
                         
-                        // Пробуем другой источник
-                        tryNextAudioSource();
+                        // Не пытаемся ретраить если пользователь запретил автовоспроизведение
+                        if (error.name === 'NotAllowedError') {
+                            showErrorMessage('Разрешите воспроизведение звука в настройках браузера');
+                        } else {
+                            // Пробуем другой источник
+                            tryNextAudioSource();
+                        }
                     });
             }
         } else {
             // Пауза
+            isManualPause = true;
             audio.pause();
             currentState = PlayerState.IDLE;
             updatePlayButtonState(false);
             playPauseBtn.classList.remove('user-requested-play');
-            console.log('Playback paused');
+            console.log('Playback paused manually');
             updateStatus('Пауза');
         }
     }
 
-    // Функция попытки следующего источника (исправленная)
+    // Функция попытки следующего источника (исправленная без рекурсии)
     function tryNextAudioSource() {
         if (retryCount >= MAX_RETRIES) {
             console.error('Max retries exceeded');
             updateStatus('Все источники недоступны');
-            showErrorMessage('Не удалось подключиться к радио. Попробуйте позже.');
+            showErrorMessage('Не удалось подключиться к радио. Попробуйте позже или обновите страницу.');
             playPauseBtn.classList.remove('loading', 'user-requested-play');
             return;
         }
@@ -261,12 +315,21 @@ document.addEventListener('DOMContentLoaded', function() {
             setAudioSource(audioSources[currentSourceIndex]);
             
             // Пытаемся воспроизвести только если пользователь хотел играть
-            if (playPauseBtn.classList.contains('user-requested-play')) {
-                audio.play().catch(e => {
-                    console.error('Failed with new source:', e);
-                    // Рекурсивно пробуем следующий источник
-                    tryNextAudioSource();
-                });
+            if (playPauseBtn.classList.contains('user-requested-play') && !isManualPause) {
+                audio.play()
+                    .then(() => {
+                        console.log('Retry successful');
+                        retryCount = 0; // Сбрасываем счетчик при успехе
+                    })
+                    .catch(error => {
+                        console.error('Failed with new source:', error);
+                        
+                        // Если это не NotAllowedError, пробуем снова
+                        if (error.name !== 'NotAllowedError') {
+                            // Следующая попытка через таймаут
+                            setTimeout(() => tryNextAudioSource(), 2000);
+                        }
+                    });
             }
         }, delay);
     }
@@ -299,28 +362,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 right: 20px;
                 background: #f44336;
                 color: white;
-                padding: 15px;
-                border-radius: 5px;
+                padding: 15px 20px;
+                border-radius: 8px;
                 z-index: 9999;
-                max-width: 300px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                max-width: 350px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                animation: slideIn 0.3s ease;
             `;
+            
+            // Добавляем стили анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+            
             document.body.appendChild(errorDiv);
         }
         
         errorDiv.innerHTML = `
-            <p style="margin: 0 0 10px 0;">${message}</p>
+            <p style="margin: 0 0 12px 0; font-weight: bold;">Ошибка радио</p>
+            <p style="margin: 0 0 15px 0;">${message}</p>
             <button onclick="this.parentElement.remove()" 
-                    style="background: none; border: 1px solid white; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer;">
+                    style="background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.5); 
+                           color: white; padding: 6px 16px; border-radius: 4px; cursor: pointer;
+                           font-size: 13px; transition: background 0.2s;">
                 Закрыть
             </button>
         `;
         
+        // Автоматическое скрытие через 7 секунд
         setTimeout(() => {
             if (errorDiv && errorDiv.parentElement) {
-                errorDiv.remove();
+                errorDiv.style.opacity = '0';
+                errorDiv.style.transition = 'opacity 0.3s';
+                setTimeout(() => {
+                    if (errorDiv && errorDiv.parentElement) {
+                        errorDiv.remove();
+                    }
+                }, 300);
             }
-        }, 5000);
+        }, 7000);
     }
 
     // Управление громкостью (полностью восстановлено)
@@ -329,16 +416,26 @@ document.addEventListener('DOMContentLoaded', function() {
             const muteSvg = volumeBtn.querySelector('.player__mute-muteSvg');
             const unmuteSvg = volumeBtn.querySelector('.player__mute-unmuteSvg');
             
+            // Инициализация иконок
+            if (muteSvg && unmuteSvg) {
+                muteSvg.style.display = 'block';
+                unmuteSvg.style.display = 'none';
+            }
+            
             volumeBtn.addEventListener('click', () => {
                 audio.muted = !audio.muted;
                 
                 if (audio.muted) {
-                    muteSvg.style.display = 'none';
-                    unmuteSvg.style.display = 'block';
+                    if (muteSvg && unmuteSvg) {
+                        muteSvg.style.display = 'none';
+                        unmuteSvg.style.display = 'block';
+                    }
                     updateStatus('Звук выключен');
                 } else {
-                    muteSvg.style.display = 'block';
-                    unmuteSvg.style.display = 'none';
+                    if (muteSvg && unmuteSvg) {
+                        muteSvg.style.display = 'block';
+                        unmuteSvg.style.display = 'none';
+                    }
                     updateStatus('Звук включен');
                 }
                 
@@ -346,7 +443,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
 
             volumeSlider.addEventListener('input', (e) => {
-                audio.volume = e.target.value / 100;
+                const volume = e.target.value / 100;
+                audio.volume = volume;
                 audio.muted = false;
                 
                 // Показываем правильную иконку
@@ -362,17 +460,37 @@ document.addEventListener('DOMContentLoaded', function() {
             // Устанавливаем начальную громкость
             audio.volume = 0.7;
             volumeSlider.value = 70;
+            
+            // Проверяем начальное состояние mute
+            if (audio.muted) {
+                volumeBtn.classList.add('muted');
+                if (muteSvg && unmuteSvg) {
+                    muteSvg.style.display = 'none';
+                    unmuteSvg.style.display = 'block';
+                }
+            }
         }
     }
 
     // Проверка онлайн-статуса
     window.addEventListener('online', () => {
+        console.log('Browser is online');
         if (currentState === PlayerState.ERROR) {
             updateStatus('Соединение восстановлено');
+            // Автоматически пробуем возобновить воспроизведение
+            if (playPauseBtn.classList.contains('user-requested-play')) {
+                setTimeout(() => {
+                    setAudioSource(audioSources[0]);
+                    currentSourceIndex = 0;
+                    retryCount = 0;
+                    audio.play().catch(e => console.log('Auto-reconnect failed:', e));
+                }, 1000);
+            }
         }
     });
 
     window.addEventListener('offline', () => {
+        console.log('Browser is offline');
         if (currentState === PlayerState.PLAYING) {
             updateStatus('Потеряно соединение с интернетом');
         }
@@ -381,33 +499,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обработчик клика на кнопку воспроизведения
     playPauseBtn.addEventListener('click', togglePlayback);
 
-    // Предварительная проверка источников
-    async function preloadAudioSources() {
-        for (let i = 0; i < audioSources.length; i++) {
-            try {
-                const response = await fetch(audioSources[i], {
-                    method: 'HEAD',
-                    mode: 'no-cors' // Используем no-cors для обхода CORS
-                });
-                console.log(`Source ${i + 1} is reachable`);
-            } catch (error) {
-                console.warn(`Source ${i + 1} may be unreachable:`, error);
-            }
-        }
-    }
-
     // Инициализация плеера
     function initPlayer() {
         setupAudioListeners();
         setupVolumeControls();
         
-        // Устанавливаем начальный источник
-        setAudioSource(audioSources[0]);
-        
-        updateStatus('Готов к воспроизведению');
-        
-        // Предварительная проверка
-        preloadAudioSources();
+        // Устанавливаем начальный источник с задержкой
+        setTimeout(() => {
+            setAudioSource(audioSources[0]);
+            updateStatus('Готов к воспроизведению');
+        }, 500);
         
         console.log('Player initialized successfully');
     }
@@ -420,14 +521,27 @@ document.addEventListener('DOMContentLoaded', function() {
         audio,
         getState: () => currentState,
         getCurrentSource: () => audioSources[currentSourceIndex],
-        manualRetry: () => tryNextAudioSource(),
+        manualRetry: () => {
+            retryCount = 0;
+            tryNextAudioSource();
+        },
         setSource: (index) => {
             if (index >= 0 && index < audioSources.length) {
                 currentSourceIndex = index;
+                retryCount = 0;
                 setAudioSource(audioSources[index]);
             }
         },
         play: () => togglePlayback(),
-        pause: () => audio.pause()
+        pause: () => {
+            isManualPause = true;
+            audio.pause();
+        },
+        forceReconnect: () => {
+            retryCount = 0;
+            currentSourceIndex = 0;
+            setAudioSource(audioSources[0]);
+            setTimeout(() => audio.play(), 500);
+        }
     };
 });
