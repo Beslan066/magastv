@@ -40,6 +40,7 @@ class UpdateRequest extends FormRequest
             'deleter_id' => 'nullable|exists:users,id',
             'delete_preview' => 'nullable|boolean',
             'delete_video' => 'nullable|boolean',
+            'published_at' => 'nullable|date_format:Y-m-d\TH:i',
         ];
     }
 

@@ -18,9 +18,10 @@ class VideoTransfer extends Model
         'transfer_id',
         'deleter_id',
         'views',
+        'published_at',
     ];
 
-    protected $dates = ['created_at', 'deleted_at'];
+    protected $dates = ['published_at', 'created_at', 'deleted_at'];
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

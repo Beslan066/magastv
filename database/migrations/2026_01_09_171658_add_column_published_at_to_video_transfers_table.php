@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('radio_broadcasts', function (Blueprint $table) {
+        Schema::table('video_transfers', function (Blueprint $table) {
             $table->dateTime('published_at')->nullable();
         });
     }
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('radio_broadcasts', function (Blueprint $table) {
+        Schema::table('video_transfers', function (Blueprint $table) {
             Schema::dropColumn('published_at');
         });
     }

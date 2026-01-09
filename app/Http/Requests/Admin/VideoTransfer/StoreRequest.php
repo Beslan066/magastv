@@ -38,6 +38,8 @@ class StoreRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'transfer_id' => 'required',
             'deleter_id' => 'nullable|exists:users,id',
+            'published_at' => 'required|date_format:Y-m-d\TH:i',
+
         ];
     }
     public function messages()
@@ -61,6 +63,9 @@ class StoreRequest extends FormRequest
             // User ID
             'user_id.exists' => __('Указанный пользователь не найден'),
 
+            'published_at.required' => 'Укажите дату публикации.',
+            'published_at.date_format' => 'Некорректный формат даты, используйте формат ГГГГ-ММ-ДДTЧЧ:ММ.',
+
             // Category ID
             'transfer_id.exists' => __('Указанная передача не найдена'),
 
@@ -70,6 +75,8 @@ class StoreRequest extends FormRequest
             'video.required' => 'Пожалуйста, загрузите видеофайл',
             'video.max' => 'Размер видео не должен превышать 2GB',
             'video.mimetypes' => 'Поддерживаются только файлы MP4, MOV или OGG',
+
+
         ];
     }
 }

@@ -134,6 +134,17 @@
 {{--                                    <div id="videoInfo" class="mt-2"></div>--}}
 {{--                                </div>--}}
 {{--                            </div>--}}
+
+
+                            <div class="form-group w-50 mb-4">
+                                <div class="form-group w-50">
+                                    <input type="datetime-local" class="datetime_input" name="published_at"
+                                           style="color: #495057; width: 250px; border: 1px solid #ced4da;
+                                   padding: 5px !important; "
+                                           value="{{ $videoTransfer->published_at ? date('Y-m-d\TH:i', strtotime($videoTransfer->published_at)) : '' }}"                            >
+                                </div>
+                            </div>
+
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                         </div>

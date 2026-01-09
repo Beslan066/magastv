@@ -105,6 +105,15 @@
                             <div class="text-danger">{{ $message }}</div>
                             @enderror
 
+                            <div class="form-group w-50">
+                                <input
+                                    type="datetime-local"
+                                    name="published_at"
+                                    class="form-control"
+                                    value="{{ now()->timezone('Europe/Moscow')->format('Y-m-d\TH:i') }}"
+                                >
+                            </div>
+
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                         </div>
                     </div>
