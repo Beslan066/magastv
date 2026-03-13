@@ -221,7 +221,7 @@
                         <div class="radio__inner">
                             <div class="radio-content">
                                 <span>88.8 FM</span>
-                                <audio src="/proxy/audio" id="radio-stream-header" preload="none"></audio>
+                                <audio src="https://magas.tv/ingradio" id="radio-stream-header" preload="none"></audio>
                                 <svg width="29" height="28" viewBox="0 0 29 28" fill="none"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path

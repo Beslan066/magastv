@@ -223,7 +223,7 @@
 
 
                                             <div>
-                                               <audio src="/proxy/audio" id="radio-stream"></audio>
+                                               <audio src="https://magas.tv/ingradio" id="radio-stream"></audio>
 
                                                 <button
                                                     class="btn-reset player__controls_btn player__controls_btn--play"
