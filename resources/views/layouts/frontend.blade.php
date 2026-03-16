@@ -46,6 +46,274 @@
                 width: 100%;
             }
         }
+
+        /* Стили для cookie-уведомления */
+        .cookie-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px 24px;
+            z-index: 1000;
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @media (min-width: 768px) {
+            .cookie-notice {
+                left: 30px;
+                right: 30px;
+                bottom: 30px;
+            }
+        }
+
+        @media (min-width: 1260px) {
+            .cookie-notice {
+                left: 50%;
+                right: auto;
+                transform: translateX(-50%);
+                width: 1200px;
+            }
+        }
+
+        .cookie-notice__content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @media (min-width: 768px) {
+            .cookie-notice__content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .cookie-notice__text {
+            color: #fff;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .cookie-notice__text a {
+            color: #70E780;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .cookie-notice__text a:hover {
+            opacity: 0.8;
+        }
+
+        .cookie-notice__buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .cookie-notice__btn {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            white-space: nowrap;
+        }
+
+        .cookie-notice__btn--accept {
+            background: #70E780;
+            color: #000;
+        }
+
+        .cookie-notice__btn--accept:hover {
+            background: #5bc96b;
+        }
+
+        .cookie-notice__btn--settings {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cookie-notice__btn--settings:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Стили для модального окна настроек */
+        .cookie-settings {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .cookie-settings.active {
+            display: flex;
+        }
+
+        .cookie-settings__modal {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cookie-settings__title {
+            color: #fff;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .cookie-settings__option {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .cookie-settings__option-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .cookie-settings__option-title {
+            color: #fff;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .cookie-settings__option-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Golos Text', sans-serif;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .cookie-settings__toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .cookie-settings__toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .cookie-settings__toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .cookie-settings__toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .cookie-settings__toggle-slider {
+            background-color: #70E780;
+        }
+
+        input:checked + .cookie-settings__toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        input:disabled + .cookie-settings__toggle-slider {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cookie-settings__save {
+            background: #70E780;
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .cookie-settings__save:hover {
+            background: #5bc96b;
+        }
+
+        .cookie-settings__close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .cookie-settings__close:hover {
+            opacity: 1;
+        }
     </style>
 
     <link rel="stylesheet" href="{{asset('css/media/media.css')}}">
@@ -94,12 +362,12 @@
                     <div class="header__media_tabs">
                         <button class="btn-reset header__media_tab header-tab active" data-media-tab="tv">
                             <div class="header-tab__main_content">
-                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                         xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="4" y="8" width="12" height="8" rx="2" stroke-width="1.5"></rect>
-                                        <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5"
-                                              stroke-linejoin="bevel"></path>
-                                    </svg>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="4" y="8" width="12" height="8" rx="2" stroke-width="1.5"></rect>
+                                    <path d="M5.38892 3L9.88895 7.50003L14.3889 3" stroke-width="1.5"
+                                          stroke-linejoin="bevel"></path>
+                                </svg>
                                 ТВ
                             </div>
                             <div class="header__media_info--mobile">
@@ -147,76 +415,76 @@
                         </button>
                     </div>
 
-                   <div class="header__media_content  header__media_content--video active" id="tv">
-                            <video id="header__media--video" class="header__media--video" preload="true"></video>
-                            <div class="overlay">
-                                <div class="overlay__inner">
-                                    <div class="video-custom-controls">
-                                        <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute"
-                                            data-id="muteVideo">
-                                            <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z" />
-                                            </svg>
+                    <div class="header__media_content  header__media_content--video active" id="tv">
+                        <video id="header__media--video" class="header__media--video" preload="true"></video>
+                        <div class="overlay">
+                            <div class="overlay__inner">
+                                <div class="video-custom-controls">
+                                    <button
+                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--mute"
+                                        data-id="muteVideo">
+                                        <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                  d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z" />
+                                        </svg>
 
-                                        </button>
-                                        <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute hidden"
-                                            data-id="unmuteVideo">
+                                    </button>
+                                    <button
+                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--unmute hidden"
+                                        data-id="unmuteVideo">
 
-                                            <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z" />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--play hidden"
-                                            data-id="play">
-                                            <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z" />
-                                            </svg>
+                                        <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                  d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z" />
+                                        </svg>
+                                    </button>
+                                    <button
+                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--play hidden"
+                                        data-id="play">
+                                        <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z" />
+                                        </svg>
 
-                                        </button>
-                                        <button
-                                            class="btn-reset video-custom-controls__btn video-custom-controls__btn--pause"
-                                            data-id="pause">
-                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <rect x="6" y="4" width="4" height="16" rx="1" />
-                                                <rect x="14" y="4" width="4" height="16" rx="1" />
-                                            </svg>
-                                        </button>
-                                        <button class="btn-reset video-custom-controls__btn" data-id="fullScreenVideo">
-                                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M12 1H15C16.1046 1 17 1.89543 17 3V6M6 1H3C1.89543 1 1 1.89543 1 3V6M1 12V15C1 16.1046 1.89543 17 3 17H6M12 17H15C16.1046 17 17 16.1046 17 15V12"
-                                                    stroke-width="2" />
-                                            </svg>
-                                        </button>
-                                    </div>
-
+                                    </button>
+                                    <button
+                                        class="btn-reset video-custom-controls__btn video-custom-controls__btn--pause"
+                                        data-id="pause">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="6" y="4" width="4" height="16" rx="1" />
+                                            <rect x="14" y="4" width="4" height="16" rx="1" />
+                                        </svg>
+                                    </button>
+                                    <button class="btn-reset video-custom-controls__btn" data-id="fullScreenVideo">
+                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M12 1H15C16.1046 1 17 1.89543 17 3V6M6 1H3C1.89543 1 1 1.89543 1 3V6M1 12V15C1 16.1046 1.89543 17 3 17H6M12 17H15C16.1046 17 17 16.1046 17 15V12"
+                                                stroke-width="2" />
+                                        </svg>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="overlay__info">
-                                <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="4" cy="4" r="4" fill="#70E780" />
-                                </svg>
-                                <h6 class="video__title">
-                                    @if($currentTvProgram && $currentTvProgram->title)
-                                        {{ $currentTvProgram->title }}
-                                    @else
-                                        Нет текущей передачи
-                                    @endif
-                                </h6>
+
                             </div>
                         </div>
+                        <div class="overlay__info">
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="4" cy="4" r="4" fill="#70E780" />
+                            </svg>
+                            <h6 class="video__title">
+                                @if($currentTvProgram && $currentTvProgram->title)
+                                    {{ $currentTvProgram->title }}
+                                @else
+                                    Нет текущей передачи
+                                @endif
+                            </h6>
+                        </div>
+                    </div>
                     <div class="header__media_content header__media_content--radio" id="radio">
                         <div class="radio__inner">
                             <div class="radio-content">
@@ -229,16 +497,16 @@
                                         fill="white"></path>
                                 </svg>
                             </div>
-                                <div class="overlay">
+                            <div class="overlay">
                                 <div class="overlay__inner">
                                     <div class="radio-custom-controls">
                                         <button
                                             class="btn-reset radio-custom-controls__btn radio-custom-controls__btn--mute"
                                             data-id="muteRadio">
                                             <svg width="19" height="16" viewBox="0 0 19 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z" />
+                                                      d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM17.293 4.29297C17.6835 3.90244 18.3165 3.90244 18.707 4.29297C19.0976 4.68349 19.0976 5.31651 18.707 5.70703L16.4141 8L18.707 10.293C19.0976 10.6835 19.0976 11.3165 18.707 11.707C18.3165 12.0976 17.6835 12.0976 17.293 11.707L15 9.41406L12.707 11.707C12.3165 12.0976 11.6835 12.0976 11.293 11.707C10.9024 11.3165 10.9024 10.6835 11.293 10.293L13.5859 8L11.293 5.70703C10.9024 5.31651 10.9024 4.68349 11.293 4.29297C11.6835 3.90244 12.3165 3.90244 12.707 4.29297L15 6.58594L17.293 4.29297Z" />
                                             </svg>
 
                                         </button>
@@ -247,16 +515,16 @@
                                             data-id="unmuteRadio">
 
                                             <svg width="18" height="16" viewBox="0 0 18 16" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
-                                                    d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z" />
+                                                      d="M7.32429 0.536043L3 4.4998V4.49994H1C0.447715 4.49994 0 4.94765 0 5.49994V10.4999C0 11.0522 0.447715 11.4999 1 11.4999H3V11.4998L7.32426 15.4639C7.96566 16.0519 9 15.5969 9 14.7267V1.27321C9 0.403119 7.9657 -0.0518867 7.32429 0.536043ZM11 5C12.6569 5 14 6.34315 14 8C14 9.65685 12.6569 11 11 11V5ZM11 3C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13V15C14.866 15 18 11.866 18 8C18 4.13401 14.866 1 11 1V3Z" />
                                             </svg>
                                         </button>
                                         <button
                                             class="btn-reset radio-custom-controls__btn radio-custom-controls__btn--play hidden"
                                             data-id="playRadio">
                                             <svg width="12" height="14" viewBox="0 0 12 14" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M11.3648 6.11953L1.4741 0.793746C0.807869 0.435006 0 0.917542 0 1.67422V12.3258C0 13.0825 0.807868 13.565 1.4741 13.2063L11.3648 7.88047C12.066 7.5029 12.066 6.4971 11.3648 6.11953Z" />
                                             </svg>
@@ -266,14 +534,14 @@
                                             class="btn-reset radio-custom-controls__btn radio-custom-controls__btn--pause"
                                             data-id="pauseRadio">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <rect x="6" y="4" width="4" height="16" rx="1" />
                                                 <rect x="14" y="4" width="4" height="16" rx="1" />
                                             </svg>
                                         </button>
                                         <button class="btn-reset fullScreenRadio" data-id="fullScreenRadio">
                                             <svg width="18" height="18" viewBox="0 0 18 18"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
                                                     d="M12 1H15C16.1046 1 17 1.89543 17 3V6M6 1H3C1.89543 1 1 1.89543 1 3V6M1 12V15C1 16.1046 1.89543 17 3 17H6M12 17H15C16.1046 17 17 16.1046 17 15V12"
                                                     stroke-width="2" />
@@ -725,6 +993,68 @@
     </div>
 </footer>
 
+<!-- Cookie Notice -->
+<div class="cookie-notice" id="cookieNotice">
+    <div class="cookie-notice__content">
+        <div class="cookie-notice__text">
+            Мы используем файлы cookie и сервисы для отслеживания метрики с целью повышения удобства пользования сайтом. Продолжая использовать наш сайт, вы соглашаетесь с <a href="{{route('soglasie')}}">обработкой персональных данных</a> и принимаете <a href="{{route('pravila')}}">условия использования</a>.
+        </div>
+        <div class="cookie-notice__buttons">
+            <button class="cookie-notice__btn cookie-notice__btn--settings" onclick="openCookieSettings()">Настройки</button>
+            <button class="cookie-notice__btn cookie-notice__btn--accept" onclick="acceptCookies()">Принять</button>
+        </div>
+    </div>
+</div>
+
+<!-- Cookie Settings Modal -->
+<div class="cookie-settings" id="cookieSettings">
+    <div class="cookie-settings__modal">
+        <button class="cookie-settings__close" onclick="closeCookieSettings()">&times;</button>
+        <h3 class="cookie-settings__title">Настройки cookie</h3>
+
+        <div class="cookie-settings__option">
+            <div class="cookie-settings__option-header">
+                <span class="cookie-settings__option-title">Необходимые cookie</span>
+                <label class="cookie-settings__toggle">
+                    <input type="checkbox" checked disabled>
+                    <span class="cookie-settings__toggle-slider"></span>
+                </label>
+            </div>
+            <div class="cookie-settings__option-description">
+                Эти файлы cookie необходимы для работы сайта и не могут быть отключены.
+            </div>
+        </div>
+
+        <div class="cookie-settings__option">
+            <div class="cookie-settings__option-header">
+                <span class="cookie-settings__option-title">Аналитические cookie (Яндекс.Метрика)</span>
+                <label class="cookie-settings__toggle">
+                    <input type="checkbox" id="analyticsCookies" checked>
+                    <span class="cookie-settings__toggle-slider"></span>
+                </label>
+            </div>
+            <div class="cookie-settings__option-description">
+                Позволяют нам собирать анонимную статистику посещений для улучшения работы сайта.
+            </div>
+        </div>
+
+        <div class="cookie-settings__option">
+            <div class="cookie-settings__option-header">
+                <span class="cookie-settings__option-title">Функциональные cookie</span>
+                <label class="cookie-settings__toggle">
+                    <input type="checkbox" id="functionalCookies" checked>
+                    <span class="cookie-settings__toggle-slider"></span>
+                </label>
+            </div>
+            <div class="cookie-settings__option-description">
+                Запоминают ваши предпочтения и настройки для улучшения взаимодействия с сайтом.
+            </div>
+        </div>
+
+        <button class="cookie-settings__save" onclick="saveCookieSettings()">Сохранить настройки</button>
+    </div>
+</div>
+
 <script src="{{asset('js/swiper.min.js')}}"></script>
 <script src="{{asset('js/nouislider.js')}}"></script>
 
@@ -735,6 +1065,9 @@
         const tabs = document.querySelectorAll('.menu-tab');
         let currentCategory = 'all';
         let searchTimeout;
+
+        // Cookie notice logic
+        checkCookieConsent();
 
         // Обработчик ввода в поле поиска
         searchInput.addEventListener('input', function () {
@@ -944,6 +1277,71 @@
             }
         }
     }
+
+    // Cookie functions
+    function checkCookieConsent() {
+        const consent = localStorage.getItem('cookieConsent');
+        if (consent) {
+            document.getElementById('cookieNotice').style.display = 'none';
+            applyCookieSettings(JSON.parse(consent));
+        }
+    }
+
+    function acceptCookies() {
+        const settings = {
+            necessary: true,
+            analytics: true,
+            functional: true
+        };
+        localStorage.setItem('cookieConsent', JSON.stringify(settings));
+        document.getElementById('cookieNotice').style.display = 'none';
+        applyCookieSettings(settings);
+    }
+
+    function openCookieSettings() {
+        const settings = JSON.parse(localStorage.getItem('cookieConsent')) || {
+            necessary: true,
+            analytics: true,
+            functional: true
+        };
+        document.getElementById('analyticsCookies').checked = settings.analytics;
+        document.getElementById('functionalCookies').checked = settings.functional;
+        document.getElementById('cookieSettings').classList.add('active');
+    }
+
+    function closeCookieSettings() {
+        document.getElementById('cookieSettings').classList.remove('active');
+    }
+
+    function saveCookieSettings() {
+        const settings = {
+            necessary: true,
+            analytics: document.getElementById('analyticsCookies').checked,
+            functional: document.getElementById('functionalCookies').checked
+        };
+        localStorage.setItem('cookieConsent', JSON.stringify(settings));
+        document.getElementById('cookieSettings').classList.remove('active');
+        document.getElementById('cookieNotice').style.display = 'none';
+        applyCookieSettings(settings);
+    }
+
+    function applyCookieSettings(settings) {
+        // Здесь можно добавить логику для включения/отключения счетчиков
+        if (!settings.analytics) {
+            // Отключить Яндекс.Метрику
+            const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
+            if (metrikaScript) {
+                metrikaScript.remove();
+            }
+        }
+    }
+
+    // Закрытие модального окна по клику вне его
+    document.getElementById('cookieSettings').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCookieSettings();
+        }
+    });
 </script>
 
 
