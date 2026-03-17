@@ -42,12 +42,14 @@ Route::get('/proxy/audio', function() {
     $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
 
     \Log::info('Radio proxy started for: ' . request()->ip());
-
+ы
     // ВАЖНО: Убираем все middleware для этого роута
     // Добавьте в конце роута:
 })->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 // А сам код функции должен быть таким:
+
+//
 
 Route::get('/proxy/audio', function() {
     $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
