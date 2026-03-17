@@ -740,5 +740,10 @@ HTML;
         ]);
     }
 
+    public function privacyPolicy()
+    {
+        return view('frontend.privacy-policy');
+    }
+
 
 }

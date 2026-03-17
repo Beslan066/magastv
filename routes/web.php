@@ -37,115 +37,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
-// routes/web.php
-
-Route::get('/proxy/audio', function() {
-    $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
-
-    \Log::info('Radio proxy started for: ' . request()->ip());
-
-    // ВАЖНО: Убираем все middleware для этого роута
-    // Добавьте в конце роута:
-})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-// А сам код функции должен быть таким:
-
-Route::get('/proxy/audio', function() {
-    $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
-
-    \Log::info('Radio proxy started for: ' . request()->ip());
-
-    // Отключаем все буферизации
-    if (ob_get_level()) {
-        ob_end_clean();
-    }
-
-    // Отключаем кэширование
-    header('Cache-Control: no-cache, no-store, must-revalidate');
-    header('Pragma: no-cache');
-    header('Expires: 0');
-
-    // Разрешаем CORS
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: GET, OPTIONS');
-
-    // Устанавливаем Content-Type как у оригинального потока
-    header('Content-Type: audio/mpeg');
-
-    // Для Icecast добавляем icy-метаданные
-    header('icy-br: 128');
-    header('icy-genre: Other');
-    header('icy-name: Magas FM');
-    header('icy-pub: 1');
-
-    // Отключаем лимит времени выполнения
-    set_time_limit(0);
-
-    // Закрываем сессию, чтобы не блокировать
-    if (session_id()) {
-        session_write_close();
-    }
-
-    // Настройки для подключения к Icecast
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header' => implode("\r\n", [
-                'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                'Accept: audio/mpeg, audio/*',
-                'Connection: close',
-                'Icy-MetaData: 1'
-            ]),
-            'timeout' => 10,
-            'ignore_errors' => true
-        ],
-        'socket' => [
-            'bindto' => '0:0'
-        ]
-    ]);
-
-    try {
-        // Открываем поток напрямую к Icecast
-        $fp = @fopen($streamUrl, 'rb', false, $context);
-
-        if (!$fp) {
-            \Log::error('Failed to open radio stream');
-            header('HTTP/1.1 502 Bad Gateway');
-            echo 'Cannot connect to radio server';
-            exit;
-        }
-
-        // Читаем и отправляем данные
-        while (!feof($fp) && connection_status() == 0) {
-            $chunk = fread($fp, 8192);
-            if ($chunk !== false) {
-                echo $chunk;
-                flush();
-            }
-
-            // Небольшая пауза
-            usleep(5000);
-        }
-
-        fclose($fp);
-        exit;
-
-    } catch (\Exception $e) {
-        \Log::error('Proxy error: ' . $e->getMessage());
-        header('HTTP/1.1 500 Internal Server Error');
-        echo 'Proxy error';
-        exit;
-    }
-})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
-
-Route::options('/proxy/audio', function() {
-    return response('', 204)
-        ->header('Access-Control-Allow-Origin', '*')
-        ->header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        ->header('Access-Control-Allow-Headers', '*')
-        ->header('Access-Control-Max-Age', '86400');
-});
-
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/on-air', [HomeController::class, 'onAir'])->name('onAir');
 Route::get('/news', [NewsController::class, 'news'])->name('home.news.index');
@@ -192,6 +83,7 @@ Route::post('/radio/filter-programs', [HomeController::class, 'filterPrograms'])
 Route::get('/sort-news', [HomeController::class, 'sortNews']);
 Route::get('/pravila-ispolzovaniya-materialov', [HomeController::class, 'pravila'])->name('pravila');
 Route::get('/soglasie-na-obrabotku-personalnykh-dannykh', [HomeController::class, 'soglasie'])->name('soglasie');
+Route::get('/privacy-policy', [HomeController::class, 'privacyPolicy'])->name('privacyPolicy');
 
 
 Route::get('dzen.xml', [HomeController::class, 'generateYandexNews'])->name('yandex_news');
