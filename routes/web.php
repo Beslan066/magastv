@@ -42,7 +42,6 @@ Route::get('/proxy/audio', function() {
     $streamUrl = 'http://media.zaoitt.ru:8086/ingradio';
 
     \Log::info('Radio proxy started for: ' . request()->ip());
-ы
     // ВАЖНО: Убираем все middleware для этого роута
     // Добавьте в конце роута:
 })->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
@@ -146,6 +145,8 @@ Route::options('/proxy/audio', function() {
         ->header('Access-Control-Allow-Headers', '*')
         ->header('Access-Control-Max-Age', '86400');
 });
+
+// Test
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/on-air', [HomeController::class, 'onAir'])->name('onAir');
