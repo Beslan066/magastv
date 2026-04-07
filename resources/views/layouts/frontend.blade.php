@@ -19,6 +19,25 @@
 
 
     <link rel="icon" type="image/x-icon" href="{{asset('assets/favicon.ico')}}">
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function(m,e,t,r,i,k,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for(var j=0;j<document.scripts.length;j++){if(document.scripts[j].src===r){return;}}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+        })(window, document,'script','https://mc.yandex.ru/metrika/tag.js', 'ym');
+
+        ym(104109555, 'init', {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true,
+            ecommerce: "dataLayer"
+        });
+    </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/104109555" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+    <!-- /Yandex.Metrika counter -->
 
     @stack('styles')
 
@@ -1073,6 +1092,8 @@
 <script src="{{asset('js/swiper.min.js')}}"></script>
 <script src="{{asset('js/nouislider.js')}}"></script>
 
+
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const searchInput = document.querySelector('.menu__input input');
@@ -1341,15 +1362,23 @@
     }
 
     function applyCookieSettings(settings) {
-        // Здесь можно добавить логику для включения/отключения счетчиков
+        // Проверяем, включена ли аналитика
         if (!settings.analytics) {
-            // Отключить Яндекс.Метрику
-            const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
-            if (metrikaScript) {
-                metrikaScript.remove();
+            // Удаляем скрипт метрики, но БЕЗОПАСНО
+            const metrikaScripts = document.querySelectorAll('script[src*="mc.yandex.ru"]');
+            metrikaScripts.forEach(script => {
+                if (script && script.parentNode) {
+                    script.parentNode.removeChild(script);
+                }
+            });
+
+            // Также удаляем window.ym, чтобы избежать ошибок
+            if (window.ym) {
+                window.ym = function() {};
             }
         }
     }
+
 
     // Закрытие модального окна по клику вне его
     document.getElementById('cookieSettings').addEventListener('click', function (e) {
@@ -1358,44 +1387,46 @@
         }
     });
 </script>
-
-
-<script defer src="{{asset('js/script.js')}}" type="module">
-
-
-</script>
+<script defer src="{{asset('js/script.js')}}" type="module"></script>
 <script src="{{asset('js/video.min.js')}}"></script>
 <script src="{{asset('js/headerLive.js')}}" type="module"></script>
+
+
 @stack('scripts')
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function (m, e, t, r, i, k, a) {
-        m[i] = m[i] || function () {
-            (m[i].a = m[i].a || []).push(arguments)
-        };
-        m[i].l = 1 * new Date();
-        for (var j = 0; j < document.scripts.length; j++) {
-            if (document.scripts[j].src === r) {
-                return;
-            }
-        }
-        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-    })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=104109555', 'ym');
+<script>
+    setTimeout(function() {
+        console.log('=== Яндекс.Метрика отладка ===');
+        console.log('1. ym функция существует:', typeof ym !== 'undefined');
+        console.log('2. ID счетчика:', typeof ym !== 'undefined' ? '104109555' : 'N/A');
 
-    ym(104109555, 'init', {
-        ssr: true,
-        webvisor: true,
-        clickmap: true,
-        ecommerce: "dataLayer",
-        accurateTrackBounce: true,
-        trackLinks: true
-    });
+        // Проверяем cookie метрики
+        console.log('3. Cookie _ym_uid:', document.cookie.match(/_ym_uid=([^;]+)/));
+        console.log('4. Cookie _ym_d:', document.cookie.match(/_ym_d=([^;]+)/));
+
+        // Проверяем localStorage
+        console.log('5. Cookie consent:', localStorage.getItem('cookieConsent'));
+
+        // Проверяем, есть ли скрипт метрики на странице
+        const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
+        console.log('6. Скрипт метрики найден:', !!metrikaScript);
+
+        // Проверяем отправку хита
+        if (typeof ym !== 'undefined') {
+            ym(104109555, 'getClientID', function(id) {
+                console.log('7. Client ID получен:', id);
+                if (!id) {
+                    console.error('❌ Client ID не получен - метрика НЕ РАБОТАЕТ!');
+                } else {
+                    console.log('✅ Метрика работает!');
+                }
+            });
+        } else {
+            console.error('❌ ym функция не определена!');
+        }
+    }, 2000);
 </script>
-<noscript>
-    <div><img src="https://mc.yandex.ru/watch/104109555" style="position:absolute; left:-9999px;" alt=""/></div>
-</noscript>
-<!-- /Yandex.Metrika counter -->
+
 </body>
 
 </html>
