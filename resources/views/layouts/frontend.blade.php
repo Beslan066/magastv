@@ -1022,16 +1022,22 @@
             </div>
 
 
-            <!-- Yandex.Metrika informer -->
-            <a href="https://metrika.yandex.ru/stat/?id=104109555&amp;from=informer" target="_blank" rel="nofollow">
-                <img src="https://informer.yandex.ru/informer/104109555/3_1_FFFFFFFF_FFFFFFFF_0_pageviews"
-                     style="width:88px; height:31px; border:0;"
-                     alt="Яндекс.Метрика"
-                     title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)"
-                     class="ym-advanced-informer" data-cid="104109555" data-lang="ru"/>
-            </a>
-            <!-- /Yandex.Metrika informer -->
-        </div>
+            <div style="display: flex; align-items: center;">
+                <!-- Yandex.Metrika informer -->
+                <a href="https://metrika.yandex.ru/stat/?id=104109555&amp;from=informer" target="_blank" rel="nofollow" style="margin-right: 10px;">
+                    <img src="https://informer.yandex.ru/informer/104109555/3_1_FFFFFFFF_FFFFFFFF_0_pageviews"
+                         style="width:88px; height:31px; border:0;"
+                         alt="Яндекс.Метрика"
+                         title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)"
+                         class="ym-advanced-informer" data-cid="104109555" data-lang="ru"/>
+                </a>
+                <!-- /Yandex.Metrika informer -->
+
+                <!-- ИКС Вебмастер -->
+                <a href="https://webmaster.yandex.ru/siteinfo/?site=https://magas.tv"><img width="88" height="31" alt="" border="0" border-radius="8" src="https://yandex.ru/cycounter?https://magas.tv&theme=light&lang=ru"/></a>
+
+            </div>
+            </div>
 
 
     </div>
