@@ -2306,6 +2306,7 @@ body.active {
     flex-grow: 1;
     height: 222px;
     display: none;
+    max-width: 280px;
 }
 
 .transferItem.active {
