@@ -1031,7 +1031,7 @@
 <!-- /Yandex.Metrika informer -->
         </div>
 
-        
+
     </div>
 </footer>
 
@@ -1325,14 +1325,6 @@
         }
     }
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-    (function(m,e,t,r,i,k,a){
-        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.
-
     // Cookie functions
     function checkCookieConsent() {
         const consent = localStorage.getItem('cookieConsent');
@@ -1381,23 +1373,15 @@
     }
 
     function applyCookieSettings(settings) {
-        // Проверяем, включена ли аналитика
+        // Здесь можно добавить логику для включения/отключения счетчиков
         if (!settings.analytics) {
-            // Удаляем скрипт метрики, но БЕЗОПАСНО
-            const metrikaScripts = document.querySelectorAll('script[src*="mc.yandex.ru"]');
-            metrikaScripts.forEach(script => {
-                if (script && script.parentNode) {
-                    script.parentNode.removeChild(script);
-                }
-            });
-
-            // Также удаляем window.ym, чтобы избежать ошибок
-            if (window.ym) {
-                window.ym = function() {};
+            // Отключить Яндекс.Метрику
+            const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
+            if (metrikaScript) {
+                metrikaScript.remove();
             }
         }
     }
-
 
     // Закрытие модального окна по клику вне его
     document.getElementById('cookieSettings').addEventListener('click', function (e) {
