@@ -2748,3 +2748,7 @@ object-fit: contain;
 .vjs-loading-spinner, .vjs-big-play-button, .vjs-modal-dialog, .vjs-text-track-display {
     display: none !important;
 }
+
+.watch__item .info_bottom {
+    font-size: 12px;
+}
