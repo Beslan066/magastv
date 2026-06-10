@@ -56,7 +56,7 @@
                                 <img src="{{asset('assets/qr.jpeg')}}" alt="QR-код на оплату" height="200px" width="200px"/>
                             </div>
                             <div>
-                                <a type="button" href="https://yookassa.ru/my/i/aHfbl9jnFRqa/l" class="payment-button" target="_blank">Оплатить</a>
+                                <a type="button" href="https://yookassa.ru/my/i/aiLjs6jRPp1w/l" class="payment-button" target="_blank">Оплатить</a>
                             </div>
                         </div>
 
