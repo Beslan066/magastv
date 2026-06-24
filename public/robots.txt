@@ -10,7 +10,7 @@ Disallow: /sort-news
 Disallow: /*?page=
 Disallow: /*?sort=
 Disallow: /*?filter=
-Disallow: /o-kompanii
+
 
 # Укажите конкретный User-agent для Яндекса
 User-agent: Yandex
@@ -25,7 +25,6 @@ Disallow: /sort-news
 Disallow: /*?page=
 Disallow: /*?sort=
 Disallow: /*?filter=
-Disallow: /o-kompanii
 
 Crawl-delay: 1
 
