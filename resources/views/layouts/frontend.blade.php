@@ -1113,361 +1113,361 @@
 <script src="{{asset('js/swiper.min.js')}}"></script>
 <script src="{{asset('js/nouislider.js')}}"></script>
 
-<script>
-    // ====== ЖДЕМ ПОЛНУЮ ЗАГРУЗКУ СТРАНИЦЫ ======
-    document.addEventListener('DOMContentLoaded', function() {
+    <script>
+        // ====== ЖДЕМ ПОЛНУЮ ЗАГРУЗКУ СТРАНИЦЫ ======
+        document.addEventListener('DOMContentLoaded', function() {
 
-        // ====== ИНИЦИАЛИЗАЦИЯ ПОИСКА ======
-        initSearch();
+            // ====== ИНИЦИАЛИЗАЦИЯ ПОИСКА ======
+            initSearch();
 
-        if (typeof checkCookieConsent === 'function') {
-            checkCookieConsent();
-        }
+            if (typeof checkCookieConsent === 'function') {
+                checkCookieConsent();
+            }
 
-        // ====== ИНИЦИАЛИЗАЦИЯ СЛАЙДЕРОВ ======
-        const scheduleSliders = document.querySelectorAll('[data-schedule]');
-        scheduleSliders.forEach(slider => {
-            initScheduleSlider(slider);
+            // ====== ИНИЦИАЛИЗАЦИЯ СЛАЙДЕРОВ ======
+            const scheduleSliders = document.querySelectorAll('[data-schedule]');
+            scheduleSliders.forEach(slider => {
+                initScheduleSlider(slider);
+            });
+
+            // ====== COOKIE ======
+            const settingsModal = document.getElementById('cookieSettings');
+            if (settingsModal) {
+                settingsModal.addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        closeCookieSettings();
+                    }
+                });
+            }
         });
 
-        // ====== COOKIE ======
-        const settingsModal = document.getElementById('cookieSettings');
-        if (settingsModal) {
-            settingsModal.addEventListener('click', function (e) {
-                if (e.target === this) {
-                    closeCookieSettings();
+        // ====== ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ ПОИСКА ======
+        function initSearch() {
+            console.log('🔍 Инициализация поиска...');
+
+            // Ищем поле ввода
+            const searchInput = document.querySelector('.search-input');
+            const searchResults = document.querySelector('.search-results-container');
+
+            console.log('📌 searchInput:', searchInput);
+            console.log('📌 searchResults:', searchResults);
+
+            if (!searchInput) {
+                console.error('❌ Поле поиска .search-input не найдено!');
+                return;
+            }
+
+            if (!searchResults) {
+                console.error('❌ Контейнер .search-results-container не найден!');
+                return;
+            }
+
+            console.log('✅ Поиск инициализирован!');
+
+            let currentCategory = 'all';
+            let searchTimeout;
+
+            // ====== ОБРАБОТЧИК НАЖАТИЯ КЛАВИШ ======
+            searchInput.addEventListener('keydown', function(e) {
+                console.log('⌨️ Нажата клавиша:', e.key);
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    console.log('⏎ Нажат Enter');
+                    const searchTerm = this.value.trim();
+                    console.log('🔎 Текст поиска:', searchTerm);
+
+                    if (searchTerm.length >= 2) {
+                        const url = `/search/all?q=${encodeURIComponent(searchTerm)}&category=${currentCategory}`;
+                        console.log('🔗 Переход на:', url);
+                        window.location.href = url;
+                    } else if (searchTerm.length > 0 && searchTerm.length < 2) {
+                        searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>';
+                    }
                 }
             });
-        }
-    });
 
-    // ====== ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ ПОИСКА ======
-    function initSearch() {
-        console.log('🔍 Инициализация поиска...');
-
-        // Ищем поле ввода
-        const searchInput = document.querySelector('.search-input');
-        const searchResults = document.querySelector('.search-results-container');
-
-        console.log('📌 searchInput:', searchInput);
-        console.log('📌 searchResults:', searchResults);
-
-        if (!searchInput) {
-            console.error('❌ Поле поиска .search-input не найдено!');
-            return;
-        }
-
-        if (!searchResults) {
-            console.error('❌ Контейнер .search-results-container не найден!');
-            return;
-        }
-
-        console.log('✅ Поиск инициализирован!');
-
-        let currentCategory = 'all';
-        let searchTimeout;
-
-        // ====== ОБРАБОТЧИК НАЖАТИЯ КЛАВИШ ======
-        searchInput.addEventListener('keydown', function(e) {
-            console.log('⌨️ Нажата клавиша:', e.key);
-
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                console.log('⏎ Нажат Enter');
+            // ====== ОБРАБОТЧИК ВВОДА ======
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
                 const searchTerm = this.value.trim();
-                console.log('🔎 Текст поиска:', searchTerm);
+                console.log('✏️ Ввод:', searchTerm);
 
-                if (searchTerm.length >= 2) {
-                    const url = `/search/all?q=${encodeURIComponent(searchTerm)}&category=${currentCategory}`;
-                    console.log('🔗 Переход на:', url);
-                    window.location.href = url;
-                } else if (searchTerm.length > 0 && searchTerm.length < 2) {
-                    searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>';
-                }
-            }
-        });
+                searchTimeout = setTimeout(() => {
+                    if (searchTerm.length >= 2) {
+                        console.log('🚀 Запрос поиска для:', searchTerm);
+                        fetchSearchResults(searchTerm, currentCategory);
+                    } else if (searchTerm.length === 0) {
+                        searchResults.innerHTML = '';
+                    } else if (searchTerm.length > 0 && searchTerm.length < 2) {
+                        searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>';
+                    }
+                }, 300);
+            });
 
-        // ====== ОБРАБОТЧИК ВВОДА ======
-        searchInput.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            const searchTerm = this.value.trim();
-            console.log('✏️ Ввод:', searchTerm);
+            // ====== ФУНКЦИЯ ЗАПРОСА ======
+            function fetchSearchResults(term, category) {
+                const categoryId = category === 'все' ? 'all' : category;
+                const url = `/search?q=${encodeURIComponent(term)}&category=${categoryId}`;
+                console.log('📡 Запрос к:', url);
 
-            searchTimeout = setTimeout(() => {
-                if (searchTerm.length >= 2) {
-                    console.log('🚀 Запрос поиска для:', searchTerm);
-                    fetchSearchResults(searchTerm, currentCategory);
-                } else if (searchTerm.length === 0) {
-                    searchResults.innerHTML = '';
-                } else if (searchTerm.length > 0 && searchTerm.length < 2) {
-                    searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>';
-                }
-            }, 300);
-        });
-
-        // ====== ФУНКЦИЯ ЗАПРОСА ======
-        function fetchSearchResults(term, category) {
-            const categoryId = category === 'все' ? 'all' : category;
-            const url = `/search?q=${encodeURIComponent(term)}&category=${categoryId}`;
-            console.log('📡 Запрос к:', url);
-
-            fetch(url)
-                .then(response => {
-                    console.log('📥 Ответ получен, статус:', response.status);
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('📦 Данные:', data);
-                    displaySearchResults(data, term);
-                })
-                .catch(error => {
-                    console.error('❌ Ошибка:', error);
-                    searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Ошибка при выполнении поиска</div>';
-                });
-        }
-
-        // ====== ФУНКЦИЯ ОТОБРАЖЕНИЯ ======
-        function displaySearchResults(data, term) {
-            console.log('🎨 Отображение результатов');
-
-            if (data.html) {
-                console.log('📄 Используем HTML из контроллера');
-                searchResults.innerHTML = data.html;
-                return;
+                fetch(url)
+                    .then(response => {
+                        console.log('📥 Ответ получен, статус:', response.status);
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('📦 Данные:', data);
+                        displaySearchResults(data, term);
+                    })
+                    .catch(error => {
+                        console.error('❌ Ошибка:', error);
+                        searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Ошибка при выполнении поиска</div>';
+                    });
             }
 
-            const items = data.items || [];
-            const total = data.total || 0;
-            console.log('📊 Найдено элементов:', items.length, 'Всего:', total);
+            // ====== ФУНКЦИЯ ОТОБРАЖЕНИЯ ======
+            function displaySearchResults(data, term) {
+                console.log('🎨 Отображение результатов');
 
-            if (items.length === 0) {
-                searchResults.innerHTML = `<div class="no-results" style="color: #fff; font-family: Golos Text, sans-serif; font-weight: 600; padding: 20px; text-align: center;">Ничего не найдено по запросу "${term}"</div>`;
-                return;
-            }
-
-            let html = '';
-            items.forEach(item => {
-                const isVideo = item.type === 'video';
-
-                let mediaContent = '';
-                if (isVideo) {
-                    mediaContent = `
-                        <video src="${item.video_url || ''}" poster="${item.media || '/assets/default-video.jpg'}"></video>
-                        <button class="btn-reset menu-news__play-btn">
-                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white"/>
-                            </svg>
-                        </button>
-                    `;
-                } else {
-                    mediaContent = `<img src="${item.media || '/assets/default-news.jpg'}" alt="${item.title}">`;
+                if (data.html) {
+                    console.log('📄 Используем HTML из контроллера');
+                    searchResults.innerHTML = data.html;
+                    return;
                 }
 
-                html += `
-                    <div class="menu-news menu-news--media" data-menu-category="${item.category_slug || ''}">
-                        <div class="menu-news__media">
-                            ${mediaContent}
-                        </div>
-                        <div class="menu-news__info">
-                            <h6 class="menu-news__title">
-                                <a href="${item.url || `/${isVideo ? 'videos' : 'news'}/${item.slug}`}">${highlightTerm(item.title, term)}</a>
-                            </h6>
-                            <div class="menu-news__text">
-                                <p>${item.lead ? highlightTerm(item.lead, term) : ''}</p>
+                const items = data.items || [];
+                const total = data.total || 0;
+                console.log('📊 Найдено элементов:', items.length, 'Всего:', total);
+
+                if (items.length === 0) {
+                    searchResults.innerHTML = `<div class="no-results" style="color: #fff; font-family: Golos Text, sans-serif; font-weight: 600; padding: 20px; text-align: center;">Ничего не найдено по запросу "${term}"</div>`;
+                    return;
+                }
+
+                let html = '';
+                items.forEach(item => {
+                    const isVideo = item.type === 'video';
+
+                    let mediaContent = '';
+                    if (isVideo) {
+                        mediaContent = `
+                            <video src="${item.video_url || ''}" poster="${item.media || '/assets/default-video.jpg'}"></video>
+                            <button class="btn-reset menu-news__play-btn">
+                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white"/>
+                                </svg>
+                            </button>
+                        `;
+                    } else {
+                        mediaContent = `<img src="${item.media || '/assets/default-news.jpg'}" alt="${item.title}">`;
+                    }
+
+                    html += `
+                        <div class="menu-news menu-news--media" data-menu-category="${item.category_slug || ''}">
+                            <div class="menu-news__media">
+                                ${mediaContent}
                             </div>
-                            <div class="menu-news__meta">
-                                <time>${formatDate(item.published_at)}</time>
-                                <div class="menu-news__views">
-                                    <div class="menu-news__icon">
-                                        <svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.99998 0C14.0312 0 16.9533 4.44092 17.7656 5.875C17.921 6.14927 17.9148 6.47693 17.7461 6.74316C16.907 8.0657 13.9914 12 8.99998 12C4.00872 11.9999 1.0939 8.06568 0.254863 6.74316C0.086031 6.47689 0.078957 6.14935 0.234355 5.875C1.04653 4.44117 3.96865 0.000143146 8.99998 0ZM8.99998 3C7.34324 3.00013 5.99998 4.34323 5.99998 6C5.99998 7.65677 7.34324 8.99987 8.99998 9C10.6568 9 12 7.65685 12 6C12 4.34315 10.6568 3 8.99998 3Z"/>
-                                        </svg>
+                            <div class="menu-news__info">
+                                <h6 class="menu-news__title">
+                                    <a href="${item.url || `/${isVideo ? 'videos' : 'news'}/${item.slug}`}">${highlightTerm(item.title, term)}</a>
+                                </h6>
+                                <div class="menu-news__text">
+                                    <p>${item.lead ? highlightTerm(item.lead, term) : ''}</p>
+                                </div>
+                                <div class="menu-news__meta">
+                                    <time>${formatDate(item.published_at)}</time>
+                                    <div class="menu-news__views">
+                                        <div class="menu-news__icon">
+                                            <svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M8.99998 0C14.0312 0 16.9533 4.44092 17.7656 5.875C17.921 6.14927 17.9148 6.47693 17.7461 6.74316C16.907 8.0657 13.9914 12 8.99998 12C4.00872 11.9999 1.0939 8.06568 0.254863 6.74316C0.086031 6.47689 0.078957 6.14935 0.234355 5.875C1.04653 4.44117 3.96865 0.000143146 8.99998 0ZM8.99998 3C7.34324 3.00013 5.99998 4.34323 5.99998 6C5.99998 7.65677 7.34324 8.99987 8.99998 9C10.6568 9 12 7.65685 12 6C12 4.34315 10.6568 3 8.99998 3Z"/>
+                                            </svg>
+                                        </div>
+                                        <span>${item.views || 0}</span>
                                     </div>
-                                    <span>${item.views || 0}</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                });
+
+                if (total > 10) {
+                    html += `
+                        <div class="all-results-link" style="padding: 20px; text-align: center;">
+                            <a href="/search/all?q=${encodeURIComponent(term)}&category=${currentCategory}" style="color: #70E780; text-decoration: none; font-family: 'Golos Text', sans-serif; font-weight: 500; display: inline-block; padding: 10px 20px; border: 1px solid #70E780; border-radius: 8px; transition: all 0.3s;">
+                                Показать все результаты (${total})
+                            </a>
+                        </div>
+                    `;
+                }
+
+                searchResults.innerHTML = html;
+            }
+
+            // ====== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ======
+            function highlightTerm(text, term) {
+                if (!term || !text) return text || '';
+                const regex = new RegExp(`(${term})`, 'gi');
+                return text.replace(regex, '<span class="highlight" style="color: #70E780; font-weight: 600;">$1</span>');
+            }
+
+            function formatDate(dateString) {
+                if (!dateString) return '';
+                const date = new Date(dateString);
+                const options = {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'};
+                return date.toLocaleDateString('ru-RU', options);
+            }
+        }
+
+        // ====== ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ СЛАЙДЕРА ======
+        function initScheduleSlider(slider) {
+            const list = slider.querySelector('.schedule-list');
+            const items = slider.querySelectorAll('.schedule-list__item');
+            const prevBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--prev');
+            const nextBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--next');
+
+            if (!list || !prevBtn || !nextBtn) return;
+
+            let currentPosition = 0;
+            const itemWidth = items[0]?.offsetWidth + parseInt(getComputedStyle(items[0]).marginRight) || 215;
+            const visibleItems = Math.floor(slider.offsetWidth / itemWidth);
+            const maxPosition = Math.max(0, items.length - visibleItems) * itemWidth;
+
+            function updateButtons() {
+                prevBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition === 0);
+                nextBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition >= maxPosition);
+            }
+
+            function scrollTo(position) {
+                currentPosition = Math.max(0, Math.min(position, maxPosition));
+                list.style.transform = `translateX(-${currentPosition}px)`;
+                updateButtons();
+            }
+
+            prevBtn.addEventListener('click', function () {
+                if (currentPosition > 0) {
+                    scrollTo(currentPosition - itemWidth * visibleItems);
+                }
             });
 
-            if (total > 10) {
-                html += `
-                    <div class="all-results-link" style="padding: 20px; text-align: center;">
-                        <a href="/search/all?q=${encodeURIComponent(term)}&category=${currentCategory}" style="color: #70E780; text-decoration: none; font-family: 'Golos Text', sans-serif; font-weight: 500; display: inline-block; padding: 10px 20px; border: 1px solid #70E780; border-radius: 8px; transition: all 0.3s;">
-                            Показать все результаты (${total})
-                        </a>
-                    </div>
-                `;
-            }
-
-            searchResults.innerHTML = html;
-        }
-
-        // ====== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ======
-        function highlightTerm(text, term) {
-            if (!term || !text) return text || '';
-            const regex = new RegExp(`(${term})`, 'gi');
-            return text.replace(regex, '<span class="highlight" style="color: #70E780; font-weight: 600;">$1</span>');
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) return '';
-            const date = new Date(dateString);
-            const options = {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'};
-            return date.toLocaleDateString('ru-RU', options);
-        }
-    }
-
-    // ====== ФУНКЦИЯ ИНИЦИАЛИЗАЦИИ СЛАЙДЕРА ======
-    function initScheduleSlider(slider) {
-        const list = slider.querySelector('.schedule-list');
-        const items = slider.querySelectorAll('.schedule-list__item');
-        const prevBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--prev');
-        const nextBtn = slider.closest('.header__schedule').querySelector('.schedule-navigation__btn--next');
-
-        if (!list || !prevBtn || !nextBtn) return;
-
-        let currentPosition = 0;
-        const itemWidth = items[0]?.offsetWidth + parseInt(getComputedStyle(items[0]).marginRight) || 215;
-        const visibleItems = Math.floor(slider.offsetWidth / itemWidth);
-        const maxPosition = Math.max(0, items.length - visibleItems) * itemWidth;
-
-        function updateButtons() {
-            prevBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition === 0);
-            nextBtn.classList.toggle('schedule-navigation__btn--disabled', currentPosition >= maxPosition);
-        }
-
-        function scrollTo(position) {
-            currentPosition = Math.max(0, Math.min(position, maxPosition));
-            list.style.transform = `translateX(-${currentPosition}px)`;
-            updateButtons();
-        }
-
-        prevBtn.addEventListener('click', function () {
-            if (currentPosition > 0) {
-                scrollTo(currentPosition - itemWidth * visibleItems);
-            }
-        });
-
-        nextBtn.addEventListener('click', function () {
-            if (currentPosition < maxPosition) {
-                scrollTo(currentPosition + itemWidth * visibleItems);
-            }
-        });
-
-        let resizeTimeout;
-        window.addEventListener('resize', function () {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(function () {
-                const newVisibleItems = Math.floor(slider.offsetWidth / itemWidth);
-                const newMaxPosition = Math.max(0, items.length - newVisibleItems) * itemWidth;
-
-                if (newMaxPosition < currentPosition) {
-                    scrollTo(newMaxPosition);
-                } else {
-                    updateButtons();
+            nextBtn.addEventListener('click', function () {
+                if (currentPosition < maxPosition) {
+                    scrollTo(currentPosition + itemWidth * visibleItems);
                 }
-            }, 250);
-        });
+            });
 
-        updateButtons();
+            let resizeTimeout;
+            window.addEventListener('resize', function () {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function () {
+                    const newVisibleItems = Math.floor(slider.offsetWidth / itemWidth);
+                    const newMaxPosition = Math.max(0, items.length - newVisibleItems) * itemWidth;
 
-        const activeItem = slider.querySelector('.schedule-list__item.active');
-        if (activeItem) {
-            const activeIndex = Array.from(items).indexOf(activeItem);
-            if (activeIndex >= visibleItems) {
-                setTimeout(() => {
-                    scrollTo(Math.min(activeIndex * itemWidth, maxPosition));
-                }, 100);
+                    if (newMaxPosition < currentPosition) {
+                        scrollTo(newMaxPosition);
+                    } else {
+                        updateButtons();
+                    }
+                }, 250);
+            });
+
+            updateButtons();
+
+            const activeItem = slider.querySelector('.schedule-list__item.active');
+            if (activeItem) {
+                const activeIndex = Array.from(items).indexOf(activeItem);
+                if (activeIndex >= visibleItems) {
+                    setTimeout(() => {
+                        scrollTo(Math.min(activeIndex * itemWidth, maxPosition));
+                    }, 100);
+                }
             }
         }
-    }
 
-    // Cookie functions
-    function checkCookieConsent() {
-        // Проверяем, что элемент существует
-        const notice = document.getElementById('cookieNotice');
-        if (!notice) return;
+        // Cookie functions
+        function checkCookieConsent() {
+            // Проверяем, что элемент существует
+            const notice = document.getElementById('cookieNotice');
+            if (!notice) return;
 
-        const consent = localStorage.getItem('cookieConsent');
-        if (consent) {
-            notice.style.display = 'none';
-            applyCookieSettings(JSON.parse(consent));
-        } else {
-            // Показываем уведомление только если согласия нет
-            notice.style.display = 'block';
-        }
-    }
-
-    function acceptCookies() {
-        const settings = {
-            necessary: true,
-            analytics: true,
-            functional: true
-        };
-        localStorage.setItem('cookieConsent', JSON.stringify(settings));
-        const notice = document.getElementById('cookieNotice');
-        if (notice) {
-            notice.style.display = 'none';
-        }
-        applyCookieSettings(settings);
-    }
-
-    function openCookieSettings() {
-        const settings = JSON.parse(localStorage.getItem('cookieConsent')) || {
-            necessary: true,
-            analytics: true,
-            functional: true
-        };
-        const analyticsCheckbox = document.getElementById('analyticsCookies');
-        const functionalCheckbox = document.getElementById('functionalCookies');
-        const settingsModal = document.getElementById('cookieSettings');
-
-        if (analyticsCheckbox) analyticsCheckbox.checked = settings.analytics;
-        if (functionalCheckbox) functionalCheckbox.checked = settings.functional;
-        if (settingsModal) settingsModal.classList.add('active');
-    }
-
-    function closeCookieSettings() {
-        const settingsModal = document.getElementById('cookieSettings');
-        if (settingsModal) {
-            settingsModal.classList.remove('active');
-        }
-    }
-
-    function saveCookieSettings() {
-        const analyticsCheckbox = document.getElementById('analyticsCookies');
-        const functionalCheckbox = document.getElementById('functionalCookies');
-
-        const settings = {
-            necessary: true,
-            analytics: analyticsCheckbox ? analyticsCheckbox.checked : true,
-            functional: functionalCheckbox ? functionalCheckbox.checked : true
-        };
-        localStorage.setItem('cookieConsent', JSON.stringify(settings));
-
-        const settingsModal = document.getElementById('cookieSettings');
-        if (settingsModal) {
-            settingsModal.classList.remove('active');
-        }
-
-        const notice = document.getElementById('cookieNotice');
-        if (notice) {
-            notice.style.display = 'none';
-        }
-        applyCookieSettings(settings);
-    }
-
-    function applyCookieSettings(settings) {
-        if (!settings.analytics) {
-            const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
-            if (metrikaScript) {
-                metrikaScript.remove();
+            const consent = localStorage.getItem('cookieConsent');
+            if (consent) {
+                notice.style.display = 'none';
+                applyCookieSettings(JSON.parse(consent));
+            } else {
+                // Показываем уведомление только если согласия нет
+                notice.style.display = 'block';
             }
         }
-    }
-</script>
+
+        function acceptCookies() {
+            const settings = {
+                necessary: true,
+                analytics: true,
+                functional: true
+            };
+            localStorage.setItem('cookieConsent', JSON.stringify(settings));
+            const notice = document.getElementById('cookieNotice');
+            if (notice) {
+                notice.style.display = 'none';
+            }
+            applyCookieSettings(settings);
+        }
+
+        function openCookieSettings() {
+            const settings = JSON.parse(localStorage.getItem('cookieConsent')) || {
+                necessary: true,
+                analytics: true,
+                functional: true
+            };
+            const analyticsCheckbox = document.getElementById('analyticsCookies');
+            const functionalCheckbox = document.getElementById('functionalCookies');
+            const settingsModal = document.getElementById('cookieSettings');
+
+            if (analyticsCheckbox) analyticsCheckbox.checked = settings.analytics;
+            if (functionalCheckbox) functionalCheckbox.checked = settings.functional;
+            if (settingsModal) settingsModal.classList.add('active');
+        }
+
+        function closeCookieSettings() {
+            const settingsModal = document.getElementById('cookieSettings');
+            if (settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+        }
+
+        function saveCookieSettings() {
+            const analyticsCheckbox = document.getElementById('analyticsCookies');
+            const functionalCheckbox = document.getElementById('functionalCookies');
+
+            const settings = {
+                necessary: true,
+                analytics: analyticsCheckbox ? analyticsCheckbox.checked : true,
+                functional: functionalCheckbox ? functionalCheckbox.checked : true
+            };
+            localStorage.setItem('cookieConsent', JSON.stringify(settings));
+
+            const settingsModal = document.getElementById('cookieSettings');
+            if (settingsModal) {
+                settingsModal.classList.remove('active');
+            }
+
+            const notice = document.getElementById('cookieNotice');
+            if (notice) {
+                notice.style.display = 'none';
+            }
+            applyCookieSettings(settings);
+        }
+
+        function applyCookieSettings(settings) {
+            if (!settings.analytics) {
+                const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
+                if (metrikaScript) {
+                    metrikaScript.remove();
+                }
+            }
+        }
+    </script>
 
 <script defer src="{{asset('js/script.js')}}" type="module"></script>
 <script src="{{asset('js/video.min.js')}}"></script>
