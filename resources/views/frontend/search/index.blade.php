@@ -13,26 +13,30 @@
                 @if($news->count() > 0 || $videos->count() > 0)
                     @if($news->count() > 0)
                         <h2 style="font-family: 'Golos Text', sans-serif; font-size: 24px; font-weight: 600; color: #70E780; margin-bottom: 20px;">
-                            Новости ({{ $news->total() }})
+                            📰 Новости ({{ $news->total() }})
                         </h2>
-                        <div class="news-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="news-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
                             @foreach($news as $item)
-                                @include('partials.search-results', ['item' => $item, 'type' => 'news'])
+                                @include('partials.search-result-item', ['item' => $item, 'type' => 'news'])
                             @endforeach
                         </div>
-                        {{ $news->appends(['q' => $query, 'category' => $category])->links() }}
+                        <div style="margin-top: 30px;">
+                            {{ $news->appends(['q' => $query, 'category' => $category])->links() }}
+                        </div>
                     @endif
 
                     @if($videos->count() > 0)
                         <h2 style="font-family: 'Golos Text', sans-serif; font-size: 24px; font-weight: 600; color: #70E780; margin-bottom: 20px; margin-top: 40px;">
-                            Видеорепортажи ({{ $videos->total() }})
+                            🎬 Видеорепортажи ({{ $videos->total() }})
                         </h2>
-                        <div class="videos-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                        <div class="videos-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
                             @foreach($videos as $item)
-                                @include('partials.search-results', ['item' => $item, 'type' => 'video'])
+                                @include('partials.search-result-item', ['item' => $item, 'type' => 'video'])
                             @endforeach
                         </div>
-                        {{ $videos->appends(['q' => $query, 'category' => $category])->links() }}
+                        <div style="margin-top: 30px;">
+                            {{ $videos->appends(['q' => $query, 'category' => $category])->links() }}
+                        </div>
                     @endif
                 @else
                     <p style="color: rgba(255,255,255,0.7); font-size: 18px; text-align: center; padding: 40px 0;">
@@ -44,39 +48,46 @@
     </div>
 @endsection
 
-<style>
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-top: 30px;
-        flex-wrap: wrap;
-    }
+@push('styles')
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
 
-    .pagination .page-item {
-        list-style: none;
-    }
+        .pagination .page-item {
+            list-style: none;
+        }
 
-    .pagination .page-link {
-        display: block;
-        padding: 8px 16px;
-        color: #fff;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        text-decoration: none;
-        font-family: 'Golos Text', sans-serif;
-        transition: all 0.3s;
-    }
+        .pagination .page-link {
+            display: block;
+            padding: 8px 16px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Golos Text', sans-serif;
+            transition: all 0.3s;
+        }
 
-    .pagination .page-link:hover {
-        background: rgba(112, 231, 128, 0.1);
-        border-color: #70E780;
-    }
+        .pagination .page-link:hover {
+            background: rgba(112, 231, 128, 0.1);
+            border-color: #70E780;
+        }
 
-    .pagination .active .page-link {
-        background: #70E780;
-        color: #000;
-        border-color: #70E780;
-    }
-</style>
+        .pagination .active .page-link {
+            background: #70E780;
+            color: #000;
+            border-color: #70E780;
+        }
+
+        .pagination .disabled .page-link {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+@endpush
