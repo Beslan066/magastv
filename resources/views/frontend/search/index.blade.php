@@ -35,7 +35,7 @@
                             @endforeach
                         </div>
                         <div style="margin-top: 30px;">
-                            {{ $videos->appends(['q' => $query, 'category' => $category])->links() }}
+                            {{ $videos->appends(['q' => $query, 'category' => $category])->links('vendor.pagination.simple') }}
                         </div>
                     @endif
                 @else
@@ -65,7 +65,7 @@
         .pagination .page-link {
             display: block;
             padding: 8px 16px;
-            color: #fff;
+            color: #000;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 4px;
