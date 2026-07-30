@@ -13,9 +13,9 @@
                 @if($news->count() > 0 || $videos->count() > 0)
                     @if($news->count() > 0)
                         <h2 style="font-family: 'Golos Text', sans-serif; font-size: 24px; font-weight: 600; color: #70E780; margin-bottom: 20px;">
-                            📰 Новости ({{ $news->total() }})
+                            Новости ({{ $news->total() }})
                         </h2>
-                        <div class="news-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                        <div class="news-list" style="display: grid; gap: 20px;">
                             @foreach($news as $item)
                                 @include('partials.search-result-item', ['item' => $item, 'type' => 'news'])
                             @endforeach
@@ -27,9 +27,9 @@
 
                     @if($videos->count() > 0)
                         <h2 style="font-family: 'Golos Text', sans-serif; font-size: 24px; font-weight: 600; color: #70E780; margin-bottom: 20px; margin-top: 40px;">
-                            🎬 Видеорепортажи ({{ $videos->total() }})
+                             Видеорепортажи ({{ $videos->total() }})
                         </h2>
-                        <div class="videos-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+                        <div class="videos-list" style="display: grid; gap: 20px;">
                             @foreach($videos as $item)
                                 @include('partials.search-result-item', ['item' => $item, 'type' => 'video'])
                             @endforeach
