@@ -1,132 +1,23 @@
 <?php return array (
-  'broadcasting' => 
-  array (
-    'default' => 'log',
-    'connections' => 
-    array (
-      'reverb' => 
-      array (
-        'driver' => 'reverb',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'host' => NULL,
-          'port' => 443,
-          'scheme' => 'https',
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'pusher' => 
-      array (
-        'driver' => 'pusher',
-        'key' => NULL,
-        'secret' => NULL,
-        'app_id' => NULL,
-        'options' => 
-        array (
-          'cluster' => NULL,
-          'host' => 'api-mt1.pusher.com',
-          'port' => 443,
-          'scheme' => 'https',
-          'encrypted' => true,
-          'useTLS' => true,
-        ),
-        'client_options' => 
-        array (
-        ),
-      ),
-      'ably' => 
-      array (
-        'driver' => 'ably',
-        'key' => NULL,
-      ),
-      'log' => 
-      array (
-        'driver' => 'log',
-      ),
-      'null' => 
-      array (
-        'driver' => 'null',
-      ),
-    ),
-  ),
-  'view' => 
-  array (
-    'paths' => 
-    array (
-      0 => '/var/www/magastv/resources/views',
-    ),
-    'compiled' => '/var/www/magastv/storage/framework/views',
-  ),
-  'concurrency' => 
-  array (
-    'default' => 'process',
-  ),
-  'hashing' => 
-  array (
-    'driver' => 'bcrypt',
-    'bcrypt' => 
-    array (
-      'rounds' => '12',
-      'verify' => true,
-      'limit' => NULL,
-    ),
-    'argon' => 
-    array (
-      'memory' => 65536,
-      'threads' => 1,
-      'time' => 4,
-      'verify' => true,
-    ),
-    'rehash_on_login' => true,
-  ),
-  'cors' => 
-  array (
-    'paths' => 
-    array (
-      0 => 'api/*',
-      1 => 'sanctum/csrf-cookie',
-    ),
-    'allowed_methods' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins' => 
-    array (
-      0 => '*',
-    ),
-    'allowed_origins_patterns' => 
-    array (
-    ),
-    'allowed_headers' => 
-    array (
-      0 => '*',
-    ),
-    'exposed_headers' => 
-    array (
-    ),
-    'max_age' => 0,
-    'supports_credentials' => false,
-  ),
+  0 => 'concurrency',
+  1 => 'broadcasting',
+  12 => 'view',
+  13 => 'cors',
+  14 => 'hashing',
   'app' => 
   array (
-    'name' => 'MagasTV',
-    'env' => 'prod',
-    'debug' => false,
-    'url' => 'https://magas.tv',
+    'name' => 'Laravel',
+    'env' => 'local',
+    'debug' => true,
+    'url' => 'http://localhost',
     'frontend_url' => 'http://localhost:3000',
     'asset_url' => NULL,
     'timezone' => 'Europe/Moscow',
-    'locale' => 'en',
-    'fallback_locale' => 'en',
+    'locale' => 'ru',
+    'fallback_locale' => 'ru',
     'faker_locale' => 'en_US',
     'cipher' => 'AES-256-CBC',
-    'key' => 'base64:nKxGglJ59JATmR+UR6d2CsfdSIH+GpSPjREBCYySJA8=',
+    'key' => 'base64:IbNjLE3YOi8ibEXT3HrYCSwp4FALuNVSlkxy4BTSEBM=',
     'previous_keys' => 
     array (
     ),
@@ -168,7 +59,6 @@
       'Arr' => 'Illuminate\\Support\\Arr',
       'Artisan' => 'Illuminate\\Support\\Facades\\Artisan',
       'Auth' => 'Illuminate\\Support\\Facades\\Auth',
-      'Benchmark' => 'Illuminate\\Support\\Benchmark',
       'Blade' => 'Illuminate\\Support\\Facades\\Blade',
       'Broadcast' => 'Illuminate\\Support\\Facades\\Broadcast',
       'Bus' => 'Illuminate\\Support\\Facades\\Bus',
@@ -205,8 +95,8 @@
       'Session' => 'Illuminate\\Support\\Facades\\Session',
       'Storage' => 'Illuminate\\Support\\Facades\\Storage',
       'Str' => 'Illuminate\\Support\\Str',
-      'Uri' => 'Illuminate\\Support\\Uri',
       'URL' => 'Illuminate\\Support\\Facades\\URL',
+      'Uri' => 'Illuminate\\Support\\Uri',
       'Validator' => 'Illuminate\\Support\\Facades\\Validator',
       'View' => 'Illuminate\\Support\\Facades\\View',
       'Vite' => 'Illuminate\\Support\\Facades\\Vite',
@@ -257,11 +147,6 @@
         'driver' => 'array',
         'serialize' => false,
       ),
-      'session' => 
-      array (
-        'driver' => 'session',
-        'key' => '_cache',
-      ),
       'database' => 
       array (
         'driver' => 'database',
@@ -273,8 +158,8 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => '/var/www/magastv/storage/framework/cache/data',
-        'lock_path' => '/var/www/magastv/storage/framework/cache/data',
+        'path' => '/home/ibragim/ntrkri/storage/framework/cache/data',
+        'lock_path' => '/home/ibragim/ntrkri/storage/framework/cache/data',
       ),
       'memcached' => 
       array (
@@ -317,17 +202,8 @@
       array (
         'driver' => 'octane',
       ),
-      'failover' => 
-      array (
-        'driver' => 'failover',
-        'stores' => 
-        array (
-          0 => 'database',
-          1 => 'array',
-        ),
-      ),
     ),
-    'prefix' => 'magastv_cache_',
+    'prefix' => 'laravel_cache_',
   ),
   'database' => 
   array (
@@ -349,11 +225,11 @@
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -369,11 +245,11 @@
       array (
         'driver' => 'mariadb',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -389,11 +265,11 @@
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -404,11 +280,11 @@
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '5432',
         'database' => 'ntrsk',
         'username' => 'postgres',
-        'password' => 'bSazs13$aed',
+        'password' => 'ndfhmsql1',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -425,7 +301,7 @@
       'options' => 
       array (
         'cluster' => 'redis',
-        'prefix' => 'magastv_database_',
+        'prefix' => 'laravel_database_',
         'persistent' => false,
       ),
       'default' => 
@@ -456,12 +332,12 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/storage/app',
+        'root' => '/home/ibragim/ntrkri/storage/app',
       ),
       'public' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/storage/app/public',
+        'root' => '/home/ibragim/ntrkri/storage/app/public',
         'url' => '/storage',
         'visibility' => 'public',
       ),
@@ -480,12 +356,12 @@
       'my_files' => 
       array (
         'driver' => 'local',
-        'root' => '/var/www/magastv/public/',
+        'root' => '/home/ibragim/ntrkri/public/',
       ),
     ),
     'links' => 
     array (
-      '/var/www/magastv/public/storage' => '/var/www/magastv/storage/app',
+      '/home/ibragim/ntrkri/public/storage' => '/home/ibragim/ntrkri/storage/app',
     ),
   ),
   'logging' => 
@@ -510,14 +386,14 @@
       'single' => 
       array (
         'driver' => 'single',
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
         'level' => 'debug',
         'replace_placeholders' => true,
       ),
       'daily' => 
       array (
         'driver' => 'daily',
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
         'replace_placeholders' => true,
@@ -582,7 +458,7 @@
       ),
       'emergency' => 
       array (
-        'path' => '/var/www/magastv/storage/logs/laravel.log',
+        'path' => '/home/ibragim/ntrkri/storage/logs/laravel.log',
       ),
     ),
   ),
@@ -601,7 +477,7 @@
         'username' => NULL,
         'password' => NULL,
         'timeout' => NULL,
-        'local_domain' => 'magas.tv',
+        'local_domain' => 'localhost',
       ),
       'ses' => 
       array (
@@ -651,14 +527,14 @@
     'from' => 
     array (
       'address' => 'hello@example.com',
-      'name' => 'MagasTV',
+      'name' => 'Laravel',
     ),
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
-        0 => '/var/www/magastv/resources/views/vendor/mail',
+        0 => '/home/ibragim/ntrkri/resources/views/vendor/mail',
       ),
     ),
   ),
@@ -709,19 +585,6 @@
         'block_for' => NULL,
         'after_commit' => false,
       ),
-      'deferred' => 
-      array (
-        'driver' => 'deferred',
-      ),
-      'failover' => 
-      array (
-        'driver' => 'failover',
-        'connections' => 
-        array (
-          0 => 'database',
-          1 => 'deferred',
-        ),
-      ),
     ),
     'batching' => 
     array (
@@ -741,15 +604,15 @@
     array (
       'token' => NULL,
     ),
-    'resend' => 
-    array (
-      'key' => NULL,
-    ),
     'ses' => 
     array (
       'key' => '',
       'secret' => '',
       'region' => 'us-east-1',
+    ),
+    'resend' => 
+    array (
+      'key' => NULL,
     ),
     'slack' => 
     array (
@@ -766,7 +629,7 @@
     'lifetime' => 120,
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => '/var/www/magastv/storage/framework/sessions',
+    'files' => '/home/ibragim/ntrkri/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -775,13 +638,127 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'magastv_session',
+    'cookie' => 'laravel_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => NULL,
     'http_only' => true,
     'same_site' => 'lax',
     'partitioned' => false,
+  ),
+  'concurrency' => 
+  array (
+    'default' => 'process',
+  ),
+  'broadcasting' => 
+  array (
+    'default' => 'log',
+    'connections' => 
+    array (
+      'reverb' => 
+      array (
+        'driver' => 'reverb',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'host' => NULL,
+          'port' => 443,
+          'scheme' => 'https',
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'pusher' => 
+      array (
+        'driver' => 'pusher',
+        'key' => NULL,
+        'secret' => NULL,
+        'app_id' => NULL,
+        'options' => 
+        array (
+          'cluster' => NULL,
+          'host' => 'api-mt1.pusher.com',
+          'port' => 443,
+          'scheme' => 'https',
+          'encrypted' => true,
+          'useTLS' => true,
+        ),
+        'client_options' => 
+        array (
+        ),
+      ),
+      'ably' => 
+      array (
+        'driver' => 'ably',
+        'key' => NULL,
+      ),
+      'log' => 
+      array (
+        'driver' => 'log',
+      ),
+      'null' => 
+      array (
+        'driver' => 'null',
+      ),
+    ),
+  ),
+  'view' => 
+  array (
+    'paths' => 
+    array (
+      0 => '/home/ibragim/ntrkri/resources/views',
+    ),
+    'compiled' => '/home/ibragim/ntrkri/storage/framework/views',
+  ),
+  'cors' => 
+  array (
+    'paths' => 
+    array (
+      0 => 'api/*',
+      1 => 'sanctum/csrf-cookie',
+    ),
+    'allowed_methods' => 
+    array (
+      0 => '*',
+    ),
+    'allowed_origins' => 
+    array (
+      0 => '*',
+    ),
+    'allowed_origins_patterns' => 
+    array (
+    ),
+    'allowed_headers' => 
+    array (
+      0 => '*',
+    ),
+    'exposed_headers' => 
+    array (
+    ),
+    'max_age' => 0,
+    'supports_credentials' => false,
+  ),
+  'hashing' => 
+  array (
+    'driver' => 'bcrypt',
+    'bcrypt' => 
+    array (
+      'rounds' => '12',
+      'verify' => true,
+      'limit' => NULL,
+    ),
+    'argon' => 
+    array (
+      'memory' => 65536,
+      'threads' => 1,
+      'time' => 4,
+      'verify' => true,
+    ),
+    'rehash_on_login' => true,
   ),
   'debugbar' => 
   array (
@@ -791,14 +768,13 @@
     array (
       0 => 'telescope*',
       1 => 'horizon*',
-      2 => '_boost/browser-logs',
     ),
     'storage' => 
     array (
       'enabled' => true,
       'open' => NULL,
       'driver' => 'file',
-      'path' => '/var/www/magastv/storage/debugbar',
+      'path' => '/home/ibragim/ntrkri/storage/debugbar',
       'connection' => NULL,
       'provider' => '',
       'hostname' => '127.0.0.1',
@@ -865,10 +841,6 @@
         'show_name' => true,
         'show_guards' => true,
       ),
-      'gate' => 
-      array (
-        'trace' => false,
-      ),
       'db' => 
       array (
         'with_params' => true,
@@ -887,7 +859,6 @@
         ),
         'hints' => false,
         'show_copy' => true,
-        'only_slow_queries' => true,
         'slow_threshold' => false,
         'memory_usage' => false,
         'soft_limit' => 100,
@@ -903,7 +874,6 @@
         'timeline' => true,
         'data' => false,
         'group' => 50,
-        'inertia_pages' => 'js/Pages',
         'exclude_paths' => 
         array (
           0 => 'vendor/filament',
@@ -929,9 +899,6 @@
       'events' => 
       array (
         'data' => false,
-        'excluded' => 
-        array (
-        ),
       ),
       'logs' => 
       array (

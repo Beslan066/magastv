@@ -1126,7 +1126,29 @@
         // Cookie notice logic
         checkCookieConsent();
 
-        // Обработчик ввода в поле поиска
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Предотвращаем отправку формы
+            const searchTerm = this.value.trim();
+            const category = document.querySelector('.menu-tab.active')?.textContent?.trim().toLowerCase() || 'all';
+            const categoryId = category === 'все' ? 'all' : category;
+
+            if (searchTerm.length >= 2) {
+                // Переходим на страницу всех результатов
+                window.location.href = `/search/all?q=${encodeURIComponent(searchTerm)}&category=${categoryId}`;
+            } else if (searchTerm.length === 0) {
+                // Если поле пустое - ничего не делаем
+                return;
+            } else {
+                // Если меньше 2 символов - показываем сообщение
+                if (searchResults) {
+                    searchResults.innerHTML = '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>';
+                }
+            }
+        }
+    });
+
+
+    // Обработчик ввода в поле поиска
         searchInput.addEventListener('input', function () {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
@@ -1153,14 +1175,25 @@
             });
         });
 
-        // Функция для получения результатов поиска
         function fetchSearchResults(term, category) {
             const categoryId = category === 'все' ? 'all' : category;
 
             fetch(`/search?q=${encodeURIComponent(term)}&category=${categoryId}`)
                 .then(response => response.json())
                 .then(data => {
-                    displaySearchResults(data.items, data.total, term);
+                    // Вставляем готовый HTML из партиала
+                    const searchResults = document.querySelector('.search-results-container');
+                    if (searchResults) {
+                        searchResults.innerHTML = data.html || '<div class="no-results">Ничего не найдено</div>';
+                    }
+
+                    // Добавляем обработчик для ссылки "Все результаты"
+                    if (data.search_url) {
+                        const moreLink = document.querySelector('.menu-list__more a');
+                        if (moreLink) {
+                            moreLink.href = data.search_url;
+                        }
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -1168,93 +1201,116 @@
         }
 
         // Функция для отображения результатов
-        function displaySearchResults(items, total, term) {
+    function displaySearchResults(items, total, term, searchUrl) {
+        const searchResults = document.querySelector('.search-results-container');
+
+        if (!searchResults) return;
+
             if (items.length === 0) {
-                searchResults.innerHTML = '<div class="no-results" style="color: #fff; font-family: Golos Text, sans-serif; font-weight: 600">Ничего не найдено</div>';
+                searchResults.innerHTML = `<div class="no-results" style="color: #fff; font-family: 'Golos Text', sans-serif; font-weight: 600; padding: 20px; text-align: center;">
+                 Ничего не найдено по запросу "${term}"
+             </div>`;
                 return;
             }
 
             let html = '';
             items.forEach(item => {
                 const isVideo = item.type === 'video';
+                const mediaPath = item.media || (isVideo ? '/assets/default-video.jpg' : '/assets/default-news.jpg');
 
-                // Формируем медиа-контент
                 let mediaContent = '';
                 if (isVideo) {
                     mediaContent = `
-                <video src="${item.video_url || ''}" poster="${item.media || '/assets/default-video.jpg'}"></video>
-                <button class="btn-reset menu-news__play-btn">
-                    <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white"/>
-                    </svg>
-                </button>
+                <div class="menu-news__video-wrapper" style="position: relative; width: 100%; height: 100%;">
+                    <video src="${item.video_url || ''}" poster="${mediaPath}" style="width: 100%; height: 100%; object-fit: cover;"></video>
+                    <button class="btn-reset menu-news__play-btn" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                        <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white"/>
+                        </svg>
+                    </button>
+                </div>
             `;
                 } else {
-                    mediaContent = `<img src="${item.media || '/assets/default-news.jpg'}" alt="${item.title}">`;
+                    mediaContent = `<img src="${mediaPath}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">`;
                 }
 
-                // Формируем HTML для элемента
                 html += `
-        <div class="menu-news menu-news--media" data-menu-category="${item.category_slug}">
-            <div class="menu-news__media">
-                ${mediaContent}
-            </div>
-            <div class="menu-news__info">
-                <h6 class="menu-news__title">
-                    <a href="/${isVideo ? 'news' : 'news'}/${item.slug}">${highlightTerm(item.title, term)}</a>
-                </h6>
-                <div class="menu-news__text">
-                    <p>${highlightTerm(item.lead, term)}</p>
+            <div class="menu-news menu-news--media" data-menu-category="${item.category_slug || 'uncategorized'}">
+                <div class="menu-news__media">
+                    ${mediaContent}
                 </div>
-                <div class="menu-news__meta">
-                    <time>${formatDate(item.published_at)}</time>
-                    <div class="menu-news__views">
-                        <div class="menu-news__icon">
-                            <svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.99998 0C14.0312 0 16.9533 4.44092 17.7656 5.875C17.921 6.14927 17.9148 6.47693 17.7461 6.74316C16.907 8.0657 13.9914 12 8.99998 12C4.00872 11.9999 1.0939 8.06568 0.254863 6.74316C0.086031 6.47689 0.078957 6.14935 0.234355 5.875C1.04653 4.44117 3.96865 0.000143146 8.99998 0ZM8.99998 3C7.34324 3.00013 5.99998 4.34323 5.99998 6C5.99998 7.65677 7.34324 8.99987 8.99998 9C10.6568 9 12 7.65685 12 6C12 4.34315 10.6568 3 8.99998 3Z"/>
-                            </svg>
+                <div class="menu-news__info">
+                    <h6 class="menu-news__title">
+                        <a href="${item.url || `/${isVideo ? 'videos' : 'news'}/${item.slug}`}">${highlightTerm(item.title, term)}</a>
+                    </h6>
+                    <div class="menu-news__text">
+                        <p>${item.lead ? highlightTerm(item.lead, term) : ''}</p>
+                    </div>
+                    <div class="menu-news__meta">
+                        <time>${formatDate(item.published_at)}</time>
+                        <div class="menu-news__views">
+                            <div class="menu-news__icon">
+                                <svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8.99998 0C14.0312 0 16.9533 4.44092 17.7656 5.875C17.921 6.14927 17.9148 6.47693 17.7461 6.74316C16.907 8.0657 13.9914 12 8.99998 12C4.00872 11.9999 1.0939 8.06568 0.254863 6.74316C0.086031 6.47689 0.078957 6.14935 0.234355 5.875C1.04653 4.44117 3.96865 0.000143146 8.99998 0ZM8.99998 3C7.34324 3.00013 5.99998 4.34323 5.99998 6C5.99998 7.65677 7.34324 8.99987 8.99998 9C10.6568 9 12 7.65685 12 6C12 4.34315 10.6568 3 8.99998 3Z"/>
+                                </svg>
+                            </div>
+                            <span>${item.views || 0}</span>
                         </div>
-                        <span>${item.views}</span>
                     </div>
                 </div>
             </div>
-        </div>
         `;
             });
 
-            if (total > 10) {
+        // Добавляем ссылку "Показать все" только если есть результаты
+        if (total > 10 && searchUrl) {
                 html += `
-        <div class="all-results-link">
-            <a href="/search?q=${encodeURIComponent(term)}&category=${currentCategory}">Показать все результаты (${total})</a>
-        </div>
+            <div class="all-results-link" style="padding: 20px; text-align: center;">
+                <a href="${searchUrl}" style="color: #70E780; text-decoration: none; font-family: 'Golos Text', sans-serif; font-weight: 500; display: inline-block; padding: 10px 20px; border: 1px solid #70E780; border-radius: 8px; transition: all 0.3s;">
+                    Показать все результаты (${total})
+                </a>
+            </div>
         `;
             }
 
             searchResults.innerHTML = html;
         }
 
+    // Функция для подсветки искомого термина
+    function highlightTerm(text, term) {
+        if (!text || !term) return text || '';
+        const regex = new RegExp(`(${term})`, 'gi');
+        return text.replace(regex, '<span class="highlight" style="color: #70E780; font-weight: 600;">$1</span>');
+    }
 
-        // Функция для очистки результатов
-        function clearSearchResults() {
+    // Функция для форматирования даты
+    function formatDate(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        const options = {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'};
+        return date.toLocaleDateString('ru-RU', options);
+    }
+
+
+    // Функция для очистки результатов
+    function clearSearchResults() {
             searchResults.innerHTML = '';
         }
 
-        // Функция для подсветки искомого термина
-        function highlightTerm(text, term) {
+    // Функция для подсветки искомого термина
+    function highlightTerm(text, term) {
             if (!term) return text;
             const regex = new RegExp(`(${term})`, 'gi');
             return text.replace(regex, '<span class="highlight">$1</span>');
         }
 
-        // Функция для форматирования даты
-        function formatDate(dateString) {
+    // Функция для форматирования даты
+    function formatDate(dateString) {
             const date = new Date(dateString);
             const options = {day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'};
             return date.toLocaleDateString('ru-RU', options);
-        }
+    }
 
-
-    });
 
     document.addEventListener('DOMContentLoaded', function () {
         // Инициализация для всех слайдеров телепрограммы
@@ -1409,20 +1465,9 @@
 
 <script>
     setTimeout(function() {
-        console.log('=== Яндекс.Метрика отладка ===');
-        console.log('1. ym функция существует:', typeof ym !== 'undefined');
-        console.log('2. ID счетчика:', typeof ym !== 'undefined' ? '104109555' : 'N/A');
-
-        // Проверяем cookie метрики
-        console.log('3. Cookie _ym_uid:', document.cookie.match(/_ym_uid=([^;]+)/));
-        console.log('4. Cookie _ym_d:', document.cookie.match(/_ym_d=([^;]+)/));
-
-        // Проверяем localStorage
-        console.log('5. Cookie consent:', localStorage.getItem('cookieConsent'));
 
         // Проверяем, есть ли скрипт метрики на странице
         const metrikaScript = document.querySelector('script[src*="mc.yandex.ru"]');
-        console.log('6. Скрипт метрики найден:', !!metrikaScript);
 
         // Проверяем отправку хита
         if (typeof ym !== 'undefined') {
