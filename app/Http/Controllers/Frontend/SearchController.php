@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\VideoReportage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class SearchController extends Controller
 {
@@ -20,30 +21,26 @@ class SearchController extends Controller
         // Если поисковый запрос пустой или слишком короткий
         if (empty($searchTerm) || strlen($searchTerm) < 2) {
             return response()->json([
-                'items' => [],
+                'html' => '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Введите минимум 2 символа для поиска</div>',
                 'total' => 0,
                 'search_url' => route('search.all', ['q' => $searchTerm, 'category' => $category])
             ]);
         }
 
-        // Базовые запросы с правильными путями к медиа
+        // Базовые запросы
         $newsQuery = News::query()
             ->select([
                 'id',
                 'title',
                 'slug',
                 'lead',
-                DB::raw("CASE
-                    WHEN image IS NOT NULL AND image != ''
-                    THEN CONCAT('" . asset('storage/public') . "/', image)
-                    ELSE '" . asset('assets/default-news.jpg') . "'
-                    END as media"),
+                'image',
+                DB::raw("'news' as type"),
                 'published_at',
                 'category_id',
                 'views'
             ])
-            ->where('status', 1)
-            ->addSelect(DB::raw("'news' as type"));
+            ->where('status', 1);
 
         $videosQuery = VideoReportage::query()
             ->select([
@@ -51,17 +48,13 @@ class SearchController extends Controller
                 'title',
                 'slug',
                 'lead',
-                DB::raw("CASE
-                    WHEN preview IS NOT NULL AND preview != ''
-                    THEN CONCAT('" . asset('storage/public') . "/', preview)
-                    ELSE '" . asset('assets/default-video.jpg') . "'
-                    END as media"),
+                'preview as image',
+                DB::raw("'video' as type"),
                 'published_at',
                 'category_id',
                 'views'
             ])
-            ->where('status', 1)
-            ->addSelect(DB::raw("'video' as type"));
+            ->where('status', 1);
 
         // Применяем поиск по тексту
         if ($searchTerm) {
@@ -86,7 +79,7 @@ class SearchController extends Controller
             }
         }
 
-        // Объединяем запросы и получаем результаты
+        // Объединяем запросы
         $unionQuery = $newsQuery->unionAll($videosQuery);
 
         // Получаем общее количество результатов
@@ -100,43 +93,38 @@ class SearchController extends Controller
             ->take(10)
             ->get()
             ->map(function($item) {
+                // Добавляем category_slug
                 $category = Category::find($item->category_id);
                 $item->category_slug = $category ? $category->slug : 'uncategorized';
 
-                // Добавляем правильный URL для ссылки
+                // Формируем правильный URL для медиа
                 if ($item->type === 'video') {
+                    $item->media = $item->image ? Storage::url($item->image) : asset('assets/default-video.jpg');
+                    $item->video_url = $item->video ?? ''; // Если есть поле video
                     $item->url = route('home.videos.single', ['slug' => $item->slug]);
                 } else {
+                    $item->media = $item->image ? Storage::url($item->image) : asset('assets/default-news.jpg');
                     $item->url = route('home.news.single', ['slug' => $item->slug]);
                 }
-
-                // Добавляем поле type для определения в партиале
-                $item->type = $item->type; // уже есть
-                $item->media = $item->media; // уже есть
 
                 return $item;
             });
 
+        // Генерируем HTML через партиал
         $html = view('partials.search-results', [
             'results' => $items,
             'hasMore' => $total > 10,
-            'query' => $request->query('q', '')
+            'query' => $searchTerm
         ])->render();
 
         return response()->json([
             'html' => $html,
             'total' => $total,
-            'search_url' => route('search.all', ['q' => $request->query('q', ''), 'category' => $category])
-        ]);
-
-        return response()->json([
-            'items' => $items,
-            'total' => $total,
-            'search_url' => route('search.all', ['q' => $request->query('q', ''), 'category' => $category])
+            'search_url' => route('search.all', ['q' => $searchTerm, 'category' => $category])
         ]);
     }
 
-    // Метод для страницы всех результатов - /search/all (использует вашу существующую страницу)
+    // Метод для страницы всех результатов - /search/all
     public function allResults(Request $request)
     {
         $query = $request->query('q', '');
@@ -149,17 +137,13 @@ class SearchController extends Controller
                 'title',
                 'slug',
                 'lead',
-                DB::raw("CASE
-                    WHEN image IS NOT NULL AND image != ''
-                    THEN CONCAT('" . asset('storage/public') . "/', image)
-                    ELSE '" . asset('assets/default-news.jpg') . "'
-                    END as media"),
+                'image',
+                DB::raw("'news' as type"),
                 'published_at',
                 'category_id',
                 'views'
             ])
-            ->where('status', 1)
-            ->addSelect(DB::raw("'news' as type"));
+            ->where('status', 1);
 
         $videosQuery = VideoReportage::query()
             ->select([
@@ -167,17 +151,13 @@ class SearchController extends Controller
                 'title',
                 'slug',
                 'lead',
-                DB::raw("CASE
-                    WHEN preview IS NOT NULL AND preview != ''
-                    THEN CONCAT('" . asset('storage/public') . "/', preview)
-                    ELSE '" . asset('assets/default-video.jpg') . "'
-                    END as media"),
+                'preview as image',
+                DB::raw("'video' as type"),
                 'published_at',
                 'category_id',
                 'views'
             ])
-            ->where('status', 1)
-            ->addSelect(DB::raw("'video' as type"));
+            ->where('status', 1);
 
         // Применяем поиск по тексту
         if ($query) {
@@ -206,7 +186,6 @@ class SearchController extends Controller
         $news = $newsQuery->orderBy('published_at', 'desc')->paginate(10);
         $videos = $videosQuery->orderBy('published_at', 'desc')->paginate(10);
 
-        // Используем вашу существующую страницу
         return view('frontend.search.index', [
             'query' => $query,
             'news' => $news,
