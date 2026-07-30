@@ -17,7 +17,7 @@
                         </h2>
                         <div class="news-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
                             @foreach($news as $item)
-                                @include('partials.search-result', ['item' => $item, 'type' => 'news'])
+                                @include('partials.search-results', ['item' => $item, 'type' => 'news'])
                             @endforeach
                         </div>
                         {{ $news->appends(['q' => $query, 'category' => $category])->links() }}
@@ -29,7 +29,7 @@
                         </h2>
                         <div class="videos-list" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
                             @foreach($videos as $item)
-                                @include('partials.search-result', ['item' => $item, 'type' => 'video'])
+                                @include('partials.search-results', ['item' => $item, 'type' => 'video'])
                             @endforeach
                         </div>
                         {{ $videos->appends(['q' => $query, 'category' => $category])->links() }}
