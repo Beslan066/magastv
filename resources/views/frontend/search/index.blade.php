@@ -21,7 +21,7 @@
                             @endforeach
                         </div>
                         <div style="margin-top: 30px;">
-                            {{ $news->appends(['q' => $query, 'category' => $category])->links() }}
+                            {{ $news->appends(['q' => $query, 'category' => $category])->links(vendor.pagination.simple) }}
                         </div>
                     @endif
 
