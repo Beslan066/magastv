@@ -9,7 +9,7 @@
                 <h2>Новости</h2>
                 <div class="news-list">
                     @foreach($news as $item)
-                        @include('partials.search-result-item', ['item' => $item, 'type' => 'news'])
+                        @include('partials.search-results-item', ['item' => $item, 'type' => 'news'])
                     @endforeach
                 </div>
                 {{ $news->links() }}
@@ -19,7 +19,7 @@
                 <h2>Видеорепортажи</h2>
                 <div class="videos-list">
                     @foreach($videos as $item)
-                        @include('partials.search-result-item', ['item' => $item, 'type' => 'video'])
+                        @include('partials.search-results-item', ['item' => $item, 'type' => 'video'])
                     @endforeach
                 </div>
                 {{ $videos->links() }}
