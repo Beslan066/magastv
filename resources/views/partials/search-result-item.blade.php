@@ -2,7 +2,9 @@
     <div class="search-result-item__media" style="position: relative; height: 200px; overflow: hidden;">
         @if($type === 'video')
             @php
-                $imageUrl = isset($item->preview) ? Storage::url($item->preview) : (isset($item->image) ? Storage::url($item->image) : asset('assets/default-video.jpg'));
+                // Для видеорепортажей используем preview
+                $imageUrl = isset($item->preview) ? asset('storage/public/' . $item->preview) :
+                           (isset($item->image) ? asset('storage/public/' . $item->image) : asset('assets/default-video.jpg'));
             @endphp
             <img src="{{ $imageUrl }}" alt="{{ $item->title }}" style="width: 100%; height: 100%; object-fit: cover;">
             <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
@@ -16,7 +18,9 @@
             </div>
         @else
             @php
-                $imageUrl = isset($item->image) ? Storage::url($item->image) : (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
+                // Для новостей используем image
+                $imageUrl = isset($item->image) ? asset('storage/public/' . $item->image) :
+                           (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
             @endphp
             <img src="{{ $imageUrl }}" alt="{{ $item->title }}" style="width: 100%; height: 100%; object-fit: cover;">
             <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 4px 12px; border-radius: 4px;">

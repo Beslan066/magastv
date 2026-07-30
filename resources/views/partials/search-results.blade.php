@@ -5,8 +5,10 @@
             <div class="menu-news__media">
                 @if($item->type === 'video' || $item instanceof \App\Models\VideoReportage)
                     @php
-                        $videoUrl = isset($item->video) ? Storage::url($item->video) : ($item->video_url ?? '');
-                        $posterUrl = isset($item->preview) ? Storage::url($item->preview) : ($item->media ?? asset('assets/default-video.jpg'));
+                        $videoUrl = isset($item->video) ? asset('storage/public/' . $item->video) : ($item->video_url ?? '');
+                        // Для видеорепортажей используем preview
+                        $posterUrl = isset($item->preview) ? asset('storage/public/' . $item->preview) :
+                                    (isset($item->media) ? $item->media : asset('assets/default-video.jpg'));
                     @endphp
                     <video src="{{ $videoUrl }}" poster="{{ $posterUrl }}"></video>
                     <button class="btn-reset menu-news__play-btn">
@@ -16,7 +18,9 @@
                     </button>
                 @else
                     @php
-                        $imageUrl = isset($item->image) ? Storage::url($item->image) : ($item->media ?? asset('assets/default-news.jpg'));
+                        // Для новостей используем image
+                        $imageUrl = isset($item->image) ? asset('storage/public/' . $item->image) :
+                                    (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
                     @endphp
                     <img src="{{ $imageUrl }}" alt="{{ $item->title }}">
                 @endif
@@ -48,12 +52,14 @@
     @endforeach
 
     @if(isset($hasMore) && $hasMore)
-        <div class="menu-list__more">
-            <a href="{{ route('search.all', ['q' => $query ?? '']) }}" class="btn btn--more">Все результаты</a>
+        <div class="menu-list__more" style="padding: 20px; text-align: center;">
+            <a href="{{ route('search.all', ['q' => $query ?? '']) }}" style="color: #70E780; text-decoration: none; font-family: 'Golos Text', sans-serif; font-weight: 500; display: inline-block; padding: 10px 20px; border: 1px solid #70E780; border-radius: 8px; transition: all 0.3s;">
+                Все результаты
+            </a>
         </div>
     @endif
 @elseif(isset($results))
-    <div class="no-results" style="color: #fff; padding: 20px; text-align: center;">
+    <div class="no-results" style="color: #fff; padding: 20px; text-align: center; font-family: 'Golos Text', sans-serif;">
         Ничего не найдено по запросу "{{ $query ?? '' }}"
     </div>
 @endif
