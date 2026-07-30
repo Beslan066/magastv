@@ -1116,10 +1116,13 @@
 <script>
     // ====== ЖДЕМ ПОЛНУЮ ЗАГРУЗКУ СТРАНИЦЫ ======
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🟢 DOM загружен');
 
         // ====== ИНИЦИАЛИЗАЦИЯ ПОИСКА ======
         initSearch();
+
+        if (typeof checkCookieConsent === 'function') {
+            checkCookieConsent();
+        }
 
         // ====== ИНИЦИАЛИЗАЦИЯ СЛАЙДЕРОВ ======
         const scheduleSliders = document.querySelectorAll('[data-schedule]');
@@ -1381,15 +1384,19 @@
         }
     }
 
-    // ====== COOKIE FUNCTIONS ======
+    // Cookie functions
     function checkCookieConsent() {
+        // Проверяем, что элемент существует
+        const notice = document.getElementById('cookieNotice');
+        if (!notice) return;
+
         const consent = localStorage.getItem('cookieConsent');
         if (consent) {
-            const notice = document.getElementById('cookieNotice');
-            if (notice) {
-                notice.style.display = 'none';
-            }
+            notice.style.display = 'none';
             applyCookieSettings(JSON.parse(consent));
+        } else {
+            // Показываем уведомление только если согласия нет
+            notice.style.display = 'block';
         }
     }
 

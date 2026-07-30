@@ -1,67 +1,39 @@
-<div class="search-result-item" style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); transition: transform 0.3s, box-shadow 0.3s;">
-    <div class="search-result-item__media" style="position: relative; height: 200px; overflow: hidden;">
-        @if($type === 'video')
-            @php
-                // Для видеорепортажей используем preview
-                $imageUrl = isset($item->preview) ? asset('storage/public/' . $item->preview) :
-                           (isset($item->image) ? asset('storage/public/' . $item->image) : asset('assets/default-video.jpg'));
-            @endphp
-            <img src="{{ $imageUrl }}" alt="{{ $item->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
-                <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
-                    <circle cx="24" cy="24" r="24" fill="rgba(0,0,0,0.7)"/>
-                    <path d="M30 24L20 30V18L30 24Z" fill="white"/>
-                </svg>
-            </div>
-            <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 4px 12px; border-radius: 4px;">
-                <span style="color: #fff; font-size: 12px; font-family: 'Golos Text', sans-serif;">▶ Видео</span>
-            </div>
-        @else
-            @php
-                // Для новостей используем image
-                $imageUrl = isset($item->image) ? asset('storage/public/' . $item->image) :
-                           (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
-            @endphp
-            <img src="{{ $imageUrl }}" alt="{{ $item->title }}" style="width: 100%; height: 100%; object-fit: cover;">
-            <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); padding: 4px 12px; border-radius: 4px;">
-                <span style="color: #fff; font-size: 12px; font-family: 'Golos Text', sans-serif;">📰 Новость</span>
-            </div>
-        @endif
-    </div>
-    <div class="search-result-item__content" style="padding: 15px;">
-        <h3 style="font-family: 'Golos Text', sans-serif; font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 10px; line-height: 1.3;">
-            <a href="{{ $type === 'video' ? route('home.videos.single', ['slug' => $item->slug]) : route('home.news.single', ['slug' => $item->slug]) }}"
-               style="color: #fff; text-decoration: none; transition: color 0.3s;">
-                {{ $item->title }}
-            </a>
-        </h3>
-        @if(!empty($item->lead))
-            <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
-                {{ Str::limit($item->lead, 150) }}
-            </p>
-        @endif
-        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.05);">
-            <time style="color: rgba(255, 255, 255, 0.5); font-size: 13px; font-family: 'Golos Text', sans-serif;">
-                {{ isset($item->published_at) ? \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i') : '' }}
-            </time>
-            <span style="color: rgba(255, 255, 255, 0.5); font-size: 13px; font-family: 'Golos Text', sans-serif;">
-                👁 {{ $item->views ?? 0 }}
-            </span>
-            @if(isset($item->category) && $item->category)
-                <span style="color: #70E780; font-size: 13px; font-family: 'Golos Text', sans-serif; background: rgba(112, 231, 128, 0.1); padding: 2px 12px; border-radius: 12px;">
-                    {{ $item->category->name ?? '' }}
-                </span>
+<li class="news-item news-item--second search-result-item">
+    <a href="{{ $type === 'video' ? route('home.videos.single', ['slug' => $item->slug]) : route('home.news.single', ['slug' => $item->slug]) }}">
+        <div class="news-item__media">
+            @if($type === 'video')
+                @php
+                    $imageUrl = isset($item->preview) ? asset('storage/public/' . $item->preview) :
+                               (isset($item->image) ? asset('storage/public/' . $item->image) : asset('assets/default-video.jpg'));
+                @endphp
+                <img src="{{ $imageUrl }}" alt="{{ $item->title }}">
+                <button class="btn-reset news-item--media__btn">
+                    <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white" />
+                    </svg>
+                </button>
+            @else
+                @php
+                    $imageUrl = isset($item->image) ? asset('storage/public/' . $item->image) :
+                               (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
+                @endphp
+                <img src="{{ $imageUrl }}" alt="{{ $item->title }}">
             @endif
         </div>
+    </a>
+    <div class="news-item__bottom">
+        <h6 class="news-item__title">
+            <a href="{{ $type === 'video' ? route('home.videos.single', ['slug' => $item->slug]) : route('home.news.single', ['slug' => $item->slug]) }}">
+                {{ $item->title }}
+            </a>
+        </h6>
+        <div class="news-item__descr">
+            <p>{{ Str::limit($item->lead ?? '', 150) }}</p>
+        </div>
+        <div class="news-item__info">
+            <time datetime="{{ isset($item->published_at) ? \Carbon\Carbon::parse($item->published_at)->format('Y-m-d H:i') : '' }}" class="news-item_time">
+                {{ isset($item->published_at) ? \Carbon\Carbon::parse($item->published_at)->format('d.m.Y H:i') : '' }}
+            </time>
+        </div>
     </div>
-</div>
-
-<style>
-    .search-result-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-    }
-    .search-result-item__content h3 a:hover {
-        color: #70E780 !important;
-    }
-</style>
+</li>

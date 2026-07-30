@@ -1,65 +1,253 @@
-@if(isset($results) && $results->count() > 0)
-    @foreach($results as $item)
-        <div class="menu-news @if($item->type === 'video' || $item instanceof \App\Models\VideoReportage) menu-news--media @endif"
-             data-menu-category="{{ $item->category_slug ?? $item->category->slug ?? '' }}">
-            <div class="menu-news__media">
-                @if($item->type === 'video' || $item instanceof \App\Models\VideoReportage)
-                    @php
-                        $videoUrl = isset($item->video) ? asset('storage/public/' . $item->video) : ($item->video_url ?? '');
-                        // Для видеорепортажей используем preview
-                        $posterUrl = isset($item->preview) ? asset('storage/public/' . $item->preview) :
-                                    (isset($item->media) ? $item->media : asset('assets/default-video.jpg'));
-                    @endphp
-                    <video src="{{ $videoUrl }}" poster="{{ $posterUrl }}"></video>
-                    <button class="btn-reset menu-news__play-btn">
-                        <svg width="10" height="12" viewBox="0 0 10 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9.39052 5.1221L1.47885 0.806647C0.812478 0.44317 0 0.925483 0 1.68454V10.3155C0 11.0745 0.812477 11.5568 1.47885 11.1934L9.39052 6.8779C10.0854 6.49888 10.0854 5.50112 9.39052 5.1221Z" fill="white"></path>
-                        </svg>
-                    </button>
-                @else
-                    @php
-                        // Для новостей используем image
-                        $imageUrl = isset($item->image) ? asset('storage/public/' . $item->image) :
-                                    (isset($item->media) ? $item->media : asset('assets/default-news.jpg'));
-                    @endphp
-                    <img src="{{ $imageUrl }}" alt="{{ $item->title }}">
-                @endif
-            </div>
-            <div class="menu-news__info">
-                <h6 class="menu-news__title">
-                    <a href="{{ ($item->type === 'video' || $item instanceof \App\Models\VideoReportage)
-                        ? route('home.videos.single', ['slug' => $item->slug])
-                        : route('home.news.single', ['slug' => $item->slug]) }}">
-                        {{ $item->title }}
-                    </a>
-                </h6>
-                <div class="menu-news__text">
-                    <p>{{ $item->lead ?? '' }}</p>
-                </div>
-                <div class="menu-news__meta">
-                    <time>{{ isset($item->published_at) ? \Carbon\Carbon::parse($item->published_at)->format('d M, H:i') : '' }}</time>
-                    <div class="menu-news__views">
-                        <div class="menu-news__icon">
-                            <svg width="18" height="12" viewBox="0 0 18 12" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8.99998 0C14.0312 0 16.9533 4.44092 17.7656 5.875C17.921 6.14927 17.9148 6.47693 17.7461 6.74316C16.907 8.0657 13.9914 12 8.99998 12C4.00872 11.9999 1.0939 8.06568 0.254863 6.74316C0.086031 6.47689 0.078957 6.14935 0.234355 5.875C1.04653 4.44117 3.96865 0.000143146 8.99998 0ZM8.99998 3C7.34324 3.00013 5.99998 4.34323 5.99998 6C5.99998 7.65677 7.34324 8.99987 8.99998 9C10.6568 9 12 7.65685 12 6C12 4.34315 10.6568 3 8.99998 3Z"></path>
-                            </svg>
-                        </div>
-                        <span>{{ $item->views ?? 0 }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
+@extends('layouts.frontend')
 
-    @if(isset($hasMore) && $hasMore)
-        <div class="menu-list__more" style="padding: 20px; text-align: center;">
-            <a href="{{ route('search.all', ['q' => $query ?? '']) }}" style="color: #70E780; text-decoration: none; font-family: 'Golos Text', sans-serif; font-weight: 500; display: inline-block; padding: 10px 20px; border: 1px solid #70E780; border-radius: 8px; transition: all 0.3s;">
-                Все результаты
-            </a>
+@push('meta')
+    <title>Результаты поиска - Национальная телерадиокомпания "Магас"</title>
+@endpush
+
+@push('styles')
+    <link rel="stylesheet" href="{{asset('css/pages/news-page.css')}}">
+    <style>
+        .search-results-page {
+            padding: 40px 0;
+            min-height: 60vh;
+        }
+        .search-results-page .page-title {
+            font-family: 'Golos Text', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .search-results-page .search-query {
+            color: rgba(255,255,255,0.6);
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-family: 'Golos Text', sans-serif;
+        }
+        .search-results-page .search-query span {
+            color: #70E780;
+            font-weight: 600;
+        }
+        .search-results-page .search-count {
+            color: rgba(255,255,255,0.6);
+            font-family: 'Golos Text', sans-serif;
+            font-size: 16px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .search-results-page .search-count strong {
+            color: #70E780;
+        }
+        .search-results-page .news-content__news-block {
+            width: 100%;
+        }
+        .search-results-page .news-block__list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .search-results-page .news-item--second {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .search-results-page .news-item--second:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        }
+        .search-results-page .news-item__media {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .search-results-page .news-item__media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .search-results-page .news-item__media .news-item--media__btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .search-results-page .news-item__media .news-item--media__btn:hover {
+            background: rgba(112, 231, 128, 0.8);
+        }
+        .search-results-page .news-item__bottom {
+            padding: 15px;
+        }
+        .search-results-page .news-item__title {
+            font-family: 'Golos Text', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        .search-results-page .news-item__title a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .search-results-page .news-item__title a:hover {
+            color: #70E780;
+        }
+        .search-results-page .news-item__descr p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .search-results-page .news-item__info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .search-results-page .news-item_time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 13px;
+            font-family: 'Golos Text', sans-serif;
+        }
+        .search-results-page .no-results {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .search-results-page .no-results p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 18px;
+            font-family: 'Golos Text', sans-serif;
+        }
+        .search-results-page .no-results a {
+            display: inline-block;
+            margin-top: 20px;
+            color: #70E780;
+            text-decoration: none;
+            font-family: 'Golos Text', sans-serif;
+            font-weight: 500;
+            padding: 10px 30px;
+            border: 1px solid #70E780;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        .search-results-page .no-results a:hover {
+            background: #70E780;
+            color: #000;
+        }
+        .search-results-page .section-title {
+            font-family: 'Golos Text', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: #70E780;
+            margin-bottom: 20px;
+        }
+        .search-results-page .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .search-results-page .pagination .page-item {
+            list-style: none;
+        }
+        .search-results-page .pagination .page-link {
+            display: block;
+            padding: 8px 16px;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            text-decoration: none;
+            font-family: 'Golos Text', sans-serif;
+            transition: all 0.3s;
+        }
+        .search-results-page .pagination .page-link:hover {
+            background: rgba(112, 231, 128, 0.1);
+            border-color: #70E780;
+        }
+        .search-results-page .pagination .active .page-link {
+            background: #70E780;
+            color: #000;
+            border-color: #70E780;
+        }
+        .search-results-page .pagination .disabled .page-link {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+@endpush
+
+@section('content')
+    <main class="search-results-page">
+        <div class="container">
+            <h1 class="page-title">Результаты поиска</h1>
+            @if(!empty($query))
+                <p class="search-query">
+                    По запросу: <span>"{{ $query }}"</span>
+                </p>
+            @endif
+
+            @if(isset($message))
+                <div class="no-results">
+                    <p>{{ $message }}</p>
+                    <a href="{{ route('home') }}">Вернуться на главную</a>
+                </div>
+            @else
+                @php
+                    $totalResults = ($news->total() ?? 0) + ($videos->total() ?? 0);
+                @endphp
+
+                @if($totalResults > 0)
+                    <span class="search-count">Найдено: <strong>{{ $totalResults }}</strong> записей</span>
+
+                    <div class="news-content__news-block">
+                        @if($news->count() > 0)
+                            <h2 class="section-title">📰 Новости ({{ $news->total() }})</h2>
+                            <ul class="list-reset news-block__list">
+                                @foreach($news as $item)
+                                    @include('partials.search-result-item', ['item' => $item, 'type' => 'news'])
+                                @endforeach
+                            </ul>
+                            <div class="pagination">
+                                {{ $news->appends(['q' => $query, 'category' => $category])->links() }}
+                            </div>
+                        @endif
+
+                        @if($videos->count() > 0)
+                            <h2 class="section-title" style="margin-top: 40px;">🎬 Видеорепортажи ({{ $videos->total() }})</h2>
+                            <ul class="list-reset news-block__list">
+                                @foreach($videos as $item)
+                                    @include('partials.search-result-item', ['item' => $item, 'type' => 'video'])
+                                @endforeach
+                            </ul>
+                            <div class="pagination">
+                                {{ $videos->appends(['q' => $query, 'category' => $category])->links() }}
+                            </div>
+                        @endif
+                    </div>
+                @else
+                    <div class="no-results">
+                        <p>По вашему запросу "{{ $query }}" ничего не найдено.</p>
+                        <a href="{{ route('home') }}">Вернуться на главную</a>
+                    </div>
+                @endif
+            @endif
         </div>
-    @endif
-@elseif(isset($results))
-    <div class="no-results" style="color: #fff; padding: 20px; text-align: center; font-family: 'Golos Text', sans-serif;">
-        Ничего не найдено по запросу "{{ $query ?? '' }}"
-    </div>
-@endif
+    </main>
+@endsection
