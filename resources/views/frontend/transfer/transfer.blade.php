@@ -221,7 +221,7 @@
                         @endif
 
                         <div>
-                            {{$$transferVideos->links('vendor.pagination.simple')}}
+                            {{$transferVideos->links('vendor.pagination.simple')}}
                         </div>
                     </div>
                 </div>
