@@ -246,7 +246,7 @@
                         Выпуски передач
                     </h2>
                     <div class="releases__content">
-                        @if($transferVideos && count($transferVideos) > 0)
+                        @if($transferVideos && $transferVideos->count() > 0)
                             <div class="releases__items">
                                 @foreach($transferVideos as $video)
                                     <div class="popular-item releases-item">
@@ -256,21 +256,22 @@
                                         <div class="popular-item__info">
                                             <h6 class="popular-item__title">
                                                 <a>
-                                                    {{$video->title}}
+                                                    {{ $video->title }}
                                                 </a>
                                             </h6>
-                                            <time datetime="{{$video->formatted_created_at}}" class="popular-item__time">{{$video->formatted_created_at}}</time>
+                                            <time datetime="{{ $video->formatted_created_at }}" class="popular-item__time">{{ $video->formatted_created_at }}</time>
                                         </div>
                                     </div>
                                 @endforeach
                             </div>
+
+                            <!-- Пагинация -->
+                            <div class="pagination-wrapper" style="margin-top: 30px;">
+                                {{ $transferVideos->links('vendor.pagination.simple') }}
+                            </div>
                         @else
                             <p>Нет доступных выпусков</p>
                         @endif
-
-                        <div>
-                            {{$transferVideos->links('vendor.pagination.simple')}}
-                        </div>
                     </div>
                 </div>
             </div>
