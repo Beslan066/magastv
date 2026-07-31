@@ -127,6 +127,54 @@
         .programs-slide__schedule span {
             color: white;
         }
+
+        .pagination-wrapper .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            padding: 0;
+            list-style: none;
+        }
+
+        .pagination-wrapper .pagination .page-item {
+            list-style: none;
+        }
+
+        .pagination-wrapper .pagination .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 12px;
+            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            text-decoration: none;
+            font-family: 'Golos Text', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .pagination-wrapper .pagination .page-link:hover {
+            background: rgba(112, 231, 128, 0.15);
+            border-color: #70E780;
+            color: #70E780;
+        }
+
+        .pagination-wrapper .pagination .active .page-link {
+            background: #70E780;
+            color: #000;
+            border-color: #70E780;
+            font-weight: 600;
+        }
+
+        .pagination-wrapper .pagination .disabled .page-link {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
     </style>
 @endpush
 
