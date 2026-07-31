@@ -219,6 +219,10 @@
                         @else
                             <p>Нет доступных выпусков</p>
                         @endif
+
+                        <div>
+                            {{$$transferVideos->links('vendor.pagination.simple')}}
+                        </div>
                     </div>
                 </div>
             </div>

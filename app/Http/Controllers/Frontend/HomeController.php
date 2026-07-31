@@ -117,6 +117,85 @@ class HomeController extends Controller
         ]);
     }
 
+
+    public function videoSingle($slug)
+    {
+        // Ищем видеорепортаж
+        $video = VideoReportage::where('slug', $slug)->first();
+
+        if (!$video) {
+            abort(404);
+        }
+
+        $video->formatted_published_at = Carbon::parse($video->published_at)->format('d.m.Y H:i');
+        $video->media = $video->preview;
+
+        // Увеличиваем счетчик просмотров
+        $video->incrementViews();
+
+        // Получаем похожие материалы
+        $similarVideos = VideoReportage::query()
+            ->where('category_id', $video->category_id)
+            ->where('id', '!=', $video->id)
+            ->where('status', 1)
+            ->whereNot('ing_news', 1)
+            ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'views', 'category_id')
+            ->addSelect(DB::raw("'video' as type"))
+            ->orderBy('published_at', 'desc')
+            ->limit(6)
+            ->get()
+            ->map(function ($item) {
+                $item->formatted_published_at = Carbon::parse($item->published_at)->format('d.m.Y H:i');
+                return $item;
+            });
+
+        // Похожие новости
+        $similarNews = News::query()
+            ->where('category_id', $video->category_id)
+            ->where('status', 1)
+            ->select('id', 'title', 'slug', 'image as media', 'published_at', 'views', 'category_id')
+            ->addSelect(DB::raw("'news' as type"))
+            ->orderBy('published_at', 'desc')
+            ->limit(6)
+            ->get()
+            ->map(function ($item) {
+                $item->formatted_published_at = Carbon::parse($item->published_at)->format('d.m.Y H:i');
+                return $item;
+            });
+
+        // Объединяем и перемешиваем
+        $similarItems = $similarVideos->merge($similarNews)->shuffle()->take(6);
+
+        // Популярные материалы
+        $popularItems = News::query()
+            ->select('id', 'title', 'slug', 'image as media', 'published_at', 'category_id', 'views')
+            ->where('status', 1)
+            ->where('published_at', '>=', now()->subDays(7))
+            ->addSelect(DB::raw("'news' as type"))
+            ->unionAll(
+                VideoReportage::query()
+                    ->select('id', 'title', 'slug', 'preview as media', 'published_at', 'category_id', 'views')
+                    ->where('status', 1)
+                    ->where('published_at', '>=', now()->subDays(7))
+                    ->whereNot('ing_news', 1)
+                    ->addSelect(DB::raw("'video' as type"))
+            )
+            ->orderBy('views', 'desc')
+            ->limit(7)
+            ->get()
+            ->map(function ($item) {
+                $item->formatted_published_at = Carbon::parse($item->published_at)->format('d.m.Y H:i');
+                return $item;
+            });
+
+        return view('frontend.news.single', [
+            'news' => $video,
+            'type' => 'video',
+            'similarItems' => $similarItems,
+            'popularItems' => $popularItems,
+        ]);
+    }
+
     public function filterNews(Request $request)
     {
         $categoryId = $request->get('category_id');
@@ -260,8 +339,7 @@ HTML;
         $transferVideos = VideoTransfer::query()
             ->where('transfer_id', $transfer->id)
             ->orderBy('id', 'desc')
-            ->limit(40)
-            ->get();
+            ->paginate(20);
 
 
         $transferVideosCount = $transferVideos->count();
