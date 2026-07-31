@@ -58,18 +58,32 @@ class SearchController extends Controller
                 ])
                 ->where('status', 1);
 
-            // Применяем поиск по тексту
+            // Применяем поиск по тексту (регистронезависимый)
             if ($searchTerm) {
-                $searchTermLike = '%' . $searchTerm . '%';
-                $newsQuery->where(function($q) use ($searchTermLike) {
-                    $q->where('title', 'like', $searchTermLike)
-                        ->orWhere('lead', 'like', $searchTermLike);
-                });
+                // Для MySQL используем LOWER(), для PostgreSQL - ILIKE
+                $dbDriver = DB::connection()->getDriverName();
 
-                $videosQuery->where(function($q) use ($searchTermLike) {
-                    $q->where('title', 'like', $searchTermLike)
-                        ->orWhere('lead', 'like', $searchTermLike);
-                });
+                if ($dbDriver === 'pgsql') {
+                    $newsQuery->where(function($q) use ($searchTerm) {
+                        $q->where('title', 'ILIKE', '%' . $searchTerm . '%')
+                            ->orWhere('lead', 'ILIKE', '%' . $searchTerm . '%');
+                    });
+                    $videosQuery->where(function($q) use ($searchTerm) {
+                        $q->where('title', 'ILIKE', '%' . $searchTerm . '%')
+                            ->orWhere('lead', 'ILIKE', '%' . $searchTerm . '%');
+                    });
+                } else {
+                    // MySQL, SQLite
+                    $searchTermLike = '%' . strtolower($searchTerm) . '%';
+                    $newsQuery->where(function($q) use ($searchTermLike) {
+                        $q->where(DB::raw('LOWER(title)'), 'like', $searchTermLike)
+                            ->orWhere(DB::raw('LOWER(lead)'), 'like', $searchTermLike);
+                    });
+                    $videosQuery->where(function($q) use ($searchTermLike) {
+                        $q->where(DB::raw('LOWER(title)'), 'like', $searchTermLike)
+                            ->orWhere(DB::raw('LOWER(lead)'), 'like', $searchTermLike);
+                    });
+                }
             }
 
             // Применяем фильтр по категории
@@ -102,7 +116,8 @@ class SearchController extends Controller
                     // Формируем правильный URL для медиа
                     if ($item->type === 'video') {
                         $item->media = $item->image ? Storage::url($item->image) : asset('assets/default-video.jpg');
-                        $item->video_url = $item->video ?? ''; // Если есть поле video
+                        $item->video_url = $item->video ?? '';
+                        // ПРАВИЛЬНЫЙ РОУТ ДЛЯ ВИДЕОРЕПОРТАЖЕЙ
                         $item->url = route('home.videos.single', ['slug' => $item->slug]);
                     } else {
                         $item->media = $item->image ? Storage::url($item->image) : asset('assets/default-news.jpg');
@@ -126,7 +141,6 @@ class SearchController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            // Логируем ошибку
             Log::error('Search error: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
 
@@ -134,7 +148,7 @@ class SearchController extends Controller
                 'html' => '<div class="no-results" style="color: #fff; padding: 20px; text-align: center;">Ошибка при выполнении поиска. Попробуйте позже.</div>',
                 'total' => 0,
                 'search_url' => route('search.all', ['q' => $request->query('q', ''), 'category' => $category])
-            ], 200); // Возвращаем 200, чтобы клиент получил JSON
+            ], 200);
         }
     }
 
@@ -185,17 +199,29 @@ class SearchController extends Controller
                 ])
                 ->where('status', 1);
 
-            // Применяем поиск по тексту
-            $searchTerm = '%' . $query . '%';
-            $newsQuery->where(function($q) use ($searchTerm) {
-                $q->where('title', 'like', $searchTerm)
-                    ->orWhere('lead', 'like', $searchTerm);
-            });
+            // Применяем поиск по тексту (регистронезависимый)
+            $dbDriver = DB::connection()->getDriverName();
 
-            $videosQuery->where(function($q) use ($searchTerm) {
-                $q->where('title', 'like', $searchTerm)
-                    ->orWhere('lead', 'like', $searchTerm);
-            });
+            if ($dbDriver === 'pgsql') {
+                $newsQuery->where(function($q) use ($query) {
+                    $q->where('title', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('lead', 'ILIKE', '%' . $query . '%');
+                });
+                $videosQuery->where(function($q) use ($query) {
+                    $q->where('title', 'ILIKE', '%' . $query . '%')
+                        ->orWhere('lead', 'ILIKE', '%' . $query . '%');
+                });
+            } else {
+                $searchTerm = '%' . strtolower($query) . '%';
+                $newsQuery->where(function($q) use ($searchTerm) {
+                    $q->where(DB::raw('LOWER(title)'), 'like', $searchTerm)
+                        ->orWhere(DB::raw('LOWER(lead)'), 'like', $searchTerm);
+                });
+                $videosQuery->where(function($q) use ($searchTerm) {
+                    $q->where(DB::raw('LOWER(title)'), 'like', $searchTerm)
+                        ->orWhere(DB::raw('LOWER(lead)'), 'like', $searchTerm);
+                });
+            }
 
             // Применяем фильтр по категории
             if ($category !== 'all') {
@@ -218,7 +244,6 @@ class SearchController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            // Логируем ошибку
             Log::error('Search all results error: ' . $e->getMessage());
             Log::error($e->getTraceAsString());
 

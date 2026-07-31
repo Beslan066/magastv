@@ -74,4 +74,9 @@ class VideoReportage extends Model
 
         return $formattedDate;
     }
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
