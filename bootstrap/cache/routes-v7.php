@@ -92,7 +92,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::VIujBuRqPMX87Dmc',
+            '_route' => 'generated::uTsL3UHn8VpRkaPz',
           ),
           1 => NULL,
           2 => 
@@ -112,24 +112,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::Ixz0nVgsSGNTu5pr',
-          ),
-          1 => NULL,
-          2 => 
-          array (
-            'GET' => 0,
-            'HEAD' => 1,
-          ),
-          3 => NULL,
-          4 => false,
-          5 => false,
-          6 => NULL,
-        ),
-        1 => 
-        array (
-          0 => 
-          array (
-            '_route' => 'generated::dLSNKSFUFMRqme6e',
+            '_route' => 'generated::Zf3sB3ZRXdMHT4YT',
           ),
           1 => NULL,
           2 => 
@@ -448,7 +431,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::wsE0dsOio2fk0N2S',
+            '_route' => 'generated::Zlm26m9UtPTPRq2w',
           ),
           1 => NULL,
           2 => 
@@ -547,7 +530,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::9jjVr6sx0HGj1ShF',
+            '_route' => 'generated::EjAFkoHrT0txCwry',
           ),
           1 => NULL,
           2 => 
@@ -2064,7 +2047,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::w1qUlTDh5qDIubyj',
+            '_route' => 'generated::CO3maRe4qu88r2kr',
           ),
           1 => NULL,
           2 => 
@@ -2100,7 +2083,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::piAG3mitCOiXGPqY',
+            '_route' => 'generated::TY8fy908ChiKqflR',
           ),
           1 => NULL,
           2 => 
@@ -2230,7 +2213,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::75FPnBlyqCszT1da',
+            '_route' => 'generated::odDmZ3TlUuVKtk8f',
           ),
           1 => NULL,
           2 => 
@@ -2387,7 +2370,7 @@ app('router')->setCompiledRoutes(
         array (
           0 => 
           array (
-            '_route' => 'generated::GzA54H3hqF5cOoS3',
+            '_route' => 'generated::2MecFd3KuRe0UVyE',
           ),
           1 => 
           array (
@@ -4828,7 +4811,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::VIujBuRqPMX87Dmc' => 
+    'generated::uTsL3UHn8VpRkaPz' => 
     array (
       'methods' => 
       array (
@@ -4856,8 +4839,8 @@ app('router')->setCompiledRoutes(
                     return response(\\Illuminate\\Support\\Facades\\View::file(\'/var/www/magastv/vendor/laravel/framework/src/Illuminate/Foundation/Configuration\'.\'/../resources/health-up.blade.php\', [
                         \'exception\' => $exception,
                     ]), status: $exception ? 500 : 200);
-                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000005170000000000000000";}}',
-        'as' => 'generated::VIujBuRqPMX87Dmc',
+                }";s:5:"scope";s:54:"Illuminate\\Foundation\\Configuration\\ApplicationBuilder";s:4:"this";N;s:4:"self";s:32:"00000000000009850000000000000000";}}',
+        'as' => 'generated::uTsL3UHn8VpRkaPz',
       ),
       'fallback' => false,
       'defaults' => 
@@ -4873,133 +4856,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::Ixz0nVgsSGNTu5pr' => 
-    array (
-      'methods' => 
-      array (
-        0 => 'GET',
-        1 => 'HEAD',
-      ),
-      'uri' => 'proxy/audio',
-      'action' => 
-      array (
-        'middleware' => 
-        array (
-          0 => 'web',
-        ),
-        'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:2630:"function() {
-    $streamUrl = \'http://media.zaoitt.ru:8086/ingradio\';
-
-    \\Log::info(\'Radio proxy started for: \' . \\request()->ip());
-
-    // Отключаем все буферизации
-    if (\\ob_get_level()) {
-        \\ob_end_clean();
-    }
-
-    // Отключаем кэширование
-    \\header(\'Cache-Control: no-cache, no-store, must-revalidate\');
-    \\header(\'Pragma: no-cache\');
-    \\header(\'Expires: 0\');
-
-    // Разрешаем CORS
-    \\header(\'Access-Control-Allow-Origin: *\');
-    \\header(\'Access-Control-Allow-Methods: GET, OPTIONS\');
-
-    // Устанавливаем Content-Type как у оригинального потока
-    \\header(\'Content-Type: audio/mpeg\');
-
-    // Для Icecast добавляем icy-метаданные
-    \\header(\'icy-br: 128\');
-    \\header(\'icy-genre: Other\');
-    \\header(\'icy-name: Magas FM\');
-    \\header(\'icy-pub: 1\');
-
-    // Отключаем лимит времени выполнения
-    \\set_time_limit(0);
-
-    // Закрываем сессию, чтобы не блокировать
-    if (\\session_id()) {
-        \\session_write_close();
-    }
-
-    // Настройки для подключения к Icecast
-    $context = \\stream_context_create([
-        \'http\' => [
-            \'method\' => \'GET\',
-            \'header\' => \\implode("\\r\\n", [
-                \'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\',
-                \'Accept: audio/mpeg, audio/*\',
-                \'Connection: close\',
-                \'Icy-MetaData: 1\'
-            ]),
-            \'timeout\' => 10,
-            \'ignore_errors\' => true
-        ],
-        \'socket\' => [
-            \'bindto\' => \'0:0\'
-        ]
-    ]);
-
-    try {
-        // Открываем поток напрямую к Icecast
-        $fp = @\\fopen($streamUrl, \'rb\', false, $context);
-
-        if (!$fp) {
-            \\Log::error(\'Failed to open radio stream\');
-            \\header(\'HTTP/1.1 502 Bad Gateway\');
-            echo \'Cannot connect to radio server\';
-            exit;
-        }
-
-        // Читаем и отправляем данные
-        while (!\\feof($fp) && \\connection_status() == 0) {
-            $chunk = \\fread($fp, 8192);
-            if ($chunk !== false) {
-                echo $chunk;
-                \\flush();
-            }
-
-            // Небольшая пауза
-            \\usleep(5000);
-        }
-
-        \\fclose($fp);
-        exit;
-
-    } catch (\\Exception $e) {
-        \\Log::error(\'Proxy error: \' . $e->getMessage());
-        \\header(\'HTTP/1.1 500 Internal Server Error\');
-        echo \'Proxy error\';
-        exit;
-    }
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000051d0000000000000000";}}',
-        'namespace' => NULL,
-        'prefix' => '',
-        'where' => 
-        array (
-        ),
-        'excluded_middleware' => 
-        array (
-          0 => 'App\\Http\\Middleware\\VerifyCsrfToken',
-        ),
-        'as' => 'generated::Ixz0nVgsSGNTu5pr',
-      ),
-      'fallback' => false,
-      'defaults' => 
-      array (
-      ),
-      'wheres' => 
-      array (
-      ),
-      'bindingFields' => 
-      array (
-      ),
-      'lockSeconds' => NULL,
-      'waitSeconds' => NULL,
-      'withTrashed' => false,
-    ),
-    'generated::dLSNKSFUFMRqme6e' => 
+    'generated::Zf3sB3ZRXdMHT4YT' => 
     array (
       'methods' => 
       array (
@@ -5018,13 +4875,13 @@ app('router')->setCompiledRoutes(
         ->header(\'Access-Control-Allow-Methods\', \'GET, OPTIONS\')
         ->header(\'Access-Control-Allow-Headers\', \'*\')
         ->header(\'Access-Control-Max-Age\', \'86400\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"000000000000051c0000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009890000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::dLSNKSFUFMRqme6e',
+        'as' => 'generated::Zf3sB3ZRXdMHT4YT',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5373,7 +5230,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::GzA54H3hqF5cOoS3' => 
+    'generated::2MecFd3KuRe0UVyE' => 
     array (
       'methods' => 
       array (
@@ -5399,13 +5256,13 @@ app('router')->setCompiledRoutes(
     }
 
     return \\response()->json([\'views\' => $video->views]);
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005280000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009940000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
         array (
         ),
-        'as' => 'generated::GzA54H3hqF5cOoS3',
+        'as' => 'generated::2MecFd3KuRe0UVyE',
       ),
       'fallback' => false,
       'defaults' => 
@@ -5865,7 +5722,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::wsE0dsOio2fk0N2S' => 
+    'generated::Zlm26m9UtPTPRq2w' => 
     array (
       'methods' => 
       array (
@@ -5886,7 +5743,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::wsE0dsOio2fk0N2S',
+        'as' => 'generated::Zlm26m9UtPTPRq2w',
       ),
       'fallback' => false,
       'defaults' => 
@@ -6053,7 +5910,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::9jjVr6sx0HGj1ShF' => 
+    'generated::EjAFkoHrT0txCwry' => 
     array (
       'methods' => 
       array (
@@ -6074,7 +5931,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::9jjVr6sx0HGj1ShF',
+        'as' => 'generated::EjAFkoHrT0txCwry',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12440,7 +12297,7 @@ app('router')->setCompiledRoutes(
         ),
         'uses' => 'O:55:"Laravel\\SerializableClosure\\UnsignedSerializableClosure":1:{s:12:"serializable";O:46:"Laravel\\SerializableClosure\\Serializers\\Native":5:{s:3:"use";a:0:{}s:8:"function";s:46:"function () {
     return \\view(\'dashboard\');
-}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000005410000000000000000";}}',
+}";s:5:"scope";s:37:"Illuminate\\Routing\\RouteFileRegistrar";s:4:"this";N;s:4:"self";s:32:"00000000000009ad0000000000000000";}}',
         'namespace' => NULL,
         'prefix' => '',
         'where' => 
@@ -12612,7 +12469,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::w1qUlTDh5qDIubyj' => 
+    'generated::CO3maRe4qu88r2kr' => 
     array (
       'methods' => 
       array (
@@ -12633,7 +12490,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::w1qUlTDh5qDIubyj',
+        'as' => 'generated::CO3maRe4qu88r2kr',
       ),
       'fallback' => false,
       'defaults' => 
@@ -12687,7 +12544,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::piAG3mitCOiXGPqY' => 
+    'generated::TY8fy908ChiKqflR' => 
     array (
       'methods' => 
       array (
@@ -12708,7 +12565,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::piAG3mitCOiXGPqY',
+        'as' => 'generated::TY8fy908ChiKqflR',
       ),
       'fallback' => false,
       'defaults' => 
@@ -13028,7 +12885,7 @@ app('router')->setCompiledRoutes(
       'waitSeconds' => NULL,
       'withTrashed' => false,
     ),
-    'generated::75FPnBlyqCszT1da' => 
+    'generated::odDmZ3TlUuVKtk8f' => 
     array (
       'methods' => 
       array (
@@ -13049,7 +12906,7 @@ app('router')->setCompiledRoutes(
         'where' => 
         array (
         ),
-        'as' => 'generated::75FPnBlyqCszT1da',
+        'as' => 'generated::odDmZ3TlUuVKtk8f',
       ),
       'fallback' => false,
       'defaults' => 
