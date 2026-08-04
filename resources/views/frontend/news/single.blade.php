@@ -296,7 +296,7 @@
                             @if(auth()->user())
                                 @if(auth()->user()->role->name !== 'Обычный пользователь')
                                     <div class="flex-row">
-                                        <a href="{{route('video-reportages.edit', $news->id)}}">Изменить</a>
+                                        <a href="{{route('video-reportages.edit', $news->slug)}}">Изменить</a>
 
                                         <form action="{{route('video-reportages.destroy', $news->id)}}" method="post">
                                             @csrf
