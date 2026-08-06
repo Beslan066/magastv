@@ -113,10 +113,10 @@
                                         <i class="icon-base bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="{{ route('video-reportages.edit', $item->id) }}">
+                                        <a class="dropdown-item" href="{{ route('video-reportages.edit', $item->slug) }}">
                                             <i class="icon-base bx bx-edit-alt me-1"></i>Изменить
                                         </a>
-                                        <form action="{{ route('video-reportages.destroy', $item->id) }}" method="post" class="d-inline">
+                                        <form action="{{ route('video-reportages.destroy', $item->slug) }}" method="post" class="d-inline">
                                             @csrf
                                             @method('delete')
                                             <button type="submit" class="dropdown-item" onclick="return confirm('Вы уверены?')">

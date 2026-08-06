@@ -298,7 +298,7 @@
                                     <div class="flex-row">
                                         <a href="{{route('video-reportages.edit', $news->slug)}}">Изменить</a>
 
-                                        <form action="{{route('video-reportages.destroy', $news->id)}}" method="post">
+                                        <form action="{{route('video-reportages.destroy', $news->slug)}}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="submit"
