@@ -17,7 +17,7 @@
             <h4 class="card-header">Редактирование видеорепортажа</h4>
         </div>
 
-        <form action="{{ route('video-reportages.update', $video_reportage->id) }}" method="post" enctype="multipart/form-data" id="videoReportageForm">
+        <form action="{{ route('video-reportages.update', $video_reportage->slug) }}" method="post" enctype="multipart/form-data" id="videoReportageForm">
             @csrf
             @method('patch')
             <div class="row mb-6 gy-6">
